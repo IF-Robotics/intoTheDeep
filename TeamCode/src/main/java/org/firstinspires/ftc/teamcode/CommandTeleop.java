@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
+
 
 @TeleOp(name="teleOp")
 public class CommandTeleop extends CommandOpMode {
@@ -22,8 +23,19 @@ public class CommandTeleop extends CommandOpMode {
 
     private GamepadEx m_driverOp;
 
+    private LynxModule controlHub;
+
+    //random Todo: Need to clean up my loop time telemetry
+    double loop = 0.0; //
+    double loopTime = 0.0;
+
+
     @Override
     public void initialize() {
+        //general
+        controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
+        controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
         //hardware
         DcMotorEx BL, BR, FL, FR;
         FL = hardwareMap.get(DcMotorEx.class, "FL");
@@ -33,6 +45,7 @@ public class CommandTeleop extends CommandOpMode {
         FL.setDirection(DcMotorEx.Direction.REVERSE);
         BL.setDirection(DcMotorEx.Direction.REVERSE);
 
+
         m_driverOp = new GamepadEx(gamepad1);
 
         driveSubsystem = new DriveSubsystem(FR, FL, BR, BL);
@@ -40,5 +53,17 @@ public class CommandTeleop extends CommandOpMode {
 
         register(driveSubsystem);
         driveSubsystem.setDefaultCommand(teleDriveCommand);
+    }
+
+    @Override
+    public void run(){
+        super.run();
+
+        //clear cache
+        controlHub.clearBulkCache();
+        //loopTime
+        loop = System.nanoTime();
+        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+        telemetry.update();
     }
 }
