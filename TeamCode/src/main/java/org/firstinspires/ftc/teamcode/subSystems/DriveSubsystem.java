@@ -10,9 +10,17 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class DriveSubsystem extends SubsystemBase{
 
     private DcMotorEx FR, FL, BR, BL;
-    private Telemetry telemetry;
 
+    private double y;
+    private double x;
+    private double rx;
+    private double denominator;
+    private double frontLeftPower;
+    private double backLeftPower;
+    private double frontRightPower;
+    private double backRightPower;
 
+    //constructor
     public DriveSubsystem(DcMotorEx FR, DcMotorEx FL, DcMotorEx BR, DcMotorEx BL) {
         this.FR = FR;
         this.FL = FL;
@@ -21,18 +29,18 @@ public class DriveSubsystem extends SubsystemBase{
     }
 
     public void teleDrive(double power, double strafeSpeed, double forwardSpeed, double turnSpeed){
-        double y = forwardSpeed; // Remember, Y stick value is reversed
-        double x = strafeSpeed * 1.1; // Counteract imperfect strafing
-        double rx = turnSpeed;
+        y = forwardSpeed; // Remember, Y stick value is reversed
+        x = strafeSpeed * 1.1; // Counteract imperfect strafing
+        rx = turnSpeed;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
         // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double frontLeftPower = (y + x + rx) / denominator;
-        double backLeftPower = (y - x + rx) / denominator;
-        double frontRightPower = (y - x - rx) / denominator;
-        double backRightPower = (y + x - rx) / denominator;
+        denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        frontLeftPower = (y + x + rx) / denominator;
+        backLeftPower = (y - x + rx) / denominator;
+        frontRightPower = (y - x - rx) / denominator;
+        backRightPower = (y + x - rx) / denominator;
 
         FL.setPower(frontLeftPower * power);
         BL.setPower(backLeftPower * power);
@@ -40,8 +48,4 @@ public class DriveSubsystem extends SubsystemBase{
         BR.setPower(backRightPower * power);
     }
 
-    @Override
-    public void periodic() {
-
-    }
 }
