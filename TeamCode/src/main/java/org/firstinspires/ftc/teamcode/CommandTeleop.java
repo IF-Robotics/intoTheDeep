@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
@@ -26,15 +27,15 @@ public class CommandTeleop extends CommandOpMode {
     private LynxModule controlHub;
 
     //random Todo: Need to clean up my loop time telemetry
-    double loop = 0.0; //
-    double loopTime = 0.0;
-
+    ElapsedTime time = new ElapsedTime();
+    double lastTime;
 
     @Override
     public void initialize() {
         //general
         controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
 
         //hardware
         DcMotorEx BL, BR, FL, FR;
@@ -58,12 +59,12 @@ public class CommandTeleop extends CommandOpMode {
     @Override
     public void run(){
         super.run();
-
         //clear cache
         controlHub.clearBulkCache();
         //loopTime
-        loop = System.nanoTime();
-        telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+        telemetry.addData("hz ", 1/(time.seconds()));
         telemetry.update();
+        time.reset();
+
     }
 }
