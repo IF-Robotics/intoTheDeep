@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.runner;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Disabled
 public final class Drawing {
     private Drawing() {}
 
