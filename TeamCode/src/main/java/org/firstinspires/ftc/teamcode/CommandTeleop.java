@@ -82,7 +82,7 @@ public class CommandTeleop extends CommandOpMode {
         arm.setInverted(true);
         slide = new MotorGroup(slideLeft, slideRight);
 
-        register(armSubsystem);
+        //register(armSubsystem);
 
         //intake
         intake = new CRServo(hardwareMap, "intake");
@@ -92,8 +92,6 @@ public class CommandTeleop extends CommandOpMode {
         //register(intakeSubsystem);
 
         //other
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = dashboard.getTelemetry();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
 
