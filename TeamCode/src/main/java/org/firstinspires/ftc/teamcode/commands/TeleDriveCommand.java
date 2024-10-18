@@ -14,10 +14,6 @@ public class TeleDriveCommand extends CommandBase {
 
     private DoubleSupplier strafe, forward, turn;
 
-    private Gamepad gamepad1;
-
-    private DcMotorEx BL, BR, FL, FR;
-
     public TeleDriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn) {
         this.driveSubsystem = driveSubsystem;
         this.strafe = strafe;

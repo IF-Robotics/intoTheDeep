@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class DriveSubsystem extends SubsystemBase{
 
-    private DcMotorEx FR, FL, BR, BL;
+    private MotorEx FR, FL, BR, BL;
 
     private double y;
     private double x;
@@ -21,7 +22,7 @@ public class DriveSubsystem extends SubsystemBase{
     private double backRightPower;
 
     //constructor
-    public DriveSubsystem(DcMotorEx FR, DcMotorEx FL, DcMotorEx BR, DcMotorEx BL) {
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
@@ -42,10 +43,10 @@ public class DriveSubsystem extends SubsystemBase{
         frontRightPower = (y - x - rx) / denominator;
         backRightPower = (y + x - rx) / denominator;
 
-        FL.setPower(frontLeftPower * power);
-        BL.setPower(backLeftPower * power);
-        FR.setPower(frontRightPower * power);
-        BR.setPower(backRightPower * power);
+        FL.set(frontLeftPower * power);
+        BL.set(backLeftPower * power);
+        FR.set(frontRightPower * power);
+        BR.set(backRightPower * power);
     }
 
 }
