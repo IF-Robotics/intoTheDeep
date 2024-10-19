@@ -19,9 +19,10 @@ public class ArmSubsystem extends SubsystemBase {
     private double ff;
     private PIDController armController = new PIDController(kP, kI, kD);
     private int armTarget = 0;
-    private final double ticks_in_degrees = arm.getCPR()/360;
+    private final double ticks_in_degrees = 5264/360;
     private int armPos = 0;
     private double armPower;
+    private double angle;
 
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideLeft, Telemetry telemetry) {
@@ -42,7 +43,8 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         armPos = slideLeft.getCurrentPosition();
-        telemetry.addData("armAngle", armPos/ticks_in_degrees);
+        angle = armPos/ticks_in_degrees;
+        telemetry.addData("armAngle", angle);
 
     }
 }

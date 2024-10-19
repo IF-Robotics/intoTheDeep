@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
@@ -36,8 +37,10 @@ public class CommandTeleop extends CommandOpMode {
 
     //commands
     private TeleDriveCommand teleDriveCommand;
+    private ArmCommand armCommand;
 
     private GamepadEx m_driver;
+    private GamepadEx m_driverOp;
 
     private LynxModule controlHub;
 
@@ -51,6 +54,7 @@ public class CommandTeleop extends CommandOpMode {
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 
         m_driver = new GamepadEx(gamepad1);
+        m_driverOp = new GamepadEx(gamepad2);
 
         //dt
         FL = new MotorEx(hardwareMap, "FL");
@@ -70,7 +74,7 @@ public class CommandTeleop extends CommandOpMode {
         driveSubsystem.setDefaultCommand(teleDriveCommand);
 
         //arm
-        arm = new MotorEx(hardwareMap, "arm");
+        arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
         slideLeft = new MotorEx(hardwareMap, "slideL");
         slideRight = new MotorEx(hardwareMap, "slideR");
         arm.setRunMode(Motor.RunMode.RawPower);
@@ -82,7 +86,10 @@ public class CommandTeleop extends CommandOpMode {
         arm.setInverted(true);
         slide = new MotorGroup(slideLeft, slideRight);
 
-        //register(armSubsystem);
+        armSubsystem = new ArmSubsystem(arm, slideLeft, telemetry);
+        armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
+        register(armSubsystem);
+        armSubsystem.setDefaultCommand(armCommand);
 
         //intake
         intake = new CRServo(hardwareMap, "intake");
