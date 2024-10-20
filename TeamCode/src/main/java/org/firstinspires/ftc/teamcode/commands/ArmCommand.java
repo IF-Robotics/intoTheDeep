@@ -13,7 +13,7 @@ public class ArmCommand extends CommandBase {
     private DoubleSupplier targetAngle;
 
     public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier targetAngle) {
-        this.armSubsystem =armSubsystem;
+        this.armSubsystem = armSubsystem;
         this.targetAngle = targetAngle;
 
         addRequirements(armSubsystem);
@@ -21,7 +21,7 @@ public class ArmCommand extends CommandBase {
 
     @Override
     public void execute(){
-        armSubsystem.setArm(targetAngle.getAsDouble());
+        armSubsystem.setArm(targetAngle.getAsDouble()*100);
     }
 
 }

@@ -56,6 +56,8 @@ public class CommandTeleop extends CommandOpMode {
         m_driver = new GamepadEx(gamepad1);
         m_driverOp = new GamepadEx(gamepad2);
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         //dt
         FL = new MotorEx(hardwareMap, "FL");
         FR = new MotorEx(hardwareMap, "FR");
@@ -83,7 +85,7 @@ public class CommandTeleop extends CommandOpMode {
         slideLeft.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         slideLeft.setInverted(true);
-        arm.setInverted(true);
+        arm.setInverted(false);
         slide = new MotorGroup(slideLeft, slideRight);
 
         armSubsystem = new ArmSubsystem(arm, slideLeft, telemetry);
