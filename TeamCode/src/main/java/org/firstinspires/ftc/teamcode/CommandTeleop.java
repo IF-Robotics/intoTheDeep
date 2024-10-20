@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
+import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
@@ -38,6 +39,7 @@ public class CommandTeleop extends CommandOpMode {
     //commands
     private TeleDriveCommand teleDriveCommand;
     private ArmCommand armCommand;
+    private SlideCommand slideCommand;
 
     private GamepadEx m_driver;
     private GamepadEx m_driverOp;
@@ -84,14 +86,16 @@ public class CommandTeleop extends CommandOpMode {
         slideRight.setRunMode(Motor.RunMode.RawPower);
         slideLeft.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        slideLeft.setInverted(true);
+        slideLeft.setInverted(false);
+        slideRight.setInverted(true);
         arm.setInverted(false);
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, telemetry);
         armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
+        slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
         register(armSubsystem);
-        armSubsystem.setDefaultCommand(armCommand);
+        armSubsystem.setDefaultCommand(slideCommand);
 
         //intake
         intake = new CRServo(hardwareMap, "intake");
