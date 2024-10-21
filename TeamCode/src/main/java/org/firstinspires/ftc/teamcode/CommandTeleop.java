@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -18,13 +19,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
-
+@Config
 @TeleOp(name="teleOp")
 public class CommandTeleop extends CommandOpMode {
+
 
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
@@ -94,8 +97,9 @@ public class CommandTeleop extends CommandOpMode {
         armSubsystem = new ArmSubsystem(arm, slideLeft, slide, telemetry);
         armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
         slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
+        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
         register(armSubsystem);
-        armSubsystem.setDefaultCommand(slideCommand);
+        //armSubsystem.setDefaultCommand(armCoordinatesCommand);
 
         //intake
         intake = new CRServo(hardwareMap, "intake");
@@ -113,6 +117,8 @@ public class CommandTeleop extends CommandOpMode {
     @Override
     public void run(){
         super.run();
+        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        schedule(armCoordinatesCommand);
         //clear cache
         controlHub.clearBulkCache();
         //loopTime

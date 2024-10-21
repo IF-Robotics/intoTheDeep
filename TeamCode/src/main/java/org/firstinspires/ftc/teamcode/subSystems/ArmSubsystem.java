@@ -18,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     //arm PIDF
-    public double kParm = 0.5, kIarm = 0, kDarm = 0.01, kFarm = .3;
+    public static double kParm = 0.5, kIarm = 0, kDarm = 0.01, kFarm = .3;
     private double ff;
     private PIDController armController;
     private final double ticks_in_degrees = 5264/360;
@@ -63,18 +63,18 @@ public class ArmSubsystem extends SubsystemBase {
         slideExtention = slideTicks/ticksPerIn;
         slidePower = slideController.calculate(slideExtention, targetInches) + slideKF;
         slide.set(slidePower);
-        telemetry.addData("targetIN", targetInches);
+        /*telemetry.addData("targetIN", targetInches);
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);
         telemetry.addData("slideTicks", slideTicks);
-        telemetry.addData("slideError", targetInches - slideExtention);
+        telemetry.addData("slideError", targetInches - slideExtention);*/
     }
 
     public void setArmCoordinates(double x, double y){
         slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
         armTargetAngle = Math.toDegrees(Math.atan((y - armHeight)/x));
-        //setArm(armTargetAngle);
-        //setSlide(slideTargetIn);
+        setArm(armTargetAngle);
+        setSlide(slideTargetIn);
     }
 
     @Override
