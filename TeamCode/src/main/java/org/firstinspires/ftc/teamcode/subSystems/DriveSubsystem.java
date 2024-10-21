@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class DriveSubsystem extends SubsystemBase{
+public class DriveSubsystem extends SubsystemBase {
 
     private MotorEx FR, FL, BR, BL;
 
@@ -21,6 +21,7 @@ public class DriveSubsystem extends SubsystemBase{
     private double frontRightPower;
     private double backRightPower;
 
+
     //constructor
     public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL) {
         this.FR = FR;
@@ -29,24 +30,35 @@ public class DriveSubsystem extends SubsystemBase{
         this.BL = BL;
     }
 
-    public void teleDrive(double power, double strafeSpeed, double forwardSpeed, double turnSpeed){
+    public void teleDrive(double power, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
         y = forwardSpeed; // Remember, Y stick value is reversed
         x = strafeSpeed * 1.1; // Counteract imperfect strafing
-        rx = turnSpeed;
+        rx = -turnSpeed;
 
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        frontLeftPower = (y + x + rx) / denominator;
-        backLeftPower = (y - x + rx) / denominator;
-        frontRightPower = (y - x - rx) / denominator;
-        backRightPower = (y + x - rx) / denominator;
+        if (arcTanZones) {
+            if (Math.toDegrees(Math.atan(y / x)) > 90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 90 + arcTanAngleRange / 2
+            || Math.toDegrees(Math.atan(y / x)) < -90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) > -90 + arcTanAngleRange / 2) {
+                x = 0;
 
-        FL.set(frontLeftPower * power);
-        BL.set(backLeftPower * power);
-        FR.set(frontRightPower * power);
-        BR.set(backRightPower * power);
+                } else if (Math.toDegrees(Math.atan(y / x)) > 0 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 0 + arcTanAngleRange / 2
+            || Math.toDegrees(Math.atan(y / x)) > 180 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 180 + arcTanAngleRange / 2) {
+                y = 0;
+            }
+            }
+
+            // Denominator is the largest motor power (absolute value) or 1
+            // This ensures all the powers maintain the same ratio,
+            // but only if at least one is out of the range [-1, 1]
+            denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            frontLeftPower = (y + x + rx) / denominator;
+            backLeftPower = (y - x + rx) / denominator;
+            frontRightPower = (y - x - rx) / denominator;
+            backRightPower = (y + x - rx) / denominator;
+
+            FL.set(frontLeftPower * power);
+            BL.set(backLeftPower * power);
+            FR.set(frontRightPower * power);
+            BR.set(backRightPower * power);
+
     }
-
 }

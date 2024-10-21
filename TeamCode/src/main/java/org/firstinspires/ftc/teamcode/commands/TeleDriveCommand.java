@@ -13,19 +13,25 @@ public class TeleDriveCommand extends CommandBase {
     private DriveSubsystem driveSubsystem;
 
     private DoubleSupplier strafe, forward, turn;
+    private double power;
+    private boolean arcTanZones;
+    private int arcTanAngleRange;
 
-    public TeleDriveCommand(DriveSubsystem driveSubsystem, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn) {
+    public TeleDriveCommand(DriveSubsystem driveSubsystem, double power, boolean arcTanZones, int arcTanAngleRange, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn) {
         this.driveSubsystem = driveSubsystem;
         this.strafe = strafe;
         this.forward = forward;
         this.turn = turn;
+        this.power = power;
+        this.arcTanZones = arcTanZones;
+        this.arcTanAngleRange = arcTanAngleRange;
 
         addRequirements(driveSubsystem);
     }
 
     @Override
     public void execute(){
-        driveSubsystem.teleDrive(1.0, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
+        driveSubsystem.teleDrive(power, arcTanZones, arcTanAngleRange, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
     }
 
 }

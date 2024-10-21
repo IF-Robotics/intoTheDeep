@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 @TeleOp(name="teleOp")
 public class CommandTeleop extends CommandOpMode {
 
+    public static double x = 0, y = 0;
 
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
@@ -43,6 +44,7 @@ public class CommandTeleop extends CommandOpMode {
     private TeleDriveCommand teleDriveCommand;
     private ArmCommand armCommand;
     private SlideCommand slideCommand;
+    private ArmCoordinatesCommand armCoordinatesCommand;;
 
     private GamepadEx m_driver;
     private GamepadEx m_driverOp;
@@ -72,11 +74,11 @@ public class CommandTeleop extends CommandOpMode {
         FR.setRunMode(MotorEx.RunMode.RawPower);
         BL.setRunMode(MotorEx.RunMode.RawPower);
         BR.setRunMode(MotorEx.RunMode.RawPower);
-        FL.setInverted(true);
-        BL.setInverted(true);
+        FR.setInverted(true);
+        BR.setInverted(true);
 
         driveSubsystem = new DriveSubsystem(FR, FL, BR, BL);
-        teleDriveCommand = new TeleDriveCommand(driveSubsystem, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
+        teleDriveCommand = new TeleDriveCommand(driveSubsystem, 1.0, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
         register(driveSubsystem);
         driveSubsystem.setDefaultCommand(teleDriveCommand);
 
@@ -117,8 +119,8 @@ public class CommandTeleop extends CommandOpMode {
     @Override
     public void run(){
         super.run();
-        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        schedule(armCoordinatesCommand);
+        //armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        //schedule(armCoordinatesCommand);
         //clear cache
         controlHub.clearBulkCache();
         //loopTime
