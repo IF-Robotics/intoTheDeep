@@ -27,12 +27,17 @@ public class ArmSubsystem extends SubsystemBase {
     private double angle;
 
     //slide pidf
-    public static double slideKP = 2.0, slideKI = 0.0, slideKD = 0.0, slideKF = 0.0;
+    public static double slideKP = 1, slideKI = 0.0, slideKD = 0.0, slideKF = 0.1;
     private PIDController slideController;
-    private final double ticksPerIn = 5264/4.41;
+    private final double ticksPerIn = 2786/32.75;
     private int slideTicks = 1;
     private double slidePower;
     private double slideExtention;
+
+    //arm coordinates
+    private double slideTargetIn;
+    private double armTargetAngle;
+    private double armHeight = (24.5 + 24 + 6*24) / 25.4;
 
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Telemetry telemetry) {
@@ -65,6 +70,12 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("slideError", targetInches - slideExtention);
     }
 
+    public void setArmCoordinates(double x, double y){
+        slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
+        armTargetAngle = Math.toDegrees(Math.atan((y - armHeight)/x));
+        //setArm(armTargetAngle);
+        //setSlide(slideTargetIn);
+    }
 
     @Override
     public void periodic() {
