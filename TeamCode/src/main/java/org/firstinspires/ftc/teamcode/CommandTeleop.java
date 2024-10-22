@@ -4,7 +4,10 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -17,12 +20,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
+import org.firstinspires.ftc.teamcode.commands.ArmReset;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
+
 
 @Config
 @TeleOp(name="teleOp")
@@ -45,17 +50,30 @@ public class CommandTeleop extends CommandOpMode {
     private ArmCommand armCommand;
     private SlideCommand slideCommand;
     private ArmCoordinatesCommand armCoordinatesCommand;;
+    private ArmReset armReset;
+
+    //buttons
+    private Button x1;
+
 
     private GamepadEx m_driver;
     private GamepadEx m_driverOp;
 
     private LynxModule controlHub;
 
+
+
     //random Todo: Need to clean up my loop time telemetry
     ElapsedTime time = new ElapsedTime();
 
+    boolean flag = false;
+
+
+
     @Override
     public void initialize() {
+        time.reset();
+
         //general system
         controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
@@ -94,13 +112,17 @@ public class CommandTeleop extends CommandOpMode {
         slideLeft.setInverted(false);
         slideRight.setInverted(true);
         arm.setInverted(false);
+
         arm.resetEncoder();
+        slideLeft.resetEncoder();
+
         slide = new MotorGroup(slideLeft, slideRight);
 
         armSubsystem = new ArmSubsystem(arm, slideLeft, slide, telemetry);
         armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
         slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
         armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        armReset = new ArmReset(armSubsystem, arm, slideLeft, slide);
         register(armSubsystem);
         //armSubsystem.setDefaultCommand(armCoordinatesCommand);
 
@@ -111,17 +133,35 @@ public class CommandTeleop extends CommandOpMode {
 
         //register(intakeSubsystem);
 
+        configureButtons();
+
         //other
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-
+        /*while(time.seconds() < 1){
+            super.run();
+            armReset.schedule();
+        }*/
+        telemetry.addLine("Initialized");
+        telemetry.update();
     }
+
+
 
     @Override
     public void run(){
+        if (!flag) {
+            super.run(); //whatever you need to run once
+            armReset.schedule();
+            flag = true;
+        }
+
         super.run();
-        //armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        //schedule(armCoordinatesCommand);
+
+        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        if(gamepad1.x){
+            armCoordinatesCommand.schedule();
+        }
+
         //clear cache
         controlHub.clearBulkCache();
         //loopTime
@@ -129,5 +169,9 @@ public class CommandTeleop extends CommandOpMode {
         telemetry.update();
         time.reset();
 
+    }
+
+    public void configureButtons() {
+        x1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
     }
 }

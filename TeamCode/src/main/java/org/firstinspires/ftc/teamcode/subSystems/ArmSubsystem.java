@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -49,9 +50,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setArm(double targetAngle) {
         armController = new PIDController(kParm, kIarm, kDarm);
-        angle = armPos/ticks_in_degrees;
         ff = kFarm * Math.cos(Math.toRadians(angle));
         armPower = armController.calculate(angle, targetAngle) + ff;
+        arm.set(armPower);
         /*telemetry.addData("ff", ff);
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
@@ -60,33 +61,37 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setSlide(double targetInches) {
         slideController = new PIDController(slideKP, slideKI, slideKD);
-        slideExtention = slideTicks/ticksPerIn;
         slidePower = slideController.calculate(slideExtention, targetInches) + slideKF;
         slide.set(slidePower);
-        /*telemetry.addData("targetIN", targetInches);
-        telemetry.addData("slidePower", slidePower);
-        telemetry.addData("slideExtention", slideExtention);
-        telemetry.addData("slideTicks", slideTicks);
-        telemetry.addData("slideError", targetInches - slideExtention);*/
+        //telemetry.addData("targetIN", targetInches);
+        //telemetry.addData("slideTicks", slideTicks);
+        telemetry.addData("slideError", targetInches - slideExtention);
     }
 
     public void setArmCoordinates(double x, double y){
         slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
         armTargetAngle = Math.toDegrees(Math.atan((y - armHeight)/x));
-        setArm(armTargetAngle);
-        setSlide(slideTargetIn);
+        setSlide(slideTargetIn - 9.2);
+        if(x < 0) {
+            setArm(180 + armTargetAngle);
+        } else {
+            setArm(armTargetAngle);
+        }
     }
+
 
     @Override
     public void periodic() {
-        armPos = arm.getCurrentPosition() + 670;
+        armPos = arm.getCurrentPosition();
         slideTicks = slideL.getCurrentPosition();
-        arm.set(armPower);
         //setMotor(arm, armPower);
 
-        angle = armPos/ticks_in_degrees;
-        /*telemetry.addData("armAngle", angle);
-        telemetry.addData("armPower", armPower);*/
+        angle = armPos/ticks_in_degrees - 47;
+        telemetry.addData("armAngle", angle);
+        telemetry.addData("armPower", armPower);
+
+        slideExtention = slideTicks/ticksPerIn;
+        telemetry.addData("slideExtention", slideExtention);
 
     }
 
