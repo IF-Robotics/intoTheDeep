@@ -94,6 +94,7 @@ public class CommandTeleop extends CommandOpMode {
         slideLeft.setInverted(false);
         slideRight.setInverted(true);
         arm.setInverted(false);
+        arm.resetEncoder();
         slide = new MotorGroup(slideLeft, slideRight);
 
         armSubsystem = new ArmSubsystem(arm, slideLeft, slide, telemetry);

@@ -79,7 +79,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        armPos = arm.getCurrentPosition();
+        armPos = arm.getCurrentPosition() + 670;
         slideTicks = slideL.getCurrentPosition();
         arm.set(armPower);
         //setMotor(arm, armPower);
