@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -15,17 +15,20 @@ public class ArmSubsystem extends SubsystemBase {
 
     private MotorEx arm, slideL;
     private MotorGroup slide;
+    private ServoEx diffyLeft, diffyRight;
+    private AnalogInput armEncoder;
     private Telemetry telemetry;
 
 
     //arm PIDF
-    public static double kParm = 0.5, kIarm = 0, kDarm = 0.01, kFarm = .3;
+    public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
+    public static double armAngleOffset = 113.5;
     private double ff;
     private PIDController armController;
-    private final double ticks_in_degrees = 5264/360;
-    private int armPos = 0;
+    private double setArmTargetAngle;
     private double armPower;
-    private double angle;
+    private double rawAngle;
+    private double correctedAngle;
 
     //slide pidf
     public static double slideKP = 1, slideKI = 0.0, slideKD = 0.0, slideKF = 0.1;
@@ -41,17 +44,19 @@ public class ArmSubsystem extends SubsystemBase {
     private double armHeight = (24.5 + 24 + 6*24) / 25.4;
 
     //constructor
-    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Telemetry telemetry) {
+    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, ServoEx diffyLeft, ServoEx diffyRight, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
         this.slide = slide;
         this.slideL = slideL;
+        this.armEncoder = armEncoder;
         this.telemetry = telemetry;
     }
 
     public void setArm(double targetAngle) {
+        setArmTargetAngle = targetAngle;
         armController = new PIDController(kParm, kIarm, kDarm);
-        ff = kFarm * Math.cos(Math.toRadians(angle));
-        armPower = armController.calculate(angle, targetAngle) + ff;
+        ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
+        armPower = armController.calculate(correctedAngle, targetAngle) + ff;
         arm.set(armPower);
         /*telemetry.addData("ff", ff);
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
@@ -71,7 +76,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setArmCoordinates(double x, double y){
         slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
         armTargetAngle = Math.toDegrees(Math.atan((y - armHeight)/x));
-        setSlide(slideTargetIn - 9.2);
+        setSlide(slideTargetIn - 7.75);
         if(x < 0) {
             setArm(180 + armTargetAngle);
         } else {
@@ -82,13 +87,18 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        armPos = arm.getCurrentPosition();
         slideTicks = slideL.getCurrentPosition();
+        rawAngle = armEncoder.getVoltage()/3.3 * 360;;
         //setMotor(arm, armPower);
 
-        angle = armPos/ticks_in_degrees - 47;
-        telemetry.addData("armAngle", angle);
+        if(rawAngle <= 360 && rawAngle > 203){
+            correctedAngle = armAngleOffset + (360 - rawAngle);
+        } else {
+            correctedAngle = armAngleOffset - rawAngle;
+        }
+        telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
+        telemetry.addData("error", setArmTargetAngle - correctedAngle);
 
         slideExtention = slideTicks/ticksPerIn;
         telemetry.addData("slideExtention", slideExtention);

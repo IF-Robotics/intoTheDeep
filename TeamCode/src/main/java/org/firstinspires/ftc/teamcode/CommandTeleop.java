@@ -9,18 +9,19 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
-import org.firstinspires.ftc.teamcode.commands.ArmReset;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
@@ -35,10 +36,12 @@ public class CommandTeleop extends CommandOpMode {
 
     public static double x = 0, y = 0;
 
+    //hardware
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
     public CRServo intake;
-    public Servo diffyLeft, diffyRight;
+    public ServoEx diffyLeft, diffyRight;
+    public AnalogInput armEncoder;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -50,7 +53,7 @@ public class CommandTeleop extends CommandOpMode {
     private ArmCommand armCommand;
     private SlideCommand slideCommand;
     private ArmCoordinatesCommand armCoordinatesCommand;;
-    private ArmReset armReset;
+    private IntakeCommand intakeCommand;
 
     //buttons
     private Button x1;
@@ -104,6 +107,7 @@ public class CommandTeleop extends CommandOpMode {
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
         slideLeft = new MotorEx(hardwareMap, "slideL");
         slideRight = new MotorEx(hardwareMap, "slideR");
+        armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
         arm.setRunMode(Motor.RunMode.RawPower);
         slideLeft.setRunMode(Motor.RunMode.RawPower);
         slideRight.setRunMode(Motor.RunMode.RawPower);
@@ -118,25 +122,22 @@ public class CommandTeleop extends CommandOpMode {
 
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, diffyLeft, diffyRight, armEncoder, telemetry);
         armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
         slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
         armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        armReset = new ArmReset(armSubsystem, arm, slideLeft, slide);
         register(armSubsystem);
         //armSubsystem.setDefaultCommand(armCoordinatesCommand);
 
         //intake
         intake = new CRServo(hardwareMap, "intake");
-        diffyLeft =  hardwareMap.get(Servo.class, "diffyLeft");
-        diffyRight =  hardwareMap.get(Servo.class, "diffyRight");
+        diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
+        diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);
 
         //register(intakeSubsystem);
 
         configureButtons();
 
-        //other
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         /*while(time.seconds() < 1){
             super.run();
             armReset.schedule();
@@ -151,7 +152,6 @@ public class CommandTeleop extends CommandOpMode {
     public void run(){
         if (!flag) {
             super.run(); //whatever you need to run once
-            armReset.schedule();
             flag = true;
         }
 
