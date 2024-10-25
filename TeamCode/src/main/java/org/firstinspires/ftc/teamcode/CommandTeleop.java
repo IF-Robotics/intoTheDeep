@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -21,6 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
+import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
@@ -35,6 +37,7 @@ import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 public class CommandTeleop extends CommandOpMode {
 
     public static double x = 0, y = 0;
+    public static double pitch = 0, roll = 0;
 
     //hardware
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
@@ -52,16 +55,29 @@ public class CommandTeleop extends CommandOpMode {
     private TeleDriveCommand teleDriveCommand;
     private ArmCommand armCommand;
     private SlideCommand slideCommand;
-    private ArmCoordinatesCommand armCoordinatesCommand;;
+    private ArmCoordinatesCommand armCoordinatesCommand;
+    private ArmManualCommand armManualCommand;
+    private ArmCoordinatesCommand armHomeCommand;
+    private ArmCoordinatesCommand armHighBasketCommand;
+    private ArmCoordinatesCommand armBackCommand;
+    private ArmCoordinatesCommand armWhenIntakeCommand;
+    private IntakeCommand setIntakeCommand;
+    private IntakeCommand intakeWhenArmBackCommand;
+    private IntakeCommand intakeWhenHighBasketCommand;
+    private IntakeCommand outakeWhenHighBasketCommand;
+    private IntakeCommand intakeReadyCommand;
+    private IntakeCommand intakeWhenArmHomeCommand;
     private IntakeCommand intakeCommand;
 
     //buttons
-    private Button x1;
+    private Button x1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1;
+    private Trigger tLeft1, tRight1;
 
-
+    //gamePads
     private GamepadEx m_driver;
     private GamepadEx m_driverOp;
 
+    //system
     private LynxModule controlHub;
 
 
@@ -69,7 +85,12 @@ public class CommandTeleop extends CommandOpMode {
     //random Todo: Need to clean up my loop time telemetry
     ElapsedTime time = new ElapsedTime();
 
+    boolean manual = false;
     boolean flag = false;
+
+    //constants
+    public static int rollWhenReadyIntake = 80;
+    public static int rollWhenIntake = 130;
 
 
 
@@ -117,7 +138,6 @@ public class CommandTeleop extends CommandOpMode {
         slideRight.setInverted(true);
         arm.setInverted(false);
 
-        arm.resetEncoder();
         slideLeft.resetEncoder();
 
         slide = new MotorGroup(slideLeft, slideRight);
@@ -126,22 +146,37 @@ public class CommandTeleop extends CommandOpMode {
         armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
         slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
         armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        armHomeCommand = new ArmCoordinatesCommand(armSubsystem, 7.2, 5);
+        armBackCommand = new ArmCoordinatesCommand(armSubsystem, -3, 15);
+        armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, -8, 43);
+        armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, 16, 3.5);
+        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp::getRightY, m_driverOp::getLeftY);
+
         register(armSubsystem);
-        //armSubsystem.setDefaultCommand(armCoordinatesCommand);
+        armSubsystem.setDefaultCommand(armHomeCommand);
 
         //intake
         intake = new CRServo(hardwareMap, "intake");
         diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
         diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);
+        intake.setInverted(true);
 
-        //register(intakeSubsystem);
+        intakeSubsystem = new IntakeSubsystem(intake, diffyLeft, diffyRight, telemetry);
+        setIntakeCommand = new IntakeCommand(intakeSubsystem, 0, pitch, roll);
+        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, 0, 240, -150);
+
+        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, 240, 0);
+        outakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, -.5, 240, 0);
+
+        intakeReadyCommand = new IntakeCommand(intakeSubsystem, 1, 0, rollWhenReadyIntake);
+        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, 300);
+        intakeCommand = new IntakeCommand(intakeSubsystem, 1, 0, rollWhenIntake);
+
+        register(intakeSubsystem);
+        intakeSubsystem.setDefaultCommand(intakeWhenArmHomeCommand);
 
         configureButtons();
 
-        /*while(time.seconds() < 1){
-            super.run();
-            armReset.schedule();
-        }*/
         telemetry.addLine("Initialized");
         telemetry.update();
     }
@@ -157,21 +192,70 @@ public class CommandTeleop extends CommandOpMode {
 
         super.run();
 
-        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        if(gamepad1.x){
+        //arm input testing
+        //armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        /*if(gamepad2.cross){
             armCoordinatesCommand.schedule();
+        }*/
+
+        //intake input testing
+        //setIntakeCommand = new IntakeCommand(intakeSubsystem, 1, pitch, roll);
+        /*if(gamepad2.circle) {
+            setIntakeCommand.schedule();
+        }*/
+
+        if(manual){
+            armManualCommand.schedule();
         }
 
+        //manualMode
+        if(gamepad2.start){
+            manual = true;
+        } else if(gamepad2.back){
+            manual = false;
+        }
+
+
+        //binding
+
+            //intaking
+        bLeft1.whenPressed(armWhenIntakeCommand);
+        bLeft1.whenPressed(intakeReadyCommand);
+        bLeft1.whenReleased(intakeCommand);
+        dDown1.whenPressed(armHomeCommand);
+
+            //baskets
+        bRight1.whenPressed(armHighBasketCommand);
+        bRight1.whenPressed(intakeWhenHighBasketCommand);
+        bRight1.whenReleased(outakeWhenHighBasketCommand);
+
+        dLeft1.whenPressed(armBackCommand);
+        dLeft1.whenPressed(intakeWhenArmBackCommand);
+
+        //climbing
+        start2.whenPressed(intakeWhenHighBasketCommand);
+
+
         //clear cache
-        controlHub.clearBulkCache();
+        //other telemetry
+        telemetry.addData("manual", manual);
         //loopTime
         telemetry.addData("hz ", 1/(time.seconds()));
         telemetry.update();
         time.reset();
+        controlHub.clearBulkCache();
 
     }
 
     public void configureButtons() {
         x1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
+        start2 = new GamepadButton(m_driverOp, GamepadKeys.Button.START);
+        back2 = new GamepadButton(m_driverOp, GamepadKeys.Button.BACK);
+        dUp1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_UP);
+        dDown1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_DOWN);
+        dLeft1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_LEFT);
+        dRight1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_RIGHT);
+        bRight1 = new GamepadButton(m_driver, GamepadKeys.Button.RIGHT_BUMPER);
+        bLeft1 = new GamepadButton(m_driver, GamepadKeys.Button.LEFT_BUMPER);
     }
 }

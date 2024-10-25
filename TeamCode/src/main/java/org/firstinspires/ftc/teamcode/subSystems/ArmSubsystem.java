@@ -31,12 +31,13 @@ public class ArmSubsystem extends SubsystemBase {
     private double correctedAngle;
 
     //slide pidf
-    public static double slideKP = 1, slideKI = 0.0, slideKD = 0.0, slideKF = 0.1;
+    public static double slideKP = .6, slideKI = 0.0, slideKD = 0.0, slideKF = 0.1;
     private PIDController slideController;
     private final double ticksPerIn = 2786/32.75;
     private int slideTicks = 1;
     private double slidePower;
     private double slideExtention;
+    public static double slideWristOffset = 7.75;
 
     //arm coordinates
     private double slideTargetIn;
@@ -50,6 +51,11 @@ public class ArmSubsystem extends SubsystemBase {
         this.slideL = slideL;
         this.armEncoder = armEncoder;
         this.telemetry = telemetry;
+    }
+
+    public void manualArm(double armPower, double slidePower){
+        arm.set(-armPower);
+        slide.set(slidePower);
     }
 
     public void setArm(double targetAngle) {
@@ -76,7 +82,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void setArmCoordinates(double x, double y){
         slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
         armTargetAngle = Math.toDegrees(Math.atan((y - armHeight)/x));
-        setSlide(slideTargetIn - 7.75);
+        setSlide(slideTargetIn);
         if(x < 0) {
             setArm(180 + armTargetAngle);
         } else {
@@ -89,19 +95,23 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         slideTicks = slideL.getCurrentPosition();
         rawAngle = armEncoder.getVoltage()/3.3 * 360;;
-        //setMotor(arm, armPower);
 
         if(rawAngle <= 360 && rawAngle > 203){
             correctedAngle = armAngleOffset + (360 - rawAngle);
         } else {
             correctedAngle = armAngleOffset - rawAngle;
         }
+
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
         telemetry.addData("error", setArmTargetAngle - correctedAngle);
 
-        slideExtention = slideTicks/ticksPerIn;
+        slideExtention = slideTicks/ticksPerIn + slideWristOffset;
+        telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);
+
+        telemetry.addData("xPos", slideExtention * Math.cos(Math.toRadians(correctedAngle)));
+        telemetry.addData("yPos", slideExtention * Math.sin(Math.toRadians(correctedAngle)) + armHeight);
 
     }
 
