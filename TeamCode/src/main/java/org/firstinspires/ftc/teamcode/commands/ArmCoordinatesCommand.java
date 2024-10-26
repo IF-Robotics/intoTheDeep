@@ -21,4 +21,9 @@ public class ArmCoordinatesCommand extends CommandBase {
     public void execute(){
         armSubsystem.setArmCoordinates(x, y);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

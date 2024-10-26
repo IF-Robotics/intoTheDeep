@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 
@@ -13,16 +11,16 @@ public class TeleDriveCommand extends CommandBase {
     private DriveSubsystem driveSubsystem;
 
     private DoubleSupplier strafe, forward, turn;
-    private double power;
     private boolean arcTanZones;
     private int arcTanAngleRange;
+    private GamepadEx driver;
 
-    public TeleDriveCommand(DriveSubsystem driveSubsystem, double power, boolean arcTanZones, int arcTanAngleRange, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn) {
+    public TeleDriveCommand(DriveSubsystem driveSubsystem, GamepadEx driver, boolean arcTanZones, int arcTanAngleRange, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn) {
         this.driveSubsystem = driveSubsystem;
+        this.driver = driver;
         this.strafe = strafe;
         this.forward = forward;
         this.turn = turn;
-        this.power = power;
         this.arcTanZones = arcTanZones;
         this.arcTanAngleRange = arcTanAngleRange;
 
@@ -31,7 +29,7 @@ public class TeleDriveCommand extends CommandBase {
 
     @Override
     public void execute(){
-        driveSubsystem.teleDrive(power, arcTanZones, arcTanAngleRange, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
+        driveSubsystem.teleDrive(driver, arcTanZones, arcTanAngleRange, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
     }
 
 }

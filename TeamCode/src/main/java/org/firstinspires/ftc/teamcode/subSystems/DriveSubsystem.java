@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.subSystems;
+import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
+
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -20,6 +23,7 @@ public class DriveSubsystem extends SubsystemBase {
     private double backLeftPower;
     private double frontRightPower;
     private double backRightPower;
+    private double power;
 
 
     //constructor
@@ -30,10 +34,16 @@ public class DriveSubsystem extends SubsystemBase {
         this.BL = BL;
     }
 
-    public void teleDrive(double power, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
+    public void teleDrive(GamepadEx driver, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
         y = forwardSpeed; // Remember, Y stick value is reversed
         x = strafeSpeed * 1.1; // Counteract imperfect strafing
         rx = -turnSpeed;
+
+        if (driver.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
+            power = .3;
+        } else {
+            power = 1;
+        }
 
         if (arcTanZones) {
             if (Math.toDegrees(Math.atan(y / x)) > 90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 90 + arcTanAngleRange / 2

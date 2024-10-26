@@ -25,4 +25,9 @@ public class IntakeCommand extends CommandBase {
         intakeSubsystem.setIntake(power);
         intakeSubsystem.setDiffy(pitchAngle, rollAngle);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

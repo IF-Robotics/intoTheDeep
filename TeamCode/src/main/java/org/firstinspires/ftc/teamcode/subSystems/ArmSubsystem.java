@@ -38,6 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
     private double slidePower;
     private double slideExtention;
     public static double slideWristOffset = 7.75;
+    private double setSlideTarget = 8;
 
     //arm coordinates
     private double slideTargetIn;
@@ -60,23 +61,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setArm(double targetAngle) {
         setArmTargetAngle = targetAngle;
-        armController = new PIDController(kParm, kIarm, kDarm);
-        ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
-        armPower = armController.calculate(correctedAngle, targetAngle) + ff;
-        arm.set(armPower);
-        /*telemetry.addData("ff", ff);
-        telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
-        telemetry.addData("targetAngle", targetAngle);
-        telemetry.addData("error", targetAngle - angle);*/
     }
 
     public void setSlide(double targetInches) {
-        slideController = new PIDController(slideKP, slideKI, slideKD);
-        slidePower = slideController.calculate(slideExtention, targetInches) + slideKF;
-        slide.set(slidePower);
-        //telemetry.addData("targetIN", targetInches);
-        //telemetry.addData("slideTicks", slideTicks);
-        telemetry.addData("slideError", targetInches - slideExtention);
+        setSlideTarget = targetInches;
     }
 
     public void setArmCoordinates(double x, double y){
@@ -101,6 +89,25 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             correctedAngle = armAngleOffset - rawAngle;
         }
+
+        //arm pid
+        armController = new PIDController(kParm, kIarm, kDarm);
+        ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
+        armPower = armController.calculate(correctedAngle, setArmTargetAngle) + ff;
+        arm.set(armPower);
+        /*telemetry.addData("ff", ff);
+        telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
+        telemetry.addData("targetAngle", targetAngle);
+        telemetry.addData("error", targetAngle - angle);*/
+
+        //slide pid
+        slideController = new PIDController(slideKP, slideKI, slideKD);
+        slidePower = slideController.calculate(slideExtention, setSlideTarget) + slideKF;
+        slide.set(slidePower);
+        //telemetry.addData("targetIN", targetInches);
+        //telemetry.addData("slideTicks", slideTicks);
+        telemetry.addData("slideError", setSlideTarget - slideExtention);
+
 
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
