@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -7,6 +9,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -45,6 +48,10 @@ public class ArmSubsystem extends SubsystemBase {
     private double armTargetAngle;
     private double armHeight = (24.5 + 24 + 6*24) / 25.4;
 
+    //manualArm
+    private double armManualPower;
+    private double slideManualPower;
+
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, ServoEx diffyLeft, ServoEx diffyRight, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
@@ -55,8 +62,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void manualArm(double armPower, double slidePower){
-        arm.set(-armPower);
-        slide.set(slidePower);
+        armManualPower = -armPower;
+        slideManualPower = slidePower;
     }
 
     public void setArm(double targetAngle) {
@@ -94,7 +101,6 @@ public class ArmSubsystem extends SubsystemBase {
         armController = new PIDController(kParm, kIarm, kDarm);
         ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
         armPower = armController.calculate(correctedAngle, setArmTargetAngle) + ff;
-        arm.set(armPower);
         /*telemetry.addData("ff", ff);
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
@@ -103,10 +109,17 @@ public class ArmSubsystem extends SubsystemBase {
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);
         slidePower = slideController.calculate(slideExtention, setSlideTarget) + slideKF;
-        slide.set(slidePower);
         //telemetry.addData("targetIN", targetInches);
         //telemetry.addData("slideTicks", slideTicks);
         telemetry.addData("slideError", setSlideTarget - slideExtention);
+
+        if(manualArm){
+            arm.set(armManualPower);
+            slide.set(slideManualPower);
+        } else {
+            arm.set(armPower);
+            slide.set(slidePower);
+        }
 
 
         telemetry.addData("armAngle", correctedAngle);

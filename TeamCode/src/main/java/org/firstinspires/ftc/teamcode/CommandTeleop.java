@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.RIGHT_TRIGGER;
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
+
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -23,12 +24,15 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
+import org.firstinspires.ftc.teamcode.other.Touchpad;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
@@ -63,16 +67,23 @@ public class CommandTeleop extends CommandOpMode {
     private ArmCoordinatesCommand armHighBasketCommand;
     private ArmCoordinatesCommand armBackCommand;
     private ArmCoordinatesCommand armWhenIntakeCommand;
+    private ArmCoordinatesCommand armWhenCloseIntakeCommand;
+    private ArmCoordinatesCommand armWhenHighChamberCommand;
     private IntakeCommand setIntakeCommand;
     private IntakeCommand intakeWhenArmBackCommand;
     private IntakeCommand intakeWhenHighBasketCommand;
     private IntakeCommand outakeWhenHighBasketCommand;
     private IntakeCommand intakeReadyCommand;
+    private IntakeCommand outakeReadyCommand;
     private IntakeCommand intakeWhenArmHomeCommand;
     private IntakeCommand intakeCommand;
+    private IntakeCommand intakeWhenHighChamberCommand;
+    private IntakeCommand intakeCloseCommand;
+
+    //private
 
     //buttons
-    private Button x1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1;
+    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, square1, touchpad1;
     private Trigger tLeft1, tRight1;
 
     //gamePads
@@ -90,9 +101,7 @@ public class CommandTeleop extends CommandOpMode {
     boolean manual = false;
     boolean flag = false;
 
-    //constants
-    public static int rollWhenReadyIntake = 150;
-    public static int rollWhenIntake = 80;
+
 
 
 
@@ -148,11 +157,18 @@ public class CommandTeleop extends CommandOpMode {
         armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
         slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
         armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        armHomeCommand = new ArmCoordinatesCommand(armSubsystem, 7.2, 5);
-        armBackCommand = new ArmCoordinatesCommand(armSubsystem, -3, 15);
-        armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, -8, 43);
-        armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, 20, 3.75);
-        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp::getRightY, m_driverOp::getLeftY);
+        //home poses
+        armHomeCommand = new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY);
+        armBackCommand = new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY);
+        //scoring
+        armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY);
+        armWhenHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY);
+        //intaking
+        armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armIntakeX, armIntakeY);
+        armWhenCloseIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY);
+
+
+        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
 
         register(armSubsystem);
         //armSubsystem.setDefaultCommand(armHomeCommand);
@@ -165,37 +181,54 @@ public class CommandTeleop extends CommandOpMode {
 
         intakeSubsystem = new IntakeSubsystem(intake, diffyLeft, diffyRight, telemetry);
         setIntakeCommand = new IntakeCommand(intakeSubsystem, 0, pitch, roll);
-        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, .1, 240, -150);
 
-        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, 240, 0);
-        outakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, -.5, 240, 0);
-
-        intakeReadyCommand = new IntakeCommand(intakeSubsystem, 1, 0, rollWhenReadyIntake);
-        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, 300);
-        intakeCommand = new IntakeCommand(intakeSubsystem, 1, 0, rollWhenIntake);
+        //scoring
+        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenBasket, 0);
+        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenHighChamber, rollWhenHighChamber);
+        //intaking
+        intakeReadyCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake);
+        outakeReadyCommand = new IntakeCommand(intakeSubsystem, outtakePower, 0, rollWhenReadyIntake);
+        intakeCloseCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenCloseIntake);
+        //home poses
+        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, rollWhenArmHome);
+        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, intakePower, pitchWhenBasket, rollWhenArmBack);
+        intakeCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenIntake);
 
         register(intakeSubsystem);
 
 
         configureButtons();
 
+        //sub intake
+        dUp1.whenPressed(armWhenIntakeCommand);
+        dUp1.whenPressed(intakeReadyCommand);
+        bLeft1.whenPressed(intakeCommand);
+        bLeft1.whenReleased(intakeReadyCommand);
+        tLeft1.whenActive(outakeReadyCommand);
+        //intake close
+        dRight1.whenPressed(armWhenCloseIntakeCommand);
+        dRight1.whenPressed(intakeCloseCommand);
+        //retract after intaking
+        dDown1.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
 
-        bLeft1.whenPressed(armWhenIntakeCommand);
-        bLeft1.whenPressed(intakeReadyCommand);
-        bLeft1.whenReleased(intakeCommand);
-
-        dDown1.whenPressed(armHomeCommand);
+        //chambers
+        square1.whenPressed(armWhenHighChamberCommand);
+        square1.whenPressed(intakeWhenHighChamberCommand);
 
         //baskets
         triangle1.whenPressed(armHighBasketCommand);
         triangle1.whenPressed(intakeWhenHighBasketCommand);
-        x1.whenPressed(outakeWhenHighBasketCommand);
 
+        //retract after scoring in the baskets
+        cross1.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));
+
+        //arm back
         dLeft1.whenPressed(armBackCommand);
         dLeft1.whenPressed(intakeWhenArmBackCommand);
 
         //climbing
         start2.whenPressed(intakeWhenHighBasketCommand);
+        start2.whenPressed(armManualCommand);
 
 
 
@@ -226,23 +259,13 @@ public class CommandTeleop extends CommandOpMode {
             setIntakeCommand.schedule();
         }*/
 
-        if(manual){
-            armManualCommand.schedule();
-            intakeWhenHighBasketCommand.schedule();
-        }
 
-        //manualMode
-        if(gamepad2.start){
-            manual = true;
-        } else if(gamepad2.back){
-            manual = false;
-        }
 
 
 
         //clear cache
         //other telemetry
-        telemetry.addData("manual", manual);
+        telemetry.addData("manual", manualArm);
         //loopTime
         telemetry.addData("hz ", 1/(time.seconds()));
         telemetry.update();
@@ -252,7 +275,7 @@ public class CommandTeleop extends CommandOpMode {
     }
 
     public void configureButtons() {
-        x1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
+        square1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
         start2 = new GamepadButton(m_driverOp, GamepadKeys.Button.START);
         back2 = new GamepadButton(m_driverOp, GamepadKeys.Button.BACK);
         dUp1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_UP);
@@ -262,5 +285,10 @@ public class CommandTeleop extends CommandOpMode {
         bRight1 = new GamepadButton(m_driver, GamepadKeys.Button.RIGHT_BUMPER);
         bLeft1 = new GamepadButton(m_driver, GamepadKeys.Button.LEFT_BUMPER);
         triangle1 = new GamepadButton(m_driver, GamepadKeys.Button.Y);
+        cross1 = new GamepadButton(m_driver, GamepadKeys.Button.A);
+        dRight1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_RIGHT);
+        touchpad1 = new Touchpad();
+        tLeft1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
+
     }
 }
