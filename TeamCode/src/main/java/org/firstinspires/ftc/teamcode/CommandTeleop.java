@@ -194,6 +194,7 @@ public class CommandTeleop extends CommandOpMode {
         intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, intakePower, pitchWhenBasket, rollWhenArmBack);
         intakeCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenIntake);
 
+
         register(intakeSubsystem);
 
 
