@@ -15,8 +15,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private Telemetry telemetry;
 
-    public static int pitchAngleOffset = 330;
-    public static int rollAngleOffset = -20;
+    public static int pitchAngleOffset = 270;
+    public static int rollAngleOffset = 5;
 
     public IntakeSubsystem(CRServo intake, ServoEx diffyLeft, ServoEx diffyRight, Telemetry telemetry) {
         this.intake = intake;

@@ -184,7 +184,7 @@ public class CommandTeleop extends CommandOpMode {
 
         //scoring
         intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenBasket, 0);
-        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenHighChamber, rollWhenHighChamber);
+        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, pitchWhenHighChamber, rollWhenHighChamber);
         //intaking
         intakeReadyCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, outtakePower, 0, rollWhenReadyIntake);
@@ -235,6 +235,7 @@ public class CommandTeleop extends CommandOpMode {
 
         telemetry.addLine("Initialized");
         telemetry.update();
+
     }
 
 
