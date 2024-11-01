@@ -1,23 +1,15 @@
 package org.firstinspires.ftc.teamcode.subSystems;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.controller.PController;
-import com.arcrobotics.ftclib.controller.PDController;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import static org.firstinspires.ftc.teamcode.subSystems.OdoSubSystem.pos;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import static org.firstinspires.ftc.teamcode.subSystems.OdoSubsystem.pos;
 
 public class DriveSubsystem extends SubsystemBase {
 

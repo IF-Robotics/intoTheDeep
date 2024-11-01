@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.teamcode.other.Globals.armBackX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armBackY;
 import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeX;
@@ -24,12 +25,6 @@ import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenCloseIntake;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenHighChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenReadyIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.kI;
-import static org.firstinspires.ftc.teamcode.other.Globals.kP;
-import static org.firstinspires.ftc.teamcode.other.Globals.kD;
-import static org.firstinspires.ftc.teamcode.other.Globals.headingkD;
-import static org.firstinspires.ftc.teamcode.other.Globals.headingkP;
-import static org.firstinspires.ftc.teamcode.other.Globals.headingkI;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -41,6 +36,8 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 //import com.arcrobotics.ftclib.command.button.Trigger;
 //import com.arcrobotics.ftclib.gamepad.GamepadEx;
 //import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -48,6 +45,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -58,11 +56,14 @@ import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
+import org.firstinspires.ftc.teamcode.commands.OtosCommand;
+
 //import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subSystems.OdoSubSystem;
+import org.firstinspires.ftc.teamcode.subSystems.OdoSubsystem;
+
 
 
 
@@ -74,9 +75,9 @@ public class Auto extends CommandOpMode {
 
 
     // Not sure what to do without this it throws error
-    public static double targetx = 0;
-    public static double targety = 0;
-    public static double targetheading = 0;
+    private double targetx = 0;
+    private static double targety = 0;
+    private static double targetheading = 0;
 
     //hardware
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
@@ -89,8 +90,9 @@ public class Auto extends CommandOpMode {
     public DriveSubsystem driveSubsystem;
     public ArmSubsystem armSubsystem;
     public IntakeSubsystem intakeSubsystem;
-
+    public OdoSubsystem odoSubsystem;
     //commands
+    private OtosCommand otosCommand;
     private ArmCommand armCommand;
     private SlideCommand slideCommand;
     private ArmCoordinatesCommand armCoordinatesCommand;
@@ -113,6 +115,7 @@ public class Auto extends CommandOpMode {
     private IntakeCommand intakeCloseCommand;
     private DriveToPointCommand driveToPoint;
 
+    SparkFunOTOS myOtos;
 
 
     //private
@@ -142,6 +145,7 @@ public class Auto extends CommandOpMode {
 
     @Override
     public void initialize() {
+
         time.reset();
 
         //general system
@@ -152,6 +156,8 @@ public class Auto extends CommandOpMode {
 //        m_driverOp = new GamepadEx(gamepad2);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
 
         //dt
         FL = new MotorEx(hardwareMap, "FL");
@@ -165,8 +171,12 @@ public class Auto extends CommandOpMode {
         FR.setInverted(true);
         BR.setInverted(true);
 
+
+        register(odoSubsystem);
+
         driveSubsystem = new DriveSubsystem(FR, FL, BR, BL);
         driveToPoint = new DriveToPointCommand(targetx, targety, targetheading);
+
 //        teleDriveCommand = new TeleDriveCommand(driveSubsystem, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
         register(driveSubsystem);
 
