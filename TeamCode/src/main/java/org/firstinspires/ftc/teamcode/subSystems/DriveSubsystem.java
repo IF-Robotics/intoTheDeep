@@ -27,6 +27,8 @@ public class DriveSubsystem extends SubsystemBase {
     private double backRightPower;
     private double power;
 
+    private Telemetry telemetry;
+
     //driveToPoint squid
     private PIDController translationController, headingController;
     private double errorX, errorY, errorHeading;
@@ -42,25 +44,58 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-    //constructor
-    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, SparkFunOTOS otos) {
+    //constructor for auto
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, Telemetry telemetry, SparkFunOTOS otos) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
         this.BL = BL;
+        this.telemetry = telemetry;
+        this.otos = otos;
     }
 
-    public void teleDrive(GamepadEx driver, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
+    //constructor for teleop
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, Telemetry telemtry) {
+        this.FR = FR;
+        this.FL = FL;
+        this.BR = BR;
+        this.BL = BL;
+        this.telemetry = telemtry;
+    }
+
+    //basic drive
+    public void drive(double strafeSpeed, double forwardSpeed, double turnSpeed){
         y = forwardSpeed; // Remember, Y stick value is reversed
         x = strafeSpeed * 1.1; // Counteract imperfect strafing
         rx = -turnSpeed;
 
+        //mec inverse kinematics
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
+        denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        frontLeftPower = (y + x + rx) / denominator;
+        backLeftPower = (y - x + rx) / denominator;
+        frontRightPower = (y - x - rx) / denominator;
+        backRightPower = (y + x - rx) / denominator;
+
+        //writes
+        FL.set(frontLeftPower * power);
+        BL.set(backLeftPower * power);
+        FR.set(frontRightPower * power);
+        BR.set(backRightPower * power);
+    }
+
+    //drive with arc tan dead zones (teleop)
+    public void teleDrive(GamepadEx driver, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
+        //slow mode
         if (driver.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
             power = .3;
         } else {
             power = 1;
         }
 
+        //arc tan dead zones
         if (arcTanZones) {
             if (Math.toDegrees(Math.atan(y / x)) > 90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 90 + arcTanAngleRange / 2
             || Math.toDegrees(Math.atan(y / x)) < -90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) > -90 + arcTanAngleRange / 2) {
@@ -72,25 +107,11 @@ public class DriveSubsystem extends SubsystemBase {
             }
             }
 
-            // Denominator is the largest motor power (absolute value) or 1
-            // This ensures all the powers maintain the same ratio,
-            // but only if at least one is out of the range [-1, 1]
-            denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            frontLeftPower = (y + x + rx) / denominator;
-            backLeftPower = (y - x + rx) / denominator;
-            frontRightPower = (y - x - rx) / denominator;
-            backRightPower = (y + x - rx) / denominator;
-
-            FL.set(frontLeftPower * power);
-            BL.set(backLeftPower * power);
-            FR.set(frontRightPower * power);
-            BR.set(backRightPower * power);
-
+            //actually moving
+            drive(strafeSpeed, forwardSpeed, turnSpeed);
     }
 
     public void driveToPoint(SparkFunOTOS.Pose2D targetPos){
-        //read
-        currentPos = otos.getPosition();
 
         //error calculation
         errorX = targetPos.x - currentPos.x;
@@ -109,16 +130,23 @@ public class DriveSubsystem extends SubsystemBase {
         forwardSpeed = Math.sin(vectorTheta) * Math.sqrt(correctedVectorMagnitude);
         turnSpeed = headingController.calculate(errorHeading);
 
-        //mecanum inverse kinematics
-        frontLeftPower = (forwardSpeed + strafeSpeed + turnSpeed) / denominator;
-        backLeftPower = (forwardSpeed - strafeSpeed + turnSpeed) / denominator;
-        frontRightPower = (forwardSpeed - strafeSpeed - turnSpeed) / denominator;
-        backRightPower = (forwardSpeed + strafeSpeed - turnSpeed) / denominator;
-
-        //writes
-        FL.set(frontLeftPower * power);
-        BL.set(backLeftPower * power);
-        FR.set(frontRightPower * power);
-        BR.set(backRightPower * power);
+        //actually driving
+        drive(strafeSpeed, forwardSpeed, turnSpeed);
     }
+
+    public void readOtos() {
+        currentPos = otos.getPosition();
+        telemetry.addData("xDTPos", currentPos.x);
+        telemetry.addData("yDTPos", currentPos.y);
+        telemetry.addData("dtHeading", currentPos.h);
+    }
+
+    public SparkFunOTOS.Pose2D getPos(){
+        return currentPos;
+    }
+
+    public void setStaringPos(SparkFunOTOS.Pose2D pos){
+        otos.setPosition(pos);
+    }
+
 }

@@ -1,9 +1,33 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
+import static org.firstinspires.ftc.teamcode.other.Globals.armBackX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armBackY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeY;
+import static org.firstinspires.ftc.teamcode.other.Globals.intakeHoldPower;
+import static org.firstinspires.ftc.teamcode.other.Globals.intakePower;
 import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
+import static org.firstinspires.ftc.teamcode.other.Globals.outtakePower;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenHighChamber;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmBack;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmHome;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenCloseIntake;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenHighChamber;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenReadyIntake;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -19,12 +43,42 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.commands.ArmCommand;
+import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
+import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.SlideCommand;
+import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
 public abstract class Robot extends CommandOpMode {
 
+    //commands
+    public TeleDriveCommand teleDriveCommand;
+    public ArmCommand armCommand;
+    public SlideCommand slideCommand;
+    public ArmCoordinatesCommand armCoordinatesCommand;
+    public ArmManualCommand armManualCommand;
+    public ArmCoordinatesCommand armHomeCommand;
+    public ArmCoordinatesCommand armHighBasketCommand;
+    public ArmCoordinatesCommand armBackCommand;
+    public ArmCoordinatesCommand armWhenIntakeCommand;
+    public ArmCoordinatesCommand armWhenCloseIntakeCommand;
+    public ArmCoordinatesCommand armWhenHighChamberCommand;
+    public IntakeCommand setIntakeCommand;
+    public IntakeCommand intakeWhenArmBackCommand;
+    public IntakeCommand intakeWhenHighBasketCommand;
+    public IntakeCommand outakeWhenHighBasketCommand;
+    public IntakeCommand intakeReadyCommand;
+    public IntakeCommand outakeReadyCommand;
+    public IntakeCommand intakeWhenArmHomeCommand;
+    public IntakeCommand intakeCommand;
+    public IntakeCommand intakeWhenHighChamberCommand;
+    public IntakeCommand intakeCloseCommand;
+
+    //test statics
     public static double x = 0, y = 0;
     public static double pitch = 0, roll = 0;
 
@@ -43,6 +97,9 @@ public abstract class Robot extends CommandOpMode {
 
     //system
     private LynxModule controlHub;
+    //gamePads
+    public GamepadEx m_driver;
+    public GamepadEx m_driverOp;
 
     //random Todo: Need to clean up my loop time telemetry
     ElapsedTime time = new ElapsedTime();
@@ -75,7 +132,7 @@ public abstract class Robot extends CommandOpMode {
         FR.setInverted(true);
         BR.setInverted(true);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL);
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, telemetry, myOtos);
         register(driveSubsystem);
 
         //arm
@@ -109,6 +166,11 @@ public abstract class Robot extends CommandOpMode {
         intakeSubsystem = new IntakeSubsystem(intake, diffyLeft, diffyRight, telemetry);
         register(intakeSubsystem);
 
+        m_driver = new GamepadEx(gamepad1);
+        m_driverOp = new GamepadEx(gamepad2);
+
+        configureCommands();
+
         telemetry.addLine("Initialized");
         telemetry.update();
     }
@@ -122,18 +184,6 @@ public abstract class Robot extends CommandOpMode {
 
         super.run();
 
-        //arm input testing
-        //armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        /*if(gamepad2.cross){
-            armCoordinatesCommand.schedule();
-        }*/
-
-        //intake input testing
-        //setIntakeCommand = new IntakeCommand(intakeSubsystem, 1, pitch, roll);
-        /*if(gamepad2.circle) {
-            setIntakeCommand.schedule();
-        }*/
-
         //clear cache
         //other telemetry
         telemetry.addData("manual", manualArm);
@@ -142,6 +192,45 @@ public abstract class Robot extends CommandOpMode {
         telemetry.update();
         time.reset();
         controlHub.clearBulkCache();
+
+    }
+
+    public void configureCommands(){
+        teleDriveCommand = new TeleDriveCommand(driveSubsystem, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
+
+        //ARM
+        armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
+        slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
+        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
+        //home poses
+        armHomeCommand = new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY);
+        armBackCommand = new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY);
+        //scoring
+        armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY);
+        armWhenHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY);
+        //intaking
+        armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armIntakeX, armIntakeY);
+        armWhenCloseIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY);
+
+
+        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
+
+        //INTAKE
+        setIntakeCommand = new IntakeCommand(intakeSubsystem, 0, pitch, roll);
+
+        //scoring
+        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenBasket, 0);
+        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, pitchWhenHighChamber, rollWhenHighChamber);
+
+        //intaking
+        intakeReadyCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake);
+        outakeReadyCommand = new IntakeCommand(intakeSubsystem, outtakePower, 0, rollWhenReadyIntake);
+        intakeCloseCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenCloseIntake);
+
+        //home poses
+        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, rollWhenArmHome);
+        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, intakePower, pitchWhenBasket, rollWhenArmBack);
+        intakeCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenIntake);
 
     }
 

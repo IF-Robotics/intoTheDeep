@@ -19,6 +19,11 @@ public class DriveToPointCommand extends CommandBase {
         this.targetPos = targetPos;
     }
 
+    public DriveToPointCommand(DriveSubsystem driveSubsystem, SparkFunOTOS.Pose2D targetPos) {
+        this.driveSubsystem = driveSubsystem;
+        this.targetPos = targetPos;
+    }
+
     @Override
     public void initialize() {
         time.reset();
@@ -26,6 +31,7 @@ public class DriveToPointCommand extends CommandBase {
 
     @Override
     public void execute() {
+        driveSubsystem.readOtos();
         driveSubsystem.driveToPoint(targetPos);
     }
 

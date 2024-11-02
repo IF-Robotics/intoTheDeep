@@ -42,32 +42,8 @@ import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
 
-@Config
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
-
-    //commands
-    private TeleDriveCommand teleDriveCommand;
-    private ArmCommand armCommand;
-    private SlideCommand slideCommand;
-    private ArmCoordinatesCommand armCoordinatesCommand;
-    private ArmManualCommand armManualCommand;
-    private ArmCoordinatesCommand armHomeCommand;
-    private ArmCoordinatesCommand armHighBasketCommand;
-    private ArmCoordinatesCommand armBackCommand;
-    private ArmCoordinatesCommand armWhenIntakeCommand;
-    private ArmCoordinatesCommand armWhenCloseIntakeCommand;
-    private ArmCoordinatesCommand armWhenHighChamberCommand;
-    private IntakeCommand setIntakeCommand;
-    private IntakeCommand intakeWhenArmBackCommand;
-    private IntakeCommand intakeWhenHighBasketCommand;
-    private IntakeCommand outakeWhenHighBasketCommand;
-    private IntakeCommand intakeReadyCommand;
-    private IntakeCommand outakeReadyCommand;
-    private IntakeCommand intakeWhenArmHomeCommand;
-    private IntakeCommand intakeCommand;
-    private IntakeCommand intakeWhenHighChamberCommand;
-    private IntakeCommand intakeCloseCommand;
 
     //private
 
@@ -75,59 +51,15 @@ public class TeleopOpMode extends Robot {
     private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, square1, touchpad1;
     private Trigger tLeft1, tRight1;
 
-    //gamePads
-    private GamepadEx m_driver;
-    private GamepadEx m_driverOp;
 
     @Override
     public void initialize(){
         super.initialize();
 
-        m_driver = new GamepadEx(gamepad1);
-        m_driverOp = new GamepadEx(gamepad2);
-        configureCommands();
         configureButtons();
     }
 
-    public void configureCommands(){
 
-        teleDriveCommand = new TeleDriveCommand(driveSubsystem, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
-
-        //ARM
-        armCommand = new ArmCommand(armSubsystem, m_driverOp::getLeftY);
-        slideCommand = new SlideCommand(armSubsystem, m_driverOp::getRightY);
-        armCoordinatesCommand = new ArmCoordinatesCommand(armSubsystem, x, y);
-        //home poses
-        armHomeCommand = new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY);
-        armBackCommand = new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY);
-        //scoring
-        armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY);
-        armWhenHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY);
-        //intaking
-        armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armIntakeX, armIntakeY);
-        armWhenCloseIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY);
-
-
-        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
-
-        //INTAKE
-        setIntakeCommand = new IntakeCommand(intakeSubsystem, 0, pitch, roll);
-
-        //scoring
-        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenBasket, 0);
-        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, pitchWhenHighChamber, rollWhenHighChamber);
-
-        //intaking
-        intakeReadyCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake);
-        outakeReadyCommand = new IntakeCommand(intakeSubsystem, outtakePower, 0, rollWhenReadyIntake);
-        intakeCloseCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenCloseIntake);
-
-        //home poses
-        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, rollWhenArmHome);
-        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, intakePower, pitchWhenBasket, rollWhenArmBack);
-        intakeCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenIntake);
-
-    }
     public void configureButtons() {
         square1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
         start2 = new GamepadButton(m_driverOp, GamepadKeys.Button.START);

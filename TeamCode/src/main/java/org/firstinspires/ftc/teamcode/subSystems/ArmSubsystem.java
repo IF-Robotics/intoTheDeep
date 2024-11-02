@@ -127,8 +127,8 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);
 
-        telemetry.addData("xPos", slideExtention * Math.cos(Math.toRadians(correctedAngle)));
-        telemetry.addData("yPos", slideExtention * Math.sin(Math.toRadians(correctedAngle)) + armHeight);
+        telemetry.addData("xArmPos", slideExtention * Math.cos(Math.toRadians(correctedAngle)));
+        telemetry.addData("yArmPos", slideExtention * Math.sin(Math.toRadians(correctedAngle)) + armHeight);
 
     }
 

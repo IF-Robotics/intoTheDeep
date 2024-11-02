@@ -130,7 +130,7 @@ public class CommandTeleop extends CommandOpMode {
         FR.setInverted(true);
         BR.setInverted(true);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL);
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, telemetry);
         teleDriveCommand = new TeleDriveCommand(driveSubsystem, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
         register(driveSubsystem);
         driveSubsystem.setDefaultCommand(teleDriveCommand);
