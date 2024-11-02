@@ -76,15 +76,17 @@ public class TeleopOpMode extends Robot {
     private Trigger tLeft1, tRight1;
 
     //gamePads
-    protected GamepadEx m_driver;
-    protected GamepadEx m_driverOp;
+    private GamepadEx m_driver;
+    private GamepadEx m_driverOp;
 
     @Override
     public void initialize(){
         super.initialize();
 
-        configureButtons();
+        m_driver = new GamepadEx(gamepad1);
+        m_driverOp = new GamepadEx(gamepad2);
         configureCommands();
+        configureButtons();
     }
 
     public void configureCommands(){
@@ -114,14 +116,17 @@ public class TeleopOpMode extends Robot {
         //scoring
         intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenBasket, 0);
         intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, pitchWhenHighChamber, rollWhenHighChamber);
+
         //intaking
         intakeReadyCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, outtakePower, 0, rollWhenReadyIntake);
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenCloseIntake);
+
         //home poses
         intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, rollWhenArmHome);
         intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, intakePower, pitchWhenBasket, rollWhenArmBack);
         intakeCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenIntake);
+
     }
     public void configureButtons() {
         square1 = new GamepadButton(m_driver, GamepadKeys.Button.X);

@@ -80,6 +80,7 @@ public abstract class Robot extends CommandOpMode {
 
     boolean manual = false;
     boolean flag = false;
+
     public void initialize(){
         time.reset();
 
