@@ -16,8 +16,8 @@ public class autoTest extends Robot {
         super.initialize();
 
         schedule(new SequentialCommandGroup(
-                new DriveToPointCommand(driveSubsystem, SparkFunOTOS.Pose2D(0,0,0) ,0,0)
-        );
+                new DriveToPointCommand(driveSubsystem, new SparkFunOTOS.Pose2D(0,0,0) ,0,0)
+        ));
 
     }
 
