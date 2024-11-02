@@ -46,4 +46,16 @@ public class Globals {
     //manual arm boolean
     public static boolean manualArm = false;
 
+//drive to point
+    public static double translationKP = 0.0;
+    public static double translationKI = 0.0;
+    public static double translationKD = 0.0;
+    public static double headingKP = 0.0;
+    public static double headingKI = 0.0;
+    public static double headingKD = 0.0;
+
+    public static double testX = 0.0;
+    public static double testY = 0.0;
+    public static double testHeading = 0.0;
+
 }
