@@ -46,12 +46,4 @@ public class Globals {
     //manual arm boolean
     public static boolean manualArm = false;
 
-    //PID
-    public static double kP = 0;
-    public static double kD = 0;
-    public static double kI = 0;
-    // headerPID
-    public static double headingkP = 0;
-    public static double headingkD = 0;
-    public static double headingkI = 0;
 }
