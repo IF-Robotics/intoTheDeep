@@ -1,35 +1,9 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armBackX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armBackY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.intakeHoldPower;
-import static org.firstinspires.ftc.teamcode.other.Globals.intakePower;
 import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
-import static org.firstinspires.ftc.teamcode.other.Globals.outtakePower;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmBack;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmHome;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenCloseIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenReadyIntake;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.command.button.Button;
-import com.arcrobotics.ftclib.command.button.Trigger;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
@@ -37,20 +11,14 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
-import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
-import org.firstinspires.ftc.teamcode.commands.ArmCommand;
-import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
-import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.SlideCommand;
-import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
@@ -66,6 +34,7 @@ public abstract class Robot extends CommandOpMode {
     public CRServo intake;
     public ServoEx diffyLeft, diffyRight;
     public AnalogInput armEncoder;
+    public SparkFunOTOS myOtos;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -89,7 +58,12 @@ public abstract class Robot extends CommandOpMode {
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-//dt
+
+        //Otos
+        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        configureOtos();
+
+        //dt
         FL = new MotorEx(hardwareMap, "FL");
         FR = new MotorEx(hardwareMap, "FR");
         BL = new MotorEx(hardwareMap, "BL");
@@ -169,5 +143,39 @@ public abstract class Robot extends CommandOpMode {
         time.reset();
         controlHub.clearBulkCache();
 
+    }
+
+    private void configureOtos() {
+        telemetry.addLine("Configuring OTOS...");
+        telemetry.update();
+
+        // myOtos.setLinearUnit(DistanceUnit.METER);
+        myOtos.setLinearUnit(DistanceUnit.INCH);
+        // myOtos.setAngularUnit(AnguleUnit.RADIANS);
+        myOtos.setAngularUnit(AngleUnit.DEGREES);
+
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+        myOtos.setOffset(offset);
+
+        myOtos.setLinearScalar(1.0);
+        myOtos.setAngularScalar(1.0);
+
+
+        //Might not always want to do
+        myOtos.calibrateImu();
+        myOtos.resetTracking();
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+        myOtos.setPosition(currentPosition);
+
+        // Get the hardware and firmware version
+        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
+        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
+        myOtos.getVersionInfo(hwVersion, fwVersion);
+
+        telemetry.addLine("OTOS configured! Press start to get position data!");
+        telemetry.addLine();
+        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
+        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
+        telemetry.update();
     }
 }
