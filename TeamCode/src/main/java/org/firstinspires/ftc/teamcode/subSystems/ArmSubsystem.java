@@ -76,13 +76,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setArmCoordinates(double x, double y){
         slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
-        armTargetAngle = Math.toDegrees(Math.atan((y - armHeight)/x));
-        setSlide(slideTargetIn);
-        if(x < 0) {
-            setArm(180 + armTargetAngle);
-        } else {
-            setArm(armTargetAngle);
-        }
+        armTargetAngle = Math.toDegrees(Math.atan2((y - armHeight), x));
+
+        //write
+        setArm(armTargetAngle);
     }
 
 
