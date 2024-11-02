@@ -87,8 +87,8 @@ public class CommandTeleop extends CommandOpMode {
     private Trigger tLeft1, tRight1;
 
     //gamePads
-    private GamepadEx m_driver;
-    private GamepadEx m_driverOp;
+    protected GamepadEx m_driver;
+    protected GamepadEx m_driverOp;
 
     //system
     private LynxModule controlHub;
