@@ -7,7 +7,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -37,7 +36,6 @@ import org.firstinspires.ftc.teamcode.other.Touchpad;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subSystems.OdoSubsystem;
 
 
 @Config
@@ -58,7 +56,6 @@ public class CommandTeleop extends CommandOpMode {
     public DriveSubsystem driveSubsystem;
     public ArmSubsystem armSubsystem;
     public IntakeSubsystem intakeSubsystem;
-    public OdoSubsystem odoSubsystem;
 
     //commands
     private TeleDriveCommand teleDriveCommand;
@@ -137,8 +134,6 @@ public class CommandTeleop extends CommandOpMode {
         teleDriveCommand = new TeleDriveCommand(driveSubsystem, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
         register(driveSubsystem);
         driveSubsystem.setDefaultCommand(teleDriveCommand);
-
-        register(odoSubsystem);
 
         //arm
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
