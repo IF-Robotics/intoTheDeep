@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
+
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -33,14 +37,14 @@ public class DriveSubsystem extends SubsystemBase {
     private PIDController translationController, headingController;
     private double errorX, errorY, errorHeading;
     private SparkFunOTOS otos;
-    private SparkFunOTOS.Pose2D currentPos;
+    private Pose2d currentPos;
     private double rawVectorMagnitude;
     private double correctedVectorMagnitude;
     private double vectorTheta;
 
-    private double strafeSpeed;
-    private double forwardSpeed;
-    private double turnSpeed;
+    private double strafeVelocity;
+    private double forwardVelocity;
+    private double turnVelocity;
 
 
 
@@ -74,16 +78,19 @@ public class DriveSubsystem extends SubsystemBase {
         // This ensures all the powers maintain the same ratio,
         // but only if at least one is out of the range [-1, 1]
         denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        frontLeftPower = (y + x + rx) / denominator;
-        backLeftPower = (y - x + rx) / denominator;
-        frontRightPower = (y - x - rx) / denominator;
-        backRightPower = (y + x - rx) / denominator;
+        frontLeftPower = ((y + x + rx) / denominator) * power;
+        backLeftPower = ((y - x + rx) / denominator) * power;
+        frontRightPower = ((y - x - rx) / denominator) * power;
+        backRightPower = ((y + x - rx) / denominator) * power;
 
         //writes
-        FL.set(frontLeftPower * power);
-        BL.set(backLeftPower * power);
-        FR.set(frontRightPower * power);
-        BR.set(backRightPower * power);
+        FL.set(frontLeftPower);
+        BL.set(backLeftPower);
+        FR.set(frontRightPower);
+        BR.set(backRightPower);
+
+        telemetry.addData("dt power", frontLeftPower + backLeftPower + frontRightPower + backRightPower);
+
     }
 
     //drive with arc tan dead zones (teleop)
@@ -108,41 +115,70 @@ public class DriveSubsystem extends SubsystemBase {
             }
 
             //actually moving
-            drive(strafeSpeed, forwardSpeed, turnSpeed);
+            drive(Math.abs(strafeSpeed), Math.abs(forwardSpeed), Math.abs(turnSpeed));
     }
 
-    public void driveToPoint(SparkFunOTOS.Pose2D targetPos){
+    public void driveToPoint(Pose2d targetPos){
+
+        //pids
+        translationController = new PIDController(translationKP, translationKI, translationKD);
+        headingController = new PIDController(headingKP, headingKI, headingKD);
 
         //error calculation
-        errorX = targetPos.x - currentPos.x;
-        errorY = targetPos.y - currentPos.y;
-        errorHeading = targetPos.h - currentPos.h;
+        errorX = currentPos.getX() - targetPos.getX();
+        errorY = currentPos.getY() - targetPos.getY();
+        errorHeading = targetPos.getHeading() - currentPos.getRotation().getDegrees();
+
+        //testing
+        telemetry.addData("errorX", errorX);
+        telemetry.addData("errorY", errorY);
+        telemetry.addData("errorHeading", errorHeading);
 
         //vector calculation
         rawVectorMagnitude = Math.hypot(errorX, errorY);
-        vectorTheta = Math.atan2(errorY, errorX);
+        vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
-        correctedVectorMagnitude = translationController.calculate(rawVectorMagnitude);
+        correctedVectorMagnitude = translationController.calculate(0, rawVectorMagnitude);
+
+        //testing
+        telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
+        telemetry.addData("correctedVectorMagnitude", correctedVectorMagnitude);
+        telemetry.addData("vectorTheta", vectorTheta);
 
         //breaking vector into speed values + pid calc
-        strafeSpeed = Math.cos(vectorTheta) * Math.sqrt(correctedVectorMagnitude);
-        forwardSpeed = Math.sin(vectorTheta) * Math.sqrt(correctedVectorMagnitude);
-        turnSpeed = headingController.calculate(errorHeading);
+        strafeVelocity = Math.cos(Math.toRadians(vectorTheta)) * correctedVectorMagnitude;
+        forwardVelocity = Math.sin(Math.toRadians(vectorTheta)) * correctedVectorMagnitude;
+        turnVelocity = headingController.calculate(targetPos.getRotation().getDegrees(), currentPos.getRotation().getDegrees());
+
+        //testing
+        telemetry.addData("strafeSpeed", strafeVelocity);
+        telemetry.addData("forwardSpeed", forwardVelocity);
+        telemetry.addData("turnSpeed", turnVelocity);
 
         //actually driving
-        drive(strafeSpeed, forwardSpeed, turnSpeed);
+        power = 1;
+        drive(strafeVelocity, forwardVelocity, turnVelocity);
     }
 
     public void readOtos() {
-        currentPos = otos.getPosition();
-        telemetry.addData("xDTPos", currentPos.x);
-        telemetry.addData("yDTPos", currentPos.y);
-        telemetry.addData("dtHeading", currentPos.h);
+        SparkFunOTOS.Pose2D sparkfunPos = otos.getPosition();
+        currentPos = new Pose2d(sparkfunPos.x, sparkfunPos.y, new Rotation2d(sparkfunPos.h));
+        telemetry.addData("xDTPos", currentPos.getX());
+        telemetry.addData("yDTPos", currentPos.getY());
+        telemetry.addData("dtHeading", currentPos.getHeading());
     }
 
-    public SparkFunOTOS.Pose2D getPos(){
+    public Pose2d getPos(){
         return currentPos;
+    }
+
+    public double getTranslationalError(){
+        return rawVectorMagnitude;
+    }
+
+    public double getHeadingError(){
+        return errorHeading;
     }
 
     public void setStaringPos(SparkFunOTOS.Pose2D pos){

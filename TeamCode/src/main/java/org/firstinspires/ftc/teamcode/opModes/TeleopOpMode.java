@@ -1,45 +1,13 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armBackX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armBackY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.intakeHoldPower;
-import static org.firstinspires.ftc.teamcode.other.Globals.intakePower;
-import static org.firstinspires.ftc.teamcode.other.Globals.outtakePower;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmBack;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmHome;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenCloseIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenReadyIntake;
-
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
-import org.firstinspires.ftc.teamcode.commands.ArmCommand;
-import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
-import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.SlideCommand;
-import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
 
 @TeleOp(name="teleOpFunnyTest")
@@ -56,9 +24,13 @@ public class TeleopOpMode extends Robot {
     public void initialize(){
         super.initialize();
 
+        //configureMoreCommands();
         configureButtons();
     }
 
+    /*public void configureMoreCommands() {
+
+    }*/
 
     public void configureButtons() {
         square1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
