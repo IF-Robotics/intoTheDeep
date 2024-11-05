@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -41,19 +42,22 @@ public class DriveSubsystem extends SubsystemBase {
     private double rawVectorMagnitude;
     private double correctedVectorMagnitude;
     private double vectorTheta;
+    private double headingCalculation;
 
     private double strafeVelocity;
     private double forwardVelocity;
     private double turnVelocity;
 
+    private MecanumDrive fieldCentricDrive;
 
 
     //constructor for auto
-    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, Telemetry telemetry, SparkFunOTOS otos) {
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive fieldCentricDrive, Telemetry telemetry, SparkFunOTOS otos) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
         this.BL = BL;
+        this.fieldCentricDrive = fieldCentricDrive;
         this.telemetry = telemetry;
         this.otos = otos;
     }
@@ -86,11 +90,10 @@ public class DriveSubsystem extends SubsystemBase {
         //writes
         FL.set(frontLeftPower);
         BL.set(backLeftPower);
-        FR.set(frontRightPower);
-        BR.set(backRightPower);
+        FR.set(-frontRightPower);
+        BR.set(-backRightPower);
 
         telemetry.addData("dt power", frontLeftPower + backLeftPower + frontRightPower + backRightPower);
-
     }
 
     //drive with arc tan dead zones (teleop)
@@ -139,17 +142,18 @@ public class DriveSubsystem extends SubsystemBase {
         vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
-        correctedVectorMagnitude = translationController.calculate(0, rawVectorMagnitude);
+        correctedVectorMagnitude = Math.sqrt(Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude);
+        headingCalculation = headingController.calculate(targetPos.getRotation().getDegrees(), currentPos.getRotation().getDegrees());
 
         //testing
         telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
         telemetry.addData("correctedVectorMagnitude", correctedVectorMagnitude);
         telemetry.addData("vectorTheta", vectorTheta);
 
-        //breaking vector into speed values + pid calc
-        strafeVelocity = Math.cos(Math.toRadians(vectorTheta)) * correctedVectorMagnitude;
-        forwardVelocity = Math.sin(Math.toRadians(vectorTheta)) * correctedVectorMagnitude;
-        turnVelocity = headingController.calculate(targetPos.getRotation().getDegrees(), currentPos.getRotation().getDegrees());
+        //breaking vector into speed values + pid   jj
+        strafeVelocity = - (Math.cos (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
+        forwardVelocity = - (Math.sin (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
+        turnVelocity = - Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
 
         //testing
         telemetry.addData("strafeSpeed", strafeVelocity);
@@ -158,15 +162,15 @@ public class DriveSubsystem extends SubsystemBase {
 
         //actually driving
         power = 1;
-        drive(strafeVelocity, forwardVelocity, turnVelocity);
+        fieldCentricDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, currentPos.getRotation().getDegrees());
     }
 
     public void readOtos() {
         SparkFunOTOS.Pose2D sparkfunPos = otos.getPosition();
-        currentPos = new Pose2d(sparkfunPos.x, sparkfunPos.y, new Rotation2d(sparkfunPos.h));
+        currentPos = new Pose2d(sparkfunPos.x, sparkfunPos.y, new Rotation2d(Math.toRadians(sparkfunPos.h)));
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
-        telemetry.addData("dtHeading", currentPos.getHeading());
+        telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
     }
 
     public Pose2d getPos(){

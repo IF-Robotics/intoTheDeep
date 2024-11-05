@@ -27,6 +27,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenReadyIntake;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -89,6 +90,7 @@ public abstract class Robot extends CommandOpMode {
     public ServoEx diffyLeft, diffyRight;
     public AnalogInput armEncoder;
     public SparkFunOTOS myOtos;
+    private MecanumDrive fieldCentricDrive;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -129,10 +131,12 @@ public abstract class Robot extends CommandOpMode {
         FR.setRunMode(MotorEx.RunMode.RawPower);
         BL.setRunMode(MotorEx.RunMode.RawPower);
         BR.setRunMode(MotorEx.RunMode.RawPower);
-        FR.setInverted(true);
-        BR.setInverted(true);
+//        FR.setInverted(true);
+//        BR.setInverted(true);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, telemetry, myOtos);
+        fieldCentricDrive = new MecanumDrive(FL, FR, BL, BR);
+
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, fieldCentricDrive, telemetry, myOtos);
         register(driveSubsystem);
 
         //arm
