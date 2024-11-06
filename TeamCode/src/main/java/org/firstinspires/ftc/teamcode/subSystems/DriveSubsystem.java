@@ -122,6 +122,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void driveToPoint(Pose2d targetPos){
+        /*//completely temperary testing - delete if causing problems
+        targetPos = new Pose2d(testX, testY, Rotation2d.fromDegrees(testHeading));*/
 
         //pids
         translationController = new PIDController(translationKP, translationKI, translationKD);
@@ -151,7 +153,7 @@ public class DriveSubsystem extends SubsystemBase {
         telemetry.addData("vectorTheta", vectorTheta);
 
         //breaking vector into speed values + pid   jj
-        strafeVelocity = - (Math.cos (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
+        strafeVelocity = - lateralMutliplier * (Math.cos (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
         forwardVelocity = - (Math.sin (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
         turnVelocity = - Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
 
