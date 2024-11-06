@@ -185,8 +185,8 @@ public class DriveSubsystem extends SubsystemBase {
         return errorHeading;
     }
 
-    public void setStaringPos(SparkFunOTOS.Pose2D pos){
-        otos.setPosition(pos);
+    public void setStartingPos(Pose2d pos){
+        otos.setPosition(new SparkFunOTOS.Pose2D(pos.getX(), pos.getY(), pos.getRotation().getDegrees()));
     }
 
 }
