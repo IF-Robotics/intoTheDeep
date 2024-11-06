@@ -22,7 +22,7 @@ public class autoLeft extends Robot {
         super.initialize();
 
         schedule(new SequentialCommandGroup(
-                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 0, new Rotation2d(0)) ,0, 0,0),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 20, new Rotation2d(0)) ,0, 0,0),
                 new WaitCommand(200)
 //                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY),
                 //intake

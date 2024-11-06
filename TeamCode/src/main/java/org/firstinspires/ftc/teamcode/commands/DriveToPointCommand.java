@@ -38,7 +38,7 @@ public class DriveToPointCommand extends CommandBase {
         //if not in tolerance, then timer reset
         //if in tolerance and the timer matured enough, then finished
         //else not finished
-        if(  !(driveSubsystem.getTranslationalError() < translationalTolerance && driveSubsystem.getHeadingError() < headingTolerance)){
+        if(  driveSubsystem.getTranslationalError() > translationalTolerance && driveSubsystem.getHeadingError() > headingTolerance){
             time.reset();
             return false;
         } else if(time.milliseconds() > timeInTolerance){
