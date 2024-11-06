@@ -49,10 +49,11 @@ public class Globals {
 //drive to point
     public static double translationKP = 0.015;
     public static double translationKI = 0.0;
-    public static double translationKD = 0.05;
+    public static double translationKD = 0.0005;
     public static double headingKP = 0.008;
     public static double headingKI = 0.0;
-    public static double headingKD = 0.1;
+    public static double headingKD = 0.0001;
+    public static double lateralMutliplier = 1.5;
 
     public static double testX = 0.0;
     public static double testY = 0.0;
