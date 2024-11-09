@@ -3,6 +3,8 @@ import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -11,12 +13,15 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -37,7 +42,7 @@ public class DriveSubsystem extends SubsystemBase {
     //driveToPoint squid
     private PIDController translationController, headingController;
     private double errorX, errorY, errorHeading;
-    private SparkFunOTOS otos;
+    private GoBildaPinpointDriver pinpoint;
     private Pose2d currentPos;
     private double rawVectorMagnitude;
     private double correctedVectorMagnitude;
@@ -52,14 +57,14 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     //constructor for auto
-    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive fieldCentricDrive, Telemetry telemetry, SparkFunOTOS otos) {
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive fieldCentricDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
         this.BL = BL;
         this.fieldCentricDrive = fieldCentricDrive;
         this.telemetry = telemetry;
-        this.otos = otos;
+        this.pinpoint = pinpoint;
     }
 
     //constructor for teleop
@@ -167,9 +172,10 @@ public class DriveSubsystem extends SubsystemBase {
         fieldCentricDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, currentPos.getRotation().getDegrees());
     }
 
-    public void readOtos() {
-        SparkFunOTOS.Pose2D sparkfunPos = otos.getPosition();
-        currentPos = new Pose2d(-sparkfunPos.x, -sparkfunPos.y, Rotation2d.fromDegrees((sparkfunPos.h)));
+    public void readPinpoint() {
+        pinpoint.update();
+        Pose2D tempPos = pinpoint.getPosition();
+        currentPos = new Pose2d(tempPos.getX(DistanceUnit.INCH), tempPos.getY(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
@@ -188,7 +194,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setStartingPos(Pose2d pos){
-        otos.setPosition(new SparkFunOTOS.Pose2D(pos.getX(), pos.getY(), pos.getRotation().getDegrees()));
+        pinpoint.setPosition( new Pose2D(DistanceUnit.INCH, pos.getX(), pos.getY(), AngleUnit.RADIANS, pos.getHeading()));
     }
 
 }

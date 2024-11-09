@@ -28,7 +28,7 @@ public class DriveToPointCommand extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsystem.readOtos();
+        driveSubsystem.readPinpoint();
         driveSubsystem.driveToPoint(targetPos);
     }
 

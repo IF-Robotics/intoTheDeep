@@ -1,29 +1,6 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armBackX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armBackY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.intakeHoldPower;
-import static org.firstinspires.ftc.teamcode.other.Globals.intakePower;
-import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
-import static org.firstinspires.ftc.teamcode.other.Globals.outtakePower;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmBack;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmHome;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenCloseIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenReadyIntake;
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -39,6 +16,8 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
+import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
@@ -89,7 +68,7 @@ public abstract class Robot extends CommandOpMode {
     public CRServo intake;
     public ServoEx diffyLeft, diffyRight;
     public AnalogInput armEncoder;
-    public SparkFunOTOS myOtos;
+    public GoBildaPinpointDriver pinpoint;
     private MecanumDrive fieldCentricDrive;
 
     //subsystems
@@ -118,9 +97,8 @@ public abstract class Robot extends CommandOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        //Otos
-        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-        configureOtos();
+        //Pinpoint
+        configurePinpoint();
 
         //dt
         FL = new MotorEx(hardwareMap, "FL");
@@ -136,7 +114,7 @@ public abstract class Robot extends CommandOpMode {
 
         fieldCentricDrive = new MecanumDrive(FL, FR, BL, BR);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, fieldCentricDrive, telemetry, myOtos);
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, fieldCentricDrive, telemetry, pinpoint);
         register(driveSubsystem);
 
         //arm
@@ -238,37 +216,60 @@ public abstract class Robot extends CommandOpMode {
 
     }
 
-    private void configureOtos() {
-        telemetry.addLine("Configuring OTOS...");
+    private void configurePinpoint() {
+        telemetry.addLine("Configuring Pinpoint...");
         telemetry.update();
 
-        // myOtos.setLinearUnit(DistanceUnit.METER);
-        myOtos.setLinearUnit(DistanceUnit.INCH);
-        // myOtos.setAngularUnit(AnguleUnit.RADIANS);
-        myOtos.setAngularUnit(AngleUnit.DEGREES);
+        // Initialize the hardware variables. Note that the strings used here must correspond
+        // to the names assigned during the robot configuration step on the DS or RC devices.
 
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
-        myOtos.setOffset(offset);
+       pinpoint = hardwareMap.get(GoBildaPinpointDriverRR.class,"pinpoint");
 
-        myOtos.setLinearScalar(1.0);
-        myOtos.setAngularScalar(1.0);
+        /*
+        Set the odometry pod positions relative to the point that the odometry computer tracks around.
+        The X pod offset refers to how far sideways from the tracking point the
+        X (forward) odometry pod is. Left of the center is a positive number,
+        right of center is a negative number. the Y pod offset refers to how far forwards from
+        the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
+        backwards is a negative number.
+         */
+        
+       pinpoint.setOffsets(0, -83.95); //these are tuned for 3110-0002-0001 Product Insight #1
+
+        /*
+        Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
+        the goBILDA_SWINGARM_POD, or the goBILDA_4_BAR_POD.
+        If you're using another kind of odometry pod, uncomment setEncoderResolution and input the
+        number of ticks per mm of your odometry pod.
+         */
+       pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        //odo.setEncoderResolution(13.26291192);
 
 
-        //Might not always want to do
-        myOtos.calibrateImu();
-        myOtos.resetTracking();
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
-        myOtos.setPosition(currentPosition);
+        /*
+        Set the direction that each of the two odometry pods count. The X (forward) pod should
+        increase when you move the robot forward. And the Y (strafe) pod should increase when
+        you move the robot to the left.
+         */
+       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
-        // Get the hardware and firmware version
-        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
-        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
-        myOtos.getVersionInfo(hwVersion, fwVersion);
 
-        telemetry.addLine("OTOS configured! Press start to get position data!");
-        telemetry.addLine();
-        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
-        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
+        /*
+        Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
+        The IMU will automatically calibrate when first powered on, but recalibrating before running
+        the robot is a good idea to ensure that the calibration is "good".
+        resetPosAndIMU will reset the position to 0,0,0 and also recalibrate the IMU.
+        This is recommended before you run your autonomous, as a bad initial calibration can cause
+        an incorrect starting value for x, y, and heading.
+         */
+       pinpoint.recalibrateIMU();
+       pinpoint.resetPosAndIMU();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.addData("X offset",pinpoint.getXOffset());
+        telemetry.addData("Y offset",pinpoint.getYOffset());
+        telemetry.addData("Device Version Number:",pinpoint.getDeviceVersion());
+        telemetry.addData("Device SCalar",pinpoint.getYawScalar());
         telemetry.update();
     }
 }
