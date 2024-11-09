@@ -144,7 +144,7 @@ public class DriveSubsystem extends SubsystemBase {
         vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
-        correctedVectorMagnitude = Math.sqrt(Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude);
+        correctedVectorMagnitude = -Math.sqrt(Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude);
         headingCalculation = headingController.calculate(targetPos.getRotation().getDegrees(), currentPos.getRotation().getDegrees());
 
         //testing
@@ -152,9 +152,9 @@ public class DriveSubsystem extends SubsystemBase {
         telemetry.addData("correctedVectorMagnitude", correctedVectorMagnitude);
         telemetry.addData("vectorTheta", vectorTheta);
 
-        //breaking vector into speed values + pid   jj
-        strafeVelocity = - lateralMutliplier * (Math.cos (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
-        forwardVelocity = - (Math.sin (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
+        //breaking vector into speed values + pid
+        strafeVelocity = lateralMutliplier * (Math.cos (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
+        forwardVelocity = (Math.sin (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
         turnVelocity = - Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
 
         //testing
@@ -169,7 +169,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void readOtos() {
         SparkFunOTOS.Pose2D sparkfunPos = otos.getPosition();
-        currentPos = new Pose2d(sparkfunPos.x, sparkfunPos.y, new Rotation2d(Math.toRadians(sparkfunPos.h)));
+        currentPos = new Pose2d(-sparkfunPos.x, -sparkfunPos.y, Rotation2d.fromDegrees((sparkfunPos.h)));
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
