@@ -175,7 +175,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void readPinpoint() {
         pinpoint.update();
         Pose2D tempPos = pinpoint.getPosition();
-        currentPos = new Pose2d(tempPos.getX(DistanceUnit.INCH), tempPos.getY(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
+        currentPos = new Pose2d(tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
@@ -194,7 +194,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setStartingPos(Pose2d pos){
-        pinpoint.setPosition( new Pose2D(DistanceUnit.INCH, pos.getX(), pos.getY(), AngleUnit.RADIANS, pos.getHeading()));
+        pinpoint.setPosition( new Pose2D(DistanceUnit.INCH, pos.getY(), pos.getX(), AngleUnit.RADIANS, pos.getHeading()));
     }
 
 }

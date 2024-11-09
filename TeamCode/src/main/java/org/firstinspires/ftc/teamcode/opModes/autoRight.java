@@ -23,7 +23,7 @@ public class autoRight extends Robot {
 
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(new Pose2d(startRightX, startY, Rotation2d.fromDegrees(0)))),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 20, Rotation2d.fromDegrees(0)) ,5, 20,1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 20, Rotation2d.fromDegrees(0)) ,1, 5,10000),
                 new WaitCommand(200),
                 new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY)
                 //intake

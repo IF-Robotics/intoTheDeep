@@ -223,7 +223,7 @@ public abstract class Robot extends CommandOpMode {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
-       pinpoint = hardwareMap.get(GoBildaPinpointDriverRR.class,"pinpoint");
+       pinpoint = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
@@ -233,7 +233,7 @@ public abstract class Robot extends CommandOpMode {
         the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
-        
+
        pinpoint.setOffsets(0, -83.95); //these are tuned for 3110-0002-0001 Product Insight #1
 
         /*
