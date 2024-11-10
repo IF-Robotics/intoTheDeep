@@ -123,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
             }
 
             //actually moving
-            drive(Math.abs(strafeSpeed), Math.abs(forwardSpeed), Math.abs(turnSpeed));
+            drive(strafeSpeed, forwardSpeed, turnSpeed);
     }
 
     public void driveToPoint(Pose2d targetPos){

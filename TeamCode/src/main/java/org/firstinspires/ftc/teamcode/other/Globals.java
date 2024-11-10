@@ -29,8 +29,8 @@ public class Globals {
     public static double armHomeX = 7;
     public static double armHomeY = 5;
     //arm back
-    public static double armBackX = -3;
-    public static double armBackY = 15;
+    public static double armBackX = -1;
+    public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = -3;
     public static double  armHighBasketY = 43;
@@ -40,8 +40,11 @@ public class Globals {
     //arm when close intake
     public static double armCloseIntakeX = 9.66;
     public static double armCloseIntakeY = 3.5;
+    //arm when front high chamber
+    public static double armFrontHighChamberX = 15;
+    public static double armFrontHighChamberY = 20.5;
     //arm when high chamber
-    public static double armHighChamberX = -8;
+    public static double armHighChamberX = -2;
     public static double armHighChamberY = 20.5;
     //manual arm boolean
     public static boolean manualArm = false;

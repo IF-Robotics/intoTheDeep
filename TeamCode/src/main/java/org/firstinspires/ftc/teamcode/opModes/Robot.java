@@ -97,9 +97,6 @@ public abstract class Robot extends CommandOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        //Pinpoint
-        configurePinpoint();
-
         //dt
         FL = new MotorEx(hardwareMap, "FL");
         FR = new MotorEx(hardwareMap, "FR");
@@ -153,7 +150,14 @@ public abstract class Robot extends CommandOpMode {
 
         configureCommands();
 
-        telemetry.addLine("Initialized");
+        //Pinpoint
+        configurePinpoint();
+        telemetry.addData("Status", "Initialized");
+        telemetry.addData("X offset",pinpoint.getXOffset());
+        telemetry.addData("Y offset",pinpoint.getYOffset());
+        telemetry.addData("pinpoint status", pinpoint.getDeviceStatus());
+        telemetry.addData("Device Version Number:",pinpoint.getDeviceVersion());
+        telemetry.addData("Device SCalar",pinpoint.getYawScalar());
         telemetry.update();
     }
 
@@ -254,6 +258,9 @@ public abstract class Robot extends CommandOpMode {
        pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
 
+       //set yaw scalar
+        pinpoint.setYawScalar(-1.000536593);
+
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
         The IMU will automatically calibrate when first powered on, but recalibrating before running
@@ -268,6 +275,7 @@ public abstract class Robot extends CommandOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset",pinpoint.getXOffset());
         telemetry.addData("Y offset",pinpoint.getYOffset());
+        telemetry.addData("pinpoint status", pinpoint.getDeviceStatus());
         telemetry.addData("Device Version Number:",pinpoint.getDeviceVersion());
         telemetry.addData("Device SCalar",pinpoint.getYawScalar());
         telemetry.update();

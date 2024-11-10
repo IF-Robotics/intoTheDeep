@@ -2,7 +2,12 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.basketPose;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.highChamberLeft;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosLeft;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -22,12 +27,15 @@ public class autoLeft extends Robot {
         super.initialize();
 
         schedule(new SequentialCommandGroup(
-                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 20, new Rotation2d(0)) ,0, 0,0),
-                new WaitCommand(200)
-//                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY),
-                //intake
-
-
+                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
+                //extend arm
+                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
+                //drive to chamber
+                new DriveToPointCommand(driveSubsystem, highChamberLeft, 1, 5, 1000),
+                new WaitCommand(1000),
+                //drive to baskets
+                new DriveToPointCommand(driveSubsystem, basketPose, 1, 5, 1000),
+                new WaitCommand(1000)
 
         ));
 
