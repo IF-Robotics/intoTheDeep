@@ -255,11 +255,11 @@ public abstract class Robot extends CommandOpMode {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
 
        //set yaw scalar
-        pinpoint.setYawScalar(-1.000536593);
+        //pinpoint.setYawScalar(1.0);
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
