@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -22,9 +24,9 @@ public class RetractFromBasket extends SequentialCommandGroup {
                 //move intake out of the way
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake),
                 //retract slides
-                new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY),
+                new InstantCommand(() -> armSubsystem.setSlide(8)),
                 //wait
-                new WaitCommand(200),
+                new WaitCommand(500),
                 //move arm down
                 new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenArmHome)

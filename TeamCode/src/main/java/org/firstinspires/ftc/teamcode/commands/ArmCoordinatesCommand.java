@@ -17,6 +17,14 @@ public class ArmCoordinatesCommand extends CommandBase {
         addRequirements(armSubsystem);
     }
 
+    public ArmCoordinatesCommand(ArmSubsystem armSubsystem, double y) {
+        this.armSubsystem = armSubsystem;
+        this.y = y;
+
+        addRequirements(armSubsystem);
+    }
+
+
     @Override
     public void execute(){
         armSubsystem.setArmCoordinates(x, y);
