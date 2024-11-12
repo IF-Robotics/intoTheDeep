@@ -14,7 +14,7 @@ public class RetractAfterIntake extends SequentialCommandGroup{
     public RetractAfterIntake(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem){
         addCommands(
                 //life intake up
-                new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenIntake),
                 //retract slides
                 new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY),
                 //wait
@@ -22,7 +22,7 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 //move arm back
                 new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, intakeHoldPower,  pitchWhenBasket, rollWhenArmBack)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, rollWhenArmBack)
         );
 
         addRequirements(armSubsystem, intakeSubsystem);

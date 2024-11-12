@@ -80,6 +80,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //write
         setArm(armTargetAngle);
+        setSlide(slideTargetIn);
     }
 
 

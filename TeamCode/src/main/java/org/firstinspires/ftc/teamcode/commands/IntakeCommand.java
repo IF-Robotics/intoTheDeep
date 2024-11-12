@@ -9,20 +9,33 @@ public class IntakeCommand extends CommandBase {
     private IntakeSubsystem intakeSubsystem;
     private double pitchAngle;
     private double rollAngle;
-    private double power;
 
-    public IntakeCommand(IntakeSubsystem intakeSubsystem, double power, double pitchAngle, double rollAngle) {
+    private Claw claw;
+    public enum Claw {
+        OPEN,
+        CLOSE
+    }
+
+    public IntakeCommand(IntakeSubsystem intakeSubsystem, Claw claw , double pitchAngle, double rollAngle) {
         this.intakeSubsystem = intakeSubsystem;
         this.pitchAngle = pitchAngle;
         this.rollAngle = rollAngle;
-        this.power = power;
+        this.claw = claw;
 
         addRequirements(intakeSubsystem);
     }
 
     @Override
     public void execute() {
-        intakeSubsystem.setIntake(power);
+
+        switch (claw) {
+            case OPEN:
+                intakeSubsystem.openClaw();
+                break;
+            case CLOSE:
+                intakeSubsystem.closeClaw();
+        }
+
         intakeSubsystem.setDiffy(pitchAngle, rollAngle);
     }
 

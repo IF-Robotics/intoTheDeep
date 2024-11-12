@@ -16,7 +16,7 @@ public class TeleopOpMode extends Robot {
     //private
 
     //buttons
-    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, square1, touchpad1;
+    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, square1, touchpad1, start1;
     private Trigger tLeft1, tRight1;
 
 
@@ -47,6 +47,7 @@ public class TeleopOpMode extends Robot {
         dRight1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_RIGHT);
         touchpad1 = new Touchpad();
         tLeft1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
+        start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
 
         //sub intake
         dUp1.whenPressed(armWhenIntakeCommand);
@@ -78,6 +79,9 @@ public class TeleopOpMode extends Robot {
         //climbing
         start2.whenPressed(intakeWhenHighBasketCommand);
         start2.whenPressed(armManualCommand);
+
+        //testing
+        start1.whenPressed(setIntakeCommand);
 
         //Default Commands
         driveSubsystem.setDefaultCommand(teleDriveCommand);

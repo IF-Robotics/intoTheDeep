@@ -3,26 +3,23 @@ package org.firstinspires.ftc.teamcode.opModes;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
@@ -32,7 +29,7 @@ import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
-
+@Config
 public abstract class Robot extends CommandOpMode {
 
     //commands
@@ -65,8 +62,7 @@ public abstract class Robot extends CommandOpMode {
     //hardware
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
-    public CRServo intake;
-    public ServoEx diffyLeft, diffyRight;
+    public ServoEx diffyLeft, diffyRight, claw;
     public AnalogInput armEncoder;
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive fieldCentricDrive;
@@ -137,12 +133,11 @@ public abstract class Robot extends CommandOpMode {
         //armSubsystem.setDefaultCommand(armHomeCommand);
 
         //intake
-        intake = new CRServo(hardwareMap, "intake");
+        claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);
         diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
         diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);
-        intake.setInverted(true);
 
-        intakeSubsystem = new IntakeSubsystem(intake, diffyLeft, diffyRight, telemetry);
+        intakeSubsystem = new IntakeSubsystem(claw, diffyLeft, diffyRight, telemetry);
         register(intakeSubsystem);
 
         m_driver = new GamepadEx(gamepad1);
@@ -163,10 +158,10 @@ public abstract class Robot extends CommandOpMode {
 
     @Override
     public void run(){
-        /*if (!flag) {
+        if (!flag) {
             super.run(); //whatever you need to run once
             flag = true;
-        }*/
+        }
 
         super.run();
 
@@ -179,6 +174,9 @@ public abstract class Robot extends CommandOpMode {
         time.reset();
         controlHub.clearBulkCache();
 
+        if (gamepad1.start){
+            schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
+        }
     }
 
     public void configureCommands(){
@@ -202,21 +200,21 @@ public abstract class Robot extends CommandOpMode {
         armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
 
         //INTAKE
-        setIntakeCommand = new IntakeCommand(intakeSubsystem, 0, pitch, roll);
+        setIntakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll);
 
         //scoring
-        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, 0, pitchWhenBasket, 0);
-        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, pitchWhenHighChamber, rollWhenHighChamber);
+        intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket  );
+        intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenHighChamber, rollWhenHighChamber);
 
         //intaking
-        intakeReadyCommand = new IntakeCommand(intakeSubsystem, intakeHoldPower, 0, rollWhenReadyIntake);
-        outakeReadyCommand = new IntakeCommand(intakeSubsystem, outtakePower, 0, rollWhenReadyIntake);
-        intakeCloseCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenCloseIntake);
+        intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
+        outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
+        intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
 
         //home poses
-        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, 0, 0, rollWhenArmHome);
-        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, intakePower, pitchWhenBasket, rollWhenArmBack);
-        intakeCommand = new IntakeCommand(intakeSubsystem, intakePower, 0, rollWhenIntake);
+        intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenArmHome);
+        intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenArmBack);
+        intakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake);
 
     }
 

@@ -6,40 +6,41 @@ import com.acmerobotics.dashboard.config.Config;
 public class Globals {
 //intake subsystem
     //intaking
-    public static int rollWhenReadyIntake = 150;
-    public static int rollWhenIntake = 61;
-    public static int rollWhenCloseIntake = 65;
+    public static int pitchWhenIntake = 0;
+    //public static int rollWhenReadyIntake = -200;
+    public static int rollWhenIntake = -190;
+    //public static int rollWhenCloseIntake = -200;
+
     //intake power
-    public static double intakePower = .7;
-    public static double intakeHoldPower = .25;
-    public static double outtakePower = -1;
+    public static double clawOpen = .75;
+    public static double clawClose = .5;
 
     //scoring
-    public static int pitchWhenBasket = 240;
-    public static double outtakeBasketPower = -.25;
+    public static int pitchWhenBasket = 0;
+    public static int rollWhenBasket = 100;
     public static double pitchWhenHighChamber = -100;
     public static double rollWhenHighChamber = -20;
 
     //home
     public static int rollWhenArmBack = -150;
-    public static int rollWhenArmHome = 300;
+    public static int rollWhenArmHome = 200;
 
 //arm subsystem
     //arm home
-    public static double armHomeX = 7;
-    public static double armHomeY = 5;
+    public static double armHomeX = 7.5;
+    public static double armHomeY = 8;
     //arm back
     public static double armBackX = -1;
     public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = -3;
-    public static double  armHighBasketY = 43;
+    public static double  armHighBasketY = 44.5;
     //arm when intaking from sub
     public static double armIntakeX = 22;
     public static double armIntakeY = 4;
-    //arm when close intake
+    //arm when close (distance) intake
     public static double armCloseIntakeX = 9.66;
-    public static double armCloseIntakeY = 3.5;
+    public static double armCloseIntakeY = 7;
     //arm when front high chamber
     public static double armFrontHighChamberX = 15;
     public static double armFrontHighChamberY = 20.5;
