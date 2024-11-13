@@ -20,6 +20,8 @@ public class Globals {
     public static int rollWhenBasket = 150;
     public static double pitchWhenHighChamber = -100;
     public static double rollWhenHighChamber = -20;
+    public static double pitchFrontHighChamber = 70;
+    public static double rollFrontHighChamber = 140;
 
     //home
     public static int rollWhenArmBack = -150;
@@ -43,13 +45,14 @@ public class Globals {
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 7;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 15;
-    public static double armFrontHighChamberY = 20.5;
+    public static double armFrontHighChamberX = 24;
+    public static double armFrontHighChamberY = 19.31;
     //arm when high chamber
     public static double armHighChamberX = -3;
     public static double armHighChamberY = 20.5;
     //manual arm boolean
     public static boolean manualArm = false;
+
 
 //drive to point
     public static double translationKP = 0.015;

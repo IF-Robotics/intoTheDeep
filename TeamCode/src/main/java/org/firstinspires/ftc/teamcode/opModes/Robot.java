@@ -44,6 +44,7 @@ public abstract class Robot extends CommandOpMode {
     public ArmCoordinatesCommand armWhenIntakeCommand;
     public ArmCoordinatesCommand armWhenCloseIntakeCommand;
     public ArmCoordinatesCommand armWhenHighChamberCommand;
+    public ArmCoordinatesCommand armFrontHighChamberCommand;
     public IntakeCommand setIntakeCommand;
     public IntakeCommand intakeWhenArmBackCommand;
     public IntakeCommand intakeWhenHighBasketCommand;
@@ -54,6 +55,7 @@ public abstract class Robot extends CommandOpMode {
     public IntakeCommand intakeCommand;
     public IntakeCommand intakeWhenHighChamberCommand;
     public IntakeCommand intakeCloseCommand;
+    public IntakeCommand intakeFrontHighChamberCommand;
 
     //test statics
     public static double x = 0, y = 0;
@@ -195,6 +197,7 @@ public abstract class Robot extends CommandOpMode {
         armHomeCommand = new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY);
         armBackCommand = new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY);
         //scoring
+        armFrontHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY);
         armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY);
         armWhenHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY);
         //intaking
@@ -212,7 +215,7 @@ public abstract class Robot extends CommandOpMode {
         //scoring
         intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket  );
         intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenHighChamber, rollWhenHighChamber);
-
+        intakeFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber);
         //intaking
         intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
@@ -223,7 +226,10 @@ public abstract class Robot extends CommandOpMode {
         intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenArmBack);
         intakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake);
 
+
+
     }
+
 
     private void configurePinpoint() {
         telemetry.addLine("Configuring Pinpoint...");
