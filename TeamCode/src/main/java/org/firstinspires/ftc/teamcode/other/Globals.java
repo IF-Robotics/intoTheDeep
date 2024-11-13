@@ -37,7 +37,7 @@ public class Globals {
     public static double  armHighBasketY = 46.5;
     //arm when intaking from sub
     public static double armReadySubIntakeX = 26;
-    public static double armReadySubIntakeY = 10;
+    public static double armReadySubIntakeY = 10.5;
     public static double armSubIntakeY = 7;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;

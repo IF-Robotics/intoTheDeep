@@ -83,6 +83,14 @@ public class ArmSubsystem extends SubsystemBase {
         setSlide(slideTargetIn);
     }
 
+    public double getCurrentX(){
+        return slideExtention * Math.cos(Math.toRadians(correctedAngle));
+    }
+
+    public double getCurrentY(){
+        return slideExtention * Math.sin(Math.toRadians(correctedAngle)) + armHeight;
+    }
+
 
     @Override
     public void periodic() {
