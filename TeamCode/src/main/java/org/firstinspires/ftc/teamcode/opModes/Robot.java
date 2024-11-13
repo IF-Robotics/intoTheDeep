@@ -95,6 +95,9 @@ public abstract class Robot extends CommandOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        //Pinpoint
+        configurePinpoint();
+
         //dt
         FL = new MotorEx(hardwareMap, "FL");
         FR = new MotorEx(hardwareMap, "FR");
@@ -152,8 +155,6 @@ public abstract class Robot extends CommandOpMode {
 
         configureCommands();
 
-        //Pinpoint
-        configurePinpoint();
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset",pinpoint.getXOffset());
         telemetry.addData("Y offset",pinpoint.getYOffset());
