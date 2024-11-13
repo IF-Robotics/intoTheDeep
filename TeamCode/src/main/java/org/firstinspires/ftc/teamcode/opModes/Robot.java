@@ -102,6 +102,11 @@ public abstract class Robot extends CommandOpMode {
         FR.setRunMode(MotorEx.RunMode.RawPower);
         BL.setRunMode(MotorEx.RunMode.RawPower);
         BR.setRunMode(MotorEx.RunMode.RawPower);
+        FL.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
 //        FR.setInverted(true);
 //        BR.setInverted(true);
 
