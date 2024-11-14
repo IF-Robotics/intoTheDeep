@@ -271,7 +271,7 @@ public abstract class Robot extends CommandOpMode {
 
 
        //set yaw scalar
-        pinpoint.setYawScalar(1.0);
+        pinpoint.setYawScalar(-1.0);
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
