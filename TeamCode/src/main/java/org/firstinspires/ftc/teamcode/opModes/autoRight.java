@@ -23,7 +23,7 @@ public class autoRight extends Robot {
         super.initialize();
 
         schedule(new SequentialCommandGroup(
-                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
+                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosRight)),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchFrontHighChamber, rollFrontHighChamber),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(3.37, 24.4, Rotation2d.fromDegrees(-34.9)) ,1, 5,10000),
                 new WaitCommand(200),

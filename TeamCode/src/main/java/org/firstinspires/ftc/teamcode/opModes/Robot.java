@@ -267,7 +267,7 @@ public abstract class Robot extends CommandOpMode {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
 
        //set yaw scalar
@@ -282,7 +282,7 @@ public abstract class Robot extends CommandOpMode {
         an incorrect starting value for x, y, and heading.
          */
        pinpoint.recalibrateIMU();
-       pinpoint.resetPosAndIMU();
+//       pinpoint.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset",pinpoint.getXOffset());

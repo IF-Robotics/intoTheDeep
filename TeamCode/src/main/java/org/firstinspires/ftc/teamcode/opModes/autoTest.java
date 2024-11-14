@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
+import static org.firstinspires.ftc.teamcode.other.Globals.testHeading;
+import static org.firstinspires.ftc.teamcode.other.Globals.testX;
+import static org.firstinspires.ftc.teamcode.other.Globals.testY;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
+
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -19,7 +25,8 @@ public class autoTest extends Robot {
         super.initialize();
 
         schedule(new SequentialCommandGroup(
-                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 0, new Rotation2d(0)) ,0, 0,1000000)
+                new InstantCommand(() -> driveSubsystem.setStartingPos(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(testX, testY, new Rotation2d(testHeading)) ,0, 0,1000000)
         ));
 
     }

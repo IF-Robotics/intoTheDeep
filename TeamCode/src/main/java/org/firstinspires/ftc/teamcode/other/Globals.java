@@ -36,7 +36,7 @@ public class Globals {
     public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = 0;
-    public static double  armHighBasketY = 46.5;
+    public static double  armHighBasketY = 48;
     //arm when intaking from sub
     public static double armReadySubIntakeX = 26;
     public static double armReadySubIntakeY = 10.5;

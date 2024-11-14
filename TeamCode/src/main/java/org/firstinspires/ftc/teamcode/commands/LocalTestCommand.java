@@ -42,13 +42,8 @@ public class LocalTestCommand extends CommandBase {
         //drive
         driveSubsystem.teleDrive(driver, arcTanZones, arcTanAngleRange, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
         //update
-        pinpoint.update();
+        driveSubsystem.readPinpoint();
         //telemetry
-        Pose2D poseEstimate = pinpoint.getPosition();
-        telemetry.addData("X", poseEstimate.getX(DistanceUnit.INCH));
-        telemetry.addData("Y", poseEstimate.getY(DistanceUnit.INCH));
-        telemetry.addData("normalized heading", poseEstimate.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("unnormalized Heading", Math.toDegrees(pinpoint.getHeading()));
         telemetry.addData("Yaw scalar", pinpoint.getYawScalar());
         telemetry.addData("pinpoint hz", pinpoint.getFrequency());
         telemetry.update();

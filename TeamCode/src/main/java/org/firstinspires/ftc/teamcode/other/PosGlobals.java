@@ -10,10 +10,10 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 public class PosGlobals {
     //starting pos
     public static final double startRightX = (3 + 7/16) + 14.74/2;//the 3&7/16 is the length a sample
+    public static double startLeftX = -startRightX;
     public static final double startY = -70.9 + (8.18898);
     public static Pose2d startingPosRight = new Pose2d(startRightX, startY, Rotation2d.fromDegrees(-180));
-    public static Pose2d startingPosLeft = startingPosRight.plus(new Transform2d(new Translation2d(-2 * startRightX, 0), Rotation2d.fromDegrees(180)));
-    public static double startLeftX = -startRightX;
+    public static Pose2d startingPosLeft = new Pose2d(startLeftX, startY, Rotation2d.fromDegrees(0));
 
     //high chamber
     public static double highChamberRightX = 8;
