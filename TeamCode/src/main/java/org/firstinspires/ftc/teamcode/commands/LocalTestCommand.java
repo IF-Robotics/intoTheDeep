@@ -54,7 +54,7 @@ public class LocalTestCommand extends CommandBase {
 
         TelemetryPacket packet = new TelemetryPacket();
         packet.fieldOverlay().setStroke("#3F51B5");
-        Drawing.drawRobot(packet.fieldOverlay(), new Pose2d(driveSubsystem.getPos().getX(), driveSubsystem.getPos().getY(), driveSubsystem.getPos().getRotation().getRadians()));
+        Drawing.drawRobot(packet.fieldOverlay(), new Pose2d(driveSubsystem.getPos().getX(), driveSubsystem.getPos().getY(), driveSubsystem.getPos().getRotation().getRadians() + Math.PI/2));
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

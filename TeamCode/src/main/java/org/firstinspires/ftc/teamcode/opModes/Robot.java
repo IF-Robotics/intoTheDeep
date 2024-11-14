@@ -250,7 +250,7 @@ public abstract class Robot extends CommandOpMode {
         backwards is a negative number.
          */
 
-       pinpoint.setOffsets(0, -83.95); //these are tuned for 3110-0002-0001 Product Insight #1
+       pinpoint.setOffsets(0, 83.95); //these are tuned for 3110-0002-0001 Product Insight #1
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -271,7 +271,7 @@ public abstract class Robot extends CommandOpMode {
 
 
        //set yaw scalar
-        //pinpoint.setYawScalar(1.0);
+        pinpoint.setYawScalar(1.0);
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
@@ -282,7 +282,7 @@ public abstract class Robot extends CommandOpMode {
         an incorrect starting value for x, y, and heading.
          */
        pinpoint.recalibrateIMU();
-//       pinpoint.resetPosAndIMU();
+       pinpoint.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset",pinpoint.getXOffset());
