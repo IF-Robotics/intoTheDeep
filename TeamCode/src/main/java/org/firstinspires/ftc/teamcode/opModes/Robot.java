@@ -282,7 +282,7 @@ public abstract class Robot extends CommandOpMode {
         an incorrect starting value for x, y, and heading.
          */
        pinpoint.recalibrateIMU();
-       pinpoint.resetPosAndIMU();
+       //pinpoint.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset",pinpoint.getXOffset());

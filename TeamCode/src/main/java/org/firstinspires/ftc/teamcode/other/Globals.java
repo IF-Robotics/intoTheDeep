@@ -65,6 +65,6 @@ public class Globals {
 
     public static double testX = 0.0;
     public static double testY = 0.0;
-    public static double testHeading = 0.0;
+    public static double testHeading = 0;
 
 }
