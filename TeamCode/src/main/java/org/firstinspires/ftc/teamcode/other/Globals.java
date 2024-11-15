@@ -45,8 +45,8 @@ public class Globals {
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 7;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 24;
-    public static double armFrontHighChamberY = 19.31;
+    public static double armFrontHighChamberX = 25;
+    public static double armFrontHighChamberY = 18.2;
     //arm when high chamber
     public static double armHighChamberX = -3;
     public static double armHighChamberY = 20.5;

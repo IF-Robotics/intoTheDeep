@@ -32,8 +32,29 @@ public class autoLeft extends Robot {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
                 //drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -40.2, Rotation2d.fromDegrees(-28)) ,1, 5,1000),
-                new WaitCommand(200)
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -40.2, Rotation2d.fromDegrees(-34)) ,1.5, 5,1000),
+                new WaitCommand(200),
+                new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY),
+                new WaitCommand(200),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-46.9, -45.36, Rotation2d.fromDegrees(0)) ,1.5, 5,1000),
+                intakeCloseCommand,
+                armWhenCloseIntakeCommand,
+                // arm home command?
+                armHighBasketCommand,
+                // drive to basket
+                intakeWhenHighBasketCommand,
+                intakeWhenArmBackCommand,
+                armHomeCommand,
+                // drive to other specimen
+                intakeCloseCommand,
+                armWhenCloseIntakeCommand,
+
+
+
+
+
+
+
 //                new DriveToPointCommand(driveSubsystem, new Pose2d(20, 20, Rotation2d.fromDegrees(0)), 1, 5,1000
         ));
 

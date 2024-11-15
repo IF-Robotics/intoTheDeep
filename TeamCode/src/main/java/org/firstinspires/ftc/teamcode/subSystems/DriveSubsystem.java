@@ -100,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
             }
 
             //actually moving
-            mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, turnSpeed);
+            mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, -turnSpeed);
     }
 
     public void driveToPoint(Pose2d targetPos){
@@ -173,7 +173,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void setStartingPos(Pose2d pos){
-        pinpoint.setPosition( new Pose2D(DistanceUnit.INCH, pos.getY(), pos.getX(), AngleUnit.RADIANS, pos.getHeading()));
+        pinpoint.setPosition( new Pose2D(DistanceUnit.INCH, pos.getY(), -pos.getX(), AngleUnit.RADIANS, pos.getHeading()));
     }
 
     public static double getHeadingInDegrees(Pose2d pose) {
@@ -192,7 +192,7 @@ public class DriveSubsystem extends SubsystemBase {
         //drawing robot on dash
         TelemetryPacket packet = new TelemetryPacket();
         packet.fieldOverlay().setStroke("#3F51B5");
-        Drawing.drawRobot(packet.fieldOverlay(), new com.acmerobotics.roadrunner.Pose2d(pose.getX(), pose.getY(), pose.getRotation().getRadians()));
+        Drawing.drawRobot(packet.fieldOverlay(), new com.acmerobotics.roadrunner.Pose2d(pose.getX(), pose.getY(), pose.getRotation().getRadians() + Math.PI/2));
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
