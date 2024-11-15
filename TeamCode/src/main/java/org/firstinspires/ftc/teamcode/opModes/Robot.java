@@ -67,7 +67,7 @@ public abstract class Robot extends CommandOpMode {
     public ServoEx diffyLeft, diffyRight, claw;
     public AnalogInput armEncoder;
     public GoBildaPinpointDriver pinpoint;
-    private MecanumDrive fieldCentricDrive;
+    private MecanumDrive mecanumDrive;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -115,9 +115,9 @@ public abstract class Robot extends CommandOpMode {
 //        FR.setInverted(true);
 //        BR.setInverted(true);
 
-        fieldCentricDrive = new MecanumDrive(FL, FR, BL, BR);
+        mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, fieldCentricDrive, telemetry, pinpoint);
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint);
         register(driveSubsystem);
 
         //arm
@@ -250,7 +250,7 @@ public abstract class Robot extends CommandOpMode {
         backwards is a negative number.
          */
 
-       pinpoint.setOffsets(0, 83.95); //these are tuned for 3110-0002-0001 Product Insight #1
+       pinpoint.setOffsets(0, -83.95); //these are tuned for 3110-0002-0001 Product Insight #1
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -267,11 +267,10 @@ public abstract class Robot extends CommandOpMode {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
 
        //set yaw scalar
-        pinpoint.setYawScalar(-1.0);
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary

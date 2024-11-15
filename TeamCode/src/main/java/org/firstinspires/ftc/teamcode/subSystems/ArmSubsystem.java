@@ -25,6 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     //arm PIDF
     public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
+    public static double armWeakKP = 0.05;
     public static double armAngleOffset = 53.5-30;
     private double ff;
     private PIDController armController;
@@ -47,6 +48,8 @@ public class ArmSubsystem extends SubsystemBase {
     private double slideTargetIn;
     private double armTargetAngle;
     private double armHeight = (24.5 + 24 + 6*24) / 25.4;
+    private double targetX = 8.0;
+    private double targetY = 8.0;
 
     //manualArm
     private double armManualPower;
@@ -75,6 +78,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmCoordinates(double x, double y){
+        targetX = x;
+        targetY = y;
+
+        //inverse kinematics
         slideTargetIn = Math.sqrt(Math.pow(x, 2) + Math.pow(y - armHeight, 2));
         armTargetAngle = Math.toDegrees(Math.atan2((y - armHeight), x));
 
@@ -83,17 +90,31 @@ public class ArmSubsystem extends SubsystemBase {
         setSlide(slideTargetIn);
     }
 
+    public void setArmY(double y){
+        targetY = y;
+        setArmCoordinates(targetX, y);
+    }
+
+    public void setArmX(double x){
+        targetX = x;
+        setArmCoordinates(x, targetY);
+    }
+
+    //forward kinematics
     public double getCurrentX(){
         return slideExtention * Math.cos(Math.toRadians(correctedAngle));
     }
-
     public double getCurrentY(){
         return slideExtention * Math.sin(Math.toRadians(correctedAngle)) + armHeight;
     }
 
+    public double getArmAngle(){
+        return correctedAngle;
+    }
 
     @Override
     public void periodic() {
+        //read
         slideTicks = slideL.getCurrentPosition();
         rawAngle = armEncoder.getVoltage()/3.3 * 360;;
 
@@ -104,7 +125,13 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         //arm pid
-        armController = new PIDController(kParm, kIarm, kDarm);
+        //lowering the kp when the arm is up
+        if(correctedAngle > 80){
+            armController = new PIDController(armWeakKP, kIarm, kDarm);
+        } else {
+            armController = new PIDController(kParm, kIarm, kDarm);
+        }
+        //feed forward
         ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
         armPower = armController.calculate(correctedAngle, setArmTargetAngle) + ff;
         /*telemetry.addData("ff", ff);
@@ -119,6 +146,7 @@ public class ArmSubsystem extends SubsystemBase {
         //telemetry.addData("slideTicks", slideTicks);
         telemetry.addData("slideError", setSlideTarget - slideExtention);
 
+        //arm manual
         if(manualArm){
             arm.set(armManualPower);
             slide.set(slideManualPower);
@@ -127,17 +155,18 @@ public class ArmSubsystem extends SubsystemBase {
             slide.set(slidePower);
         }
 
+        //calculate slide extension
+        slideExtention = slideTicks/ticksPerIn + slideWristOffset;
 
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
         telemetry.addData("error", setArmTargetAngle - correctedAngle);
 
-        slideExtention = slideTicks/ticksPerIn + slideWristOffset;
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);
 
-        telemetry.addData("xArmPos", slideExtention * Math.cos(Math.toRadians(correctedAngle)));
-        telemetry.addData("yArmPos", slideExtention * Math.sin(Math.toRadians(correctedAngle)) + armHeight);
+        telemetry.addData("xArmPos", getCurrentX());
+        telemetry.addData("yArmPos", getCurrentY());
 
     }
 

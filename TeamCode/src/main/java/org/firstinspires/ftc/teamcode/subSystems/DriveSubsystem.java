@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.subSystems;
-import static com.arcrobotics.ftclib.gamepad.GamepadKeys.Trigger.LEFT_TRIGGER;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
-import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
@@ -15,10 +12,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Gamepad;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -56,16 +50,16 @@ public class DriveSubsystem extends SubsystemBase {
     private double forwardVelocity;
     private double turnVelocity;
 
-    private MecanumDrive fieldCentricDrive;
+    private MecanumDrive mecanumDrive;
 
 
     //constructor for auto
-    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive fieldCentricDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint) {
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive mecanumDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
         this.BL = BL;
-        this.fieldCentricDrive = fieldCentricDrive;
+        this.mecanumDrive = mecanumDrive;
         this.telemetry = telemetry;
         this.pinpoint = pinpoint;
     }
@@ -79,30 +73,10 @@ public class DriveSubsystem extends SubsystemBase {
         this.telemetry = telemtry;
     }
 
-    //basic drive
-    public void drive(double strafeSpeed, double forwardSpeed, double turnSpeed){
-        y = forwardSpeed; // Remember, Y stick value is reversed
-        x = strafeSpeed * 1.1; // Counteract imperfect strafing
-        rx = -turnSpeed;
-
-        //mec inverse kinematics
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        frontLeftPower = ((y + x + rx) / denominator) * power;
-        backLeftPower = ((y - x + rx) / denominator) * power;
-        frontRightPower = ((y - x - rx) / denominator) * power;
-        backRightPower = ((y + x - rx) / denominator) * power;
-
-        //writes
-        FL.set(frontLeftPower);
-        BL.set(backLeftPower);
-        FR.set(-frontRightPower);
-        BR.set(-backRightPower);
-
-        telemetry.addData("dt power", frontLeftPower + backLeftPower + frontRightPower + backRightPower);
+    public void stopDrive(){
+        mecanumDrive.stop();
     }
+
 
     //drive with arc tan dead zones (teleop)
     public void teleDrive(GamepadEx driver, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
@@ -126,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
             }
 
             //actually moving
-            drive(strafeSpeed, forwardSpeed, turnSpeed);
+            mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, turnSpeed);
     }
 
     public void driveToPoint(Pose2d targetPos){
@@ -172,22 +146,18 @@ public class DriveSubsystem extends SubsystemBase {
 
         //actually driving
         power = 1;
-        fieldCentricDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, getHeadingInDegrees(currentPos));
+        mecanumDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, getHeadingInDegrees(currentPos));
     }
 
     public void readPinpoint() {
         pinpoint.update();
         Pose2D tempPos = pinpoint.getPosition();
-        currentPos = new Pose2d(tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(-tempPos.getHeading(AngleUnit.DEGREES)));
+        currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
 
-        //drawing robot on dash
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.fieldOverlay().setStroke("#3F51B5");
-        Drawing.drawRobot(packet.fieldOverlay(), new com.acmerobotics.roadrunner.Pose2d(currentPos.getX(), currentPos.getY(), currentPos.getRotation().getRadians() + Math.PI/2));
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        drawBot(currentPos);
     }
 
     public Pose2d getPos(){
@@ -216,6 +186,14 @@ public class DriveSubsystem extends SubsystemBase {
             }
 
             return headingInDegrees;
+    }
+
+    public void drawBot(Pose2d pose) {
+        //drawing robot on dash
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.fieldOverlay().setStroke("#3F51B5");
+        Drawing.drawRobot(packet.fieldOverlay(), new com.acmerobotics.roadrunner.Pose2d(pose.getX(), pose.getY(), pose.getRotation().getRadians()));
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
 }

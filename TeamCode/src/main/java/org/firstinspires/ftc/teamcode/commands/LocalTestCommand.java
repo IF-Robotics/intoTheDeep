@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode.commands;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.runner.Drawing;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 
 import java.util.function.DoubleSupplier;
@@ -52,9 +45,6 @@ public class LocalTestCommand extends CommandBase {
         telemetry.addData("pinpoint hz", pinpoint.getFrequency());
         telemetry.update();
 
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.fieldOverlay().setStroke("#3F51B5");
-        Drawing.drawRobot(packet.fieldOverlay(), new Pose2d(driveSubsystem.getPos().getX(), driveSubsystem.getPos().getY(), driveSubsystem.getPos().getRotation().getRadians() + Math.PI/2));
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        driveSubsystem.drawBot(driveSubsystem.getPos());
     }
 }

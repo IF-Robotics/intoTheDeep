@@ -34,7 +34,7 @@ public class DriveToPointCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveSubsystem.drive(0,0,0);
+        driveSubsystem.stopDrive();
     }
 
     @Override
