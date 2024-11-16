@@ -46,7 +46,6 @@ public abstract class Robot extends CommandOpMode {
     public ArmCoordinatesCommand armWhenHighChamberCommand;
     public ArmCoordinatesCommand armFrontHighChamberCommand;
     public ArmCoordinatesCommand armPositionToClimb;
-    public ArmCoordinatesCommand armClimbCompleteRetract;
     public IntakeCommand setIntakeCommand;
     public IntakeCommand intakeWhenArmBackCommand;
     public IntakeCommand intakeWhenHighBasketCommand;
@@ -212,7 +211,6 @@ public abstract class Robot extends CommandOpMode {
         //climbing
         armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
         armPositionToClimb = new ArmCoordinatesCommand(armSubsystem, armPositionToClimbX, armPositionToClimbY);
-        armClimbCompleteRetract = new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY);
 
         //INTAKE
         setIntakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll);

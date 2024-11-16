@@ -6,7 +6,7 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commandGroups.ClimbToSecondRung;
+import org.firstinspires.ftc.teamcode.commandGroups.Climb;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
@@ -83,9 +83,8 @@ public class TeleopOpMode extends Robot {
         //climbing
         start2.whenPressed(intakeWhenHighBasketCommand);
         start2.whenPressed(armManualCommand);
-        square2.whenPressed(armPositionToClimb);
-        square2.whenReleased(armClimbCompleteRetract);
-        triangle2.whenPressed(new ClimbToSecondRung(armSubsystem));
+        triangle2.whenPressed(armPositionToClimb);
+        triangle2.whenReleased(new Climb(armSubsystem));
 
         //testing
         start1.whenPressed(setIntakeCommand);
