@@ -53,6 +53,22 @@ public class Globals {
     //manual arm boolean
     public static boolean manualArm = false;
 
+    //arm when climbing
+    //climbing to first rung
+    public static double armPositionToClimbX = 16.9;
+    public static double armPositionToClimbY = 24.8;
+    //climbing to second rung
+    public static double armAngleToSecondRungX = 3.5;
+    public static double armAngleToSecondRungY = 14.6;
+    public static double armExtendPastSecondRungX = 12;
+    public static double armExtendPastSecondRungY = 27.5;
+    public static double armMoveToSecondRungX = 13.5;
+    public static double armMoveToSecondRungY = 27;
+    public static double armPositionRobotToEdgeOfFirstRungX = -8;
+    public static double armPositionRobotToEdgeOfFirstRungY = 19;
+    //completely retracting when climbing
+    public static double armCompleteRetractX = 7.0;
+    public static double armCompleteRetractY = 4.0;
 
 //drive to point
     public static double translationKP = 0.015;

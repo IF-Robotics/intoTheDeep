@@ -47,7 +47,7 @@ public class autoLeft extends Robot {
                 armHomeCommand,
                 // drive to other specimen
                 intakeCloseCommand,
-                armWhenCloseIntakeCommand,
+                armWhenCloseIntakeCommand//,
 
 
 

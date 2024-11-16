@@ -160,7 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
-        telemetry.addData("error", setArmTargetAngle - correctedAngle);
+        telemetry.addData("armError", setArmTargetAngle - correctedAngle);
 
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);

@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commandGroups.ClimbToSecondRung;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
@@ -16,7 +17,7 @@ public class TeleopOpMode extends Robot {
     //private
 
     //buttons
-    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, square1, touchpad1, start1;
+    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, start1, square2;
     private Trigger tLeft1, tRight1;
 
 
@@ -34,6 +35,7 @@ public class TeleopOpMode extends Robot {
 
     public void configureButtons() {
         square1 = new GamepadButton(m_driver, GamepadKeys.Button.X);
+        square2 = new GamepadButton(m_driverOp, GamepadKeys.Button.X);
         start2 = new GamepadButton(m_driverOp, GamepadKeys.Button.START);
         back2 = new GamepadButton(m_driverOp, GamepadKeys.Button.BACK);
         dUp1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_UP);
@@ -43,10 +45,12 @@ public class TeleopOpMode extends Robot {
         bRight1 = new GamepadButton(m_driver, GamepadKeys.Button.RIGHT_BUMPER);
         bLeft1 = new GamepadButton(m_driver, GamepadKeys.Button.LEFT_BUMPER);
         triangle1 = new GamepadButton(m_driver, GamepadKeys.Button.Y);
+        triangle2 = new GamepadButton(m_driverOp, GamepadKeys.Button.Y);
         cross1 = new GamepadButton(m_driver, GamepadKeys.Button.A);
         dRight1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_RIGHT);
         touchpad1 = new Touchpad();
         tLeft1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
+        tRight1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
 
         //sub intake
@@ -79,6 +83,9 @@ public class TeleopOpMode extends Robot {
         //climbing
         start2.whenPressed(intakeWhenHighBasketCommand);
         start2.whenPressed(armManualCommand);
+        square2.whenPressed(armPositionToClimb);
+        square2.whenReleased(armClimbCompleteRetract);
+        triangle2.whenPressed(new ClimbToSecondRung(armSubsystem));
 
         //testing
         start1.whenPressed(setIntakeCommand);
