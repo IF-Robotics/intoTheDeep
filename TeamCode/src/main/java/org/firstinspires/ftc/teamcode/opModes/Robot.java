@@ -20,6 +20,8 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
@@ -45,6 +47,7 @@ public abstract class Robot extends CommandOpMode {
     public ArmCoordinatesCommand armWhenCloseIntakeCommand;
     public ArmCoordinatesCommand armWhenHighChamberCommand;
     public ArmCoordinatesCommand armFrontHighChamberCommand;
+    public ArmCoordinatesCommand armLeftAutoParkCommand;
     public IntakeCommand setIntakeCommand;
     public IntakeCommand intakeWhenArmBackCommand;
     public IntakeCommand intakeWhenHighBasketCommand;
@@ -56,6 +59,12 @@ public abstract class Robot extends CommandOpMode {
     public IntakeCommand intakeWhenHighChamberCommand;
     public IntakeCommand intakeCloseCommand;
     public IntakeCommand intakeFrontHighChamberCommand;
+    public IntakeCommand intakeLastLeftAutoCommand;
+
+
+    //commmand groups
+    public RetractAfterIntake retractAfterIntake;
+    public RetractFromBasket retractFromBasket;
 
     //test statics
     public static double x = 0, y = 0;
@@ -206,7 +215,8 @@ public abstract class Robot extends CommandOpMode {
         armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY);
         //intake from closer
         armWhenCloseIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY);
-
+        //arm auto parking
+        armLeftAutoParkCommand = new ArmCoordinatesCommand(armSubsystem, armParkLeftAutoX, armParkLeftAutoY);
 
         armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
 
@@ -218,6 +228,7 @@ public abstract class Robot extends CommandOpMode {
         intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenHighChamber, rollWhenHighChamber);
         intakeFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber);
         //intaking
+        intakeLastLeftAutoCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchLastLeftAuto, rollLastLeftAuto);
         intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
@@ -227,7 +238,9 @@ public abstract class Robot extends CommandOpMode {
         intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenArmBack);
         intakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake);
 
-
+        //command groups
+        retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem);
+        retractFromBasket = new RetractFromBasket(armSubsystem, intakeSubsystem);
 
     }
 

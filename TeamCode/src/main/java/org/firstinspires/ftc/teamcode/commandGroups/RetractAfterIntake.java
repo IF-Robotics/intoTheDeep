@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
@@ -23,8 +24,8 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 //wait
                 new WaitCommand(200),
                 //retract slides & flip up intake
-                new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenArmHome),
+                new WaitForSlideCommand(armSubsystem, 8, 1),
                 //wait
                 new WaitCommand(1000),
                 //move arm back

@@ -43,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
     private double slideExtention;
     public static double slideWristOffset = 7.75;
     private double setSlideTarget = 8;
+    private double slideError = 0;
 
     //arm coordinates
     private double slideTargetIn;
@@ -112,6 +113,14 @@ public class ArmSubsystem extends SubsystemBase {
         return correctedAngle;
     }
 
+    public double getSlideExtention(){
+        return slideExtention;
+    }
+
+    public double getSlideError(){
+        return slideError;
+    }
+
     @Override
     public void periodic() {
         //read
@@ -144,13 +153,15 @@ public class ArmSubsystem extends SubsystemBase {
         slidePower = slideController.calculate(slideExtention, setSlideTarget) + slideKF;
         //telemetry.addData("targetIN", targetInches);
         //telemetry.addData("slideTicks", slideTicks);
-        telemetry.addData("slideError", setSlideTarget - slideExtention);
+        slideError = setSlideTarget - slideExtention;
+        telemetry.addData("slideError", slideError);
 
         //arm manual
         if(manualArm){
             arm.set(armManualPower);
             slide.set(slideManualPower);
         } else {
+            //pid power
             arm.set(armPower);
             slide.set(slidePower);
         }

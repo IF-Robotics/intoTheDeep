@@ -10,6 +10,9 @@ public class Globals {
     //public static int rollWhenReadyIntake = -200;
     public static int rollWhenIntake = -190;
     //public static int rollWhenCloseIntake = -200;
+    public static int pitchLastLeftAuto = 0;
+    public static int rollLastLeftAuto = -200;
+
 
     //intake power
     public static double clawOpen = .75;
@@ -52,6 +55,9 @@ public class Globals {
     public static double armHighChamberY = 20.5;
     //manual arm boolean
     public static boolean manualArm = false;
+    //arm auto park
+    public static double armParkLeftAutoX = 0;
+    public static double armParkLeftAutoY = 0;
 
 
 //drive to point

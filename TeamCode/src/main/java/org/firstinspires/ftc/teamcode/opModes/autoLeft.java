@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.basketPose;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftBasketPose;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.highChamberLeft;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
 
@@ -15,6 +15,8 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
@@ -32,30 +34,77 @@ public class autoLeft extends Robot {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
                 //drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -40.2, Rotation2d.fromDegrees(-34)) ,1.5, 5,1000),
-                new WaitCommand(200),
-                new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY),
-                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-46.9, -45.36, Rotation2d.fromDegrees(0)) ,1.5, 5,1000),
+                new DriveToPointCommand(driveSubsystem, highChamberLeft ,1, 5,1000),
+                new WaitCommand(1000),
+                //arm to home pos
+                armBackCommand,
+                new WaitCommand(1000),
+                //drive to first sample on the spikemark
+                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1, 5,1000),
+                //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
-                // arm home command?
+                new WaitCommand(1000),
+                //grab and retract
+                retractAfterIntake,
+                new WaitCommand(500),
+                //arm & intake to high basket
                 armHighBasketCommand,
-                // drive to basket
                 intakeWhenHighBasketCommand,
-                intakeWhenArmBackCommand,
-                armHomeCommand,
-                // drive to other specimen
+                new WaitCommand(1000),
+                //drive to high basket
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
+                //drop sample & arm down
+                retractFromBasket,
+                new WaitCommand(1000),
+                //reach out the arm and intake
+                intakeCloseCommand,
+                armWhenCloseIntakeCommand
+
+/*
+                //drive to second sample on the spikemark
+                new DriveToPointCommand(driveSubsystem, leftSideMidSpike,1, 5,1000),
+//                new DriveToPointCommand(driveSubsytem, )
+                intakeCloseCommand,
+                armWhenCloseIntakeCommand,
+                new WaitCommand(1000),
+                //grab and retract
+                retractAfterIntake,
+                //arm & intake to high basket
+                armHighBasketCommand,
+                intakeWhenHighBasketCommand,
+                //drive to high basket
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
+                //drop sample & arm down
+                retractFromBasket,
+                new WaitCommand(1000),
+                //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
 
+                //drive to third sample on the spikemark
+                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1, 5,1000),
+                intakeLastLeftAutoCommand, //find positions
+                armWhenCloseIntakeCommand,
+                new WaitCommand(1000),
+                //grab and retract
+                retractAfterIntake,
+                //arm & intake to high basket
+                armHighBasketCommand,
+                intakeWhenHighBasketCommand,
+                //drive to high basket
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
+                //drop sample & arm down
+                retractFromBasket,
+                new WaitCommand(1000),
+                // park
+                armLeftAutoParkCommand, // find position
+                new DriveToPointCommand(driveSubsystem, leftAutoPark, 1, 5, 1000) //tune position
+                /*
+ */
 
 
 
-
-
-
-//                new DriveToPointCommand(driveSubsystem, new Pose2d(20, 20, Rotation2d.fromDegrees(0)), 1, 5,1000
         ));
 
     }
