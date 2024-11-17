@@ -14,7 +14,7 @@ public class Climb extends SequentialCommandGroup {
         addCommands(
                 //Climb to first rung
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
-                new WaitCommand(1600),
+                new WaitCommand(2000),
 
                 //Climb to second rung
                 //Rotate arm up just past the second rung
@@ -25,7 +25,7 @@ public class Climb extends SequentialCommandGroup {
                 new WaitCommand(1000),
                 //Move arm to second rung
                 new ArmCoordinatesCommand(armSubsystem, armMoveToSecondRungX, armMoveToSecondRungY),
-                new WaitCommand(500),
+                new WaitCommand(300),
                 //Move arm back to rotate the robot down while retracting linear slides until first rung is at the end of the robot ramp
                 new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
                 new WaitCommand(1000),
