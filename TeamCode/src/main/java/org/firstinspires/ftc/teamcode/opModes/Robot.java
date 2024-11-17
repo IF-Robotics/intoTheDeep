@@ -44,6 +44,7 @@ public abstract class Robot extends CommandOpMode {
     public ArmCoordinatesCommand armHighBasketCommand;
     public ArmCoordinatesCommand armBackCommand;
     public ArmCoordinatesCommand armWhenIntakeCommand;
+    public ArmCoordinatesCommand armWhenIntakeWallCommand;
     public ArmCoordinatesCommand armWhenCloseIntakeCommand;
     public ArmCoordinatesCommand armWhenHighChamberCommand;
     public ArmCoordinatesCommand armFrontHighChamberCommand;
@@ -59,6 +60,7 @@ public abstract class Robot extends CommandOpMode {
     public IntakeCommand intakeCommand;
     public IntakeCommand intakeWhenHighChamberCommand;
     public IntakeCommand intakeCloseCommand;
+    public IntakeCommand intakeWallCommand;
     public IntakeCommand intakeFrontHighChamberCommand;
     public IntakeCommand intakeLastLeftAutoCommand;
 
@@ -150,7 +152,6 @@ public abstract class Robot extends CommandOpMode {
 
         armSubsystem = new ArmSubsystem(arm, slideLeft, slide, diffyLeft, diffyRight, armEncoder, telemetry);
         register(armSubsystem);
-        //armSubsystem.setDefaultCommand(armHomeCommand);
 
         //intake
         claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);
@@ -172,6 +173,8 @@ public abstract class Robot extends CommandOpMode {
         telemetry.addData("Device Version Number:",pinpoint.getDeviceVersion());
         telemetry.addData("Device SCalar",pinpoint.getYawScalar());
         telemetry.update();
+
+        new ArmCoordinatesCommand(armSubsystem, armFoldX, armFoldY).schedule(true);
     }
 
     @Override
@@ -211,11 +214,14 @@ public abstract class Robot extends CommandOpMode {
         armFrontHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY);
         armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY);
         armWhenHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY);
+
         //intaking
         //intake from sub
         armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY);
         //intake from closer
         armWhenCloseIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY);
+        //intaking from the wall
+        armWhenIntakeWallCommand = new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY);
         //arm auto parking
         armLeftAutoParkCommand = new ArmCoordinatesCommand(armSubsystem, armParkLeftAutoX, armParkLeftAutoY);
 
@@ -236,6 +242,7 @@ public abstract class Robot extends CommandOpMode {
         intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
+        intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchIntakeWall, rollIntakeWall);
 
         //home poses
         intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenArmHome);

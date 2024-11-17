@@ -13,7 +13,8 @@ public class IntakeCommand extends CommandBase {
     private Claw claw;
     public enum Claw {
         OPEN,
-        CLOSE
+        CLOSE,
+        EXTRAOPEN
     }
 
     public IntakeCommand(IntakeSubsystem intakeSubsystem, Claw claw , double pitchAngle, double rollAngle) {
@@ -34,6 +35,9 @@ public class IntakeCommand extends CommandBase {
                 break;
             case CLOSE:
                 intakeSubsystem.closeClaw();
+            case EXTRAOPEN:
+                intakeSubsystem.extraOpenClaw();
+                break;
         }
 
         intakeSubsystem.setDiffy(pitchAngle, rollAngle);

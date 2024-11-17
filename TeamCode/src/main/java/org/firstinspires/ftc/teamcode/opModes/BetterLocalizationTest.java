@@ -17,10 +17,10 @@ public class BetterLocalizationTest extends Robot{
     @Override
     public void initialize() {
         super.initialize();
-        setStartingPosCommand = new SetStartingPosCommand(driveSubsystem, startingPosLeft);
-        schedule( new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)));
+
+        schedule( new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosRight)));
         localTestCommand = new LocalTestCommand(driveSubsystem, pinpoint, telemetry, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX);
-        schedule(localTestCommand);
+        driveSubsystem.setDefaultCommand(localTestCommand);
     }
 
 

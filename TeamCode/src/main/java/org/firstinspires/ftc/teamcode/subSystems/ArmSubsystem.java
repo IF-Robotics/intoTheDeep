@@ -29,32 +29,35 @@ public class ArmSubsystem extends SubsystemBase {
     public static double armAngleOffset = 53.5-30;
     private double ff;
     private PIDController armController;
-    private double setArmTargetAngle;
+    private double setArmTargetAngle = 0;
     private double armPower;
     private double rawAngle;
-    private double correctedAngle;
+    private double correctedAngle = 0;
 
     //slide pidf
     public static double slideKP = .6, slideKI = 0.0, slideKD = 0.0, slideKF = 0.1;
     private PIDController slideController;
     private final double ticksPerIn = 2786/32.75;
     private int slideTicks = 1;
-    private double slidePower;
-    private double slideExtention;
+    private double slidePower = 0;
+    private double slideExtention = 0;
     public static double slideWristOffset = 7.75;
-    private double setSlideTarget = 8;
+    private double setSlideTarget = 7.75;
     private double slideError = 0;
 
     //arm coordinates
     private double slideTargetIn;
     private double armTargetAngle;
     private double armHeight = (24.5 + 24 + 6*24) / 25.4;
-    private double targetX = 8.0;
-    private double targetY = 8.0;
+    private double targetX = armFoldX;
+    private double targetY = armFoldY;
 
     //manualArm
     private double armManualPower;
     private double slideManualPower;
+
+    //intakeFromWall
+    private boolean wallActive;
 
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, ServoEx diffyLeft, ServoEx diffyRight, AnalogInput armEncoder, Telemetry telemetry) {
@@ -63,6 +66,7 @@ public class ArmSubsystem extends SubsystemBase {
         this.slideL = slideL;
         this.armEncoder = armEncoder;
         this.telemetry = telemetry;
+        wallActive = false;
     }
 
     public void manualArm(double armPower, double slidePower){
@@ -121,6 +125,23 @@ public class ArmSubsystem extends SubsystemBase {
         return slideError;
     }
 
+    public double getArmTarget(){
+        return setArmTargetAngle;
+    }
+
+    public double getSlideTarget(){
+        return setSlideTarget;
+    }
+
+    //return intakeWall state
+    public boolean getWallState(){
+        return wallActive;
+    }
+    //toggle wall state
+    public void toggleWallState(){
+        wallActive = !wallActive;
+    }
+
     @Override
     public void periodic() {
         //read
@@ -172,6 +193,7 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
         telemetry.addData("armError", setArmTargetAngle - correctedAngle);
+        telemetry.addData("armAngleError", setArmTargetAngle - correctedAngle);
 
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);

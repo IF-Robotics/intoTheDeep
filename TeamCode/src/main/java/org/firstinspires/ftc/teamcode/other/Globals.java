@@ -7,21 +7,22 @@ public class Globals {
 //intake subsystem
     //intaking
     public static int pitchWhenIntake = 0;
-    //public static int rollWhenReadyIntake = -200;
     public static int rollWhenIntake = -190;
-    //public static int rollWhenCloseIntake = -200;
     public static int pitchLastLeftAuto = 0;
     public static int rollLastLeftAuto = -200;
+    //intake from the wall
+    public static int pitchIntakeWall = 0;
+    public static int rollIntakeWall = 10;
 
-
-    //intake power
+    //claw poses
     public static double clawOpen = 1;
+    public static double clawExtraOpen = 0;
     public static double clawClose = .48;
 
     //scoring
     public static int pitchWhenBasket = 0;
     public static int rollWhenBasket = 150;
-    public static double pitchWhenHighChamber = -100;
+    public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
     public static double pitchFrontHighChamber = 70;
     public static double rollFrontHighChamber = 140;
@@ -34,12 +35,22 @@ public class Globals {
     //arm home
     public static double armHomeX = 7.5;
     public static double armHomeY = 7;
+    //arm fold
+    public static double armFoldX = 6.5;
+    public static double armFoldY = 4.0;
     //arm back
     public static double armBackX = -3;
     public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = 0;
     public static double  armHighBasketY = 48;
+    //arm when front high chamber
+    public static double armFrontHighChamberX = 25;
+    public static double armFrontHighChamberY = 18.2;
+    //arm when high chamber
+    public static double armHighChamberX = -3;
+    public static double armHighChamberY = 18.5;
+
     //arm when intaking from sub
     public static double armReadySubIntakeX = 26;
     public static double armReadySubIntakeY = 10.5;
@@ -47,12 +58,10 @@ public class Globals {
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 8;
-    //arm when front high chamber
-    public static double armFrontHighChamberX = 25;
-    public static double armFrontHighChamberY = 18.2;
-    //arm when high chamber
-    public static double armHighChamberX = -3;
-    public static double armHighChamberY = 20.5;
+    //arm when intaking form the wall
+    public static double armIntakeWallX = 7.6;
+    public static double armIntakeWallY = 8.6;
+
     //manual arm boolean
     public static boolean manualArm = false;
     //arm auto park

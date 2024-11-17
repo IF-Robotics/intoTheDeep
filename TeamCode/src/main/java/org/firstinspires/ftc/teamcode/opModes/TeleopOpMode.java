@@ -1,6 +1,13 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
+
+import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -10,6 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.commandGroups.Climb;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
@@ -52,6 +60,7 @@ public class TeleopOpMode extends Robot {
         tLeft1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
         tRight1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
+
         //sub intake
         dUp1.whenPressed(armWhenIntakeCommand);
         dUp1.whenPressed(intakeReadyCommand);
@@ -63,6 +72,17 @@ public class TeleopOpMode extends Robot {
         dRight1.whenPressed(intakeCloseCommand);
         //retract after intaking
         dDown1.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
+        //wall intake
+        dLeft1.whenPressed(new ConditionalCommand(
+                new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
+                new SequentialCommandGroup(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
+                        new WaitCommand(1000),
+                        armBackCommand),
+                () -> {
+                    armSubsystem.toggleWallState();
+                    return armSubsystem.getWallState();
+                }
+        ));
 
         //chambers
         square1.whenPressed(armWhenHighChamberCommand);
@@ -74,10 +94,6 @@ public class TeleopOpMode extends Robot {
 
         //retract after scoring in the baskets
         cross1.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));
-
-        //arm back
-        dLeft1.whenPressed(armBackCommand);
-        dLeft1.whenPressed(intakeWhenArmBackCommand);
 
         //climbing
         start2.whenPressed(intakeWhenHighBasketCommand);

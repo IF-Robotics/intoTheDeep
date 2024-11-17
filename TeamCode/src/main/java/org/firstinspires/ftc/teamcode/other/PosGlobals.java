@@ -10,15 +10,15 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 public class PosGlobals {
     //starting pos
     public static final double startRightX = (3 + 7/16) + 14.74/2;//the 3&7/16 is the length a sample
-    public static double startLeftX = -startRightX;
-    public static final double startY = -70.9 + (8.18898);
-    public static Pose2d startingPosRight = new Pose2d(startRightX, startY, Rotation2d.fromDegrees(-180));
-    public static Pose2d startingPosLeft = new Pose2d(startLeftX, startY, Rotation2d.fromDegrees(0));
+    public static final double startLeftX = -startRightX;
+    public static final double startLeftY = -70.9 + (8.18898);
+    public static final double startRightY = -70.9 + (8.18898 + 0.944882);
+    public static Pose2d startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(200));
+    public static Pose2d startingPosLeft = new Pose2d(startLeftX, startLeftY, Rotation2d.fromDegrees(0));
 
     //high chamber
     public static Pose2d highChamberLeft = new Pose2d(-17.36, -40.2, Rotation2d.fromDegrees(-34));
-
-    public static double[] chamberXPoses = {};
+    //public static Pose2d highChamberRight = new Pose2d()
 
     //baskets
     public static Pose2d leftBasketPose = new Pose2d(-54, -55, Rotation2d.fromDegrees(-45));
