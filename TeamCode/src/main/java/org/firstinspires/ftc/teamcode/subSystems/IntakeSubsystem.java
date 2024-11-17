@@ -45,9 +45,9 @@ public class IntakeSubsystem extends SubsystemBase {
         intake.setPosition(clawClose);
     }
 
-    public void extraOpenClaw () {
+    /*public void extraOpenClaw () {
         intake.setPosition(clawExtraOpen);
-    }
+    }*/
 
     public void setDiffy(double pitchAngle, double rollAngle){
         this.pitchAngle = pitchAngle;
@@ -68,6 +68,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
         telemetry.addData("pitchAngle", pitchAngle);
         telemetry.addData("rollAngle", rollAngle);
+        telemetry.addData("clawPos", intake.getPosition());
     }
 
 }

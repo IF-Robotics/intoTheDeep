@@ -35,9 +35,9 @@ public class IntakeCommand extends CommandBase {
                 break;
             case CLOSE:
                 intakeSubsystem.closeClaw();
-            case EXTRAOPEN:
+            /*case EXTRAOPEN:
                 intakeSubsystem.extraOpenClaw();
-                break;
+                break;*/
         }
 
         intakeSubsystem.setDiffy(pitchAngle, rollAngle);

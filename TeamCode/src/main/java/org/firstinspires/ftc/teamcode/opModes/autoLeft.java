@@ -59,7 +59,7 @@ public class autoLeft extends Robot {
                 new WaitCommand(1000),
                 //reach out the arm and intake
                 intakeCloseCommand,
-                armWhenCloseIntakeCommand//,
+                armWhenCloseIntakeCommand,
 
 
                 //drive to second sample on the spikemark

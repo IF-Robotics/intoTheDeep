@@ -15,9 +15,9 @@ public class Globals {
     public static int rollIntakeWall = 10;
 
     //claw poses
-    public static double clawOpen = 1;
-    public static double clawExtraOpen = 0;
-    public static double clawClose = .48;
+    public static double clawOpen = .46;
+    //public static double clawExtraOpen = 0;
+    public static double clawClose = .7;
 
     //scoring
     public static int pitchWhenBasket = 0;
