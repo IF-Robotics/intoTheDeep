@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
+
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -10,14 +11,13 @@ import org.firstinspires.ftc.teamcode.commandGroups.Climb;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
-
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
 
     //private
 
     //buttons
-    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, start1, square2;
+    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, start1, square2, dUp2;
     private Trigger tLeft1, tRight1;
 
 
@@ -52,7 +52,6 @@ public class TeleopOpMode extends Robot {
         tLeft1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
         tRight1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
-
         //sub intake
         dUp1.whenPressed(armWhenIntakeCommand);
         dUp1.whenPressed(intakeReadyCommand);
@@ -88,6 +87,7 @@ public class TeleopOpMode extends Robot {
 
         //testing
         start1.whenPressed(setIntakeCommand);
+
 
         //Default Commands
         driveSubsystem.setDefaultCommand(teleDriveCommand);
