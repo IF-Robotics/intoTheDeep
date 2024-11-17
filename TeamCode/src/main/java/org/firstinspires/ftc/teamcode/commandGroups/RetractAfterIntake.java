@@ -16,7 +16,7 @@ public class RetractAfterIntake extends SequentialCommandGroup{
     public RetractAfterIntake(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem){
         addCommands(
                 //tilts slides down a tad
-                new InstantCommand(() -> armSubsystem.setArm(0)),
+                new InstantCommand(() -> armSubsystem.setArmY(armSubIntakeY)),
                 //wait
                 new WaitCommand(500),
                 //grab the sample
