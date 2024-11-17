@@ -24,7 +24,7 @@ public class PosGlobals {
     public static Pose2d leftBasketPose = new Pose2d(-54, -55, Rotation2d.fromDegrees(-45));
 
     //spikemarks
-    public static Pose2d leftSideRightSpike = new Pose2d(-46.9, -43.36, Rotation2d.fromDegrees(0));
+    public static Pose2d leftSideRightSpike = new Pose2d(-46.9, -39, Rotation2d.fromDegrees(0));
     public static Pose2d leftSideMidSpike = leftSideRightSpike.transformBy(new Transform2d(new Translation2d(-10.0, 0.0), new Rotation2d()));
     public static Pose2d leftSideLeftSpike = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 

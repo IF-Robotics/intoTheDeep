@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private double pitchAngle;
     private double rollAngle;
 
-    public static int pitchAngleOffset = 310;
+    public static int pitchAngleOffset = 295;
     public static int rollAngleOffset = 60;
 
     //the value in the parentheses is our desired angle range in degrees

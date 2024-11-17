@@ -15,8 +15,8 @@ public class Globals {
 
 
     //intake power
-    public static double clawOpen = .75;
-    public static double clawClose = .5;
+    public static double clawOpen = 1;
+    public static double clawClose = .48;
 
     //scoring
     public static int pitchWhenBasket = 0;
@@ -46,7 +46,7 @@ public class Globals {
     public static double armSubIntakeY = 6;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
-    public static double armCloseIntakeY = 7;
+    public static double armCloseIntakeY = 8;
     //arm when front high chamber
     public static double armFrontHighChamberX = 25;
     public static double armFrontHighChamberY = 18.2;
@@ -61,7 +61,7 @@ public class Globals {
 
 
 //drive to point
-    public static double translationKP = 0.015;
+    public static double translationKP = 0.02;
     public static double translationKI = 0.0;
     public static double translationKD = 0.0005;
     public static double headingKP = 0.008;

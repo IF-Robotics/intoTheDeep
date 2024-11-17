@@ -37,13 +37,13 @@ public class autoLeft extends Robot {
                 new DriveToPointCommand(driveSubsystem, highChamberLeft ,1, 5,1000),
                 new WaitCommand(1000),
                 //arm to home pos
-                armBackCommand,
+                new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new WaitCommand(1000),
-                //drive to first sample on the spikemark
-                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1, 5,1000),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
+                //drive to first sample on the spikemark
+                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1.5, 5,500),
                 new WaitCommand(1000),
                 //grab and retract
                 retractAfterIntake,
@@ -59,9 +59,9 @@ public class autoLeft extends Robot {
                 new WaitCommand(1000),
                 //reach out the arm and intake
                 intakeCloseCommand,
-                armWhenCloseIntakeCommand
+                armWhenCloseIntakeCommand,
 
-/*
+
                 //drive to second sample on the spikemark
                 new DriveToPointCommand(driveSubsystem, leftSideMidSpike,1, 5,1000),
 //                new DriveToPointCommand(driveSubsytem, )
@@ -70,9 +70,11 @@ public class autoLeft extends Robot {
                 new WaitCommand(1000),
                 //grab and retract
                 retractAfterIntake,
+                new WaitCommand(500),
                 //arm & intake to high basket
                 armHighBasketCommand,
                 intakeWhenHighBasketCommand,
+                new WaitCommand(500),
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
                 //drop sample & arm down
@@ -81,6 +83,7 @@ public class autoLeft extends Robot {
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
+
 
                 //drive to third sample on the spikemark
                 new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1, 5,1000),
@@ -100,8 +103,8 @@ public class autoLeft extends Robot {
                 // park
                 armLeftAutoParkCommand, // find position
                 new DriveToPointCommand(driveSubsystem, leftAutoPark, 1, 5, 1000) //tune position
-                /*
- */
+
+
 
 
 
