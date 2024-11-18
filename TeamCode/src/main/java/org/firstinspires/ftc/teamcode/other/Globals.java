@@ -65,8 +65,8 @@ public class Globals {
     //manual arm boolean
     public static boolean manualArm = false;
     //arm auto park
-    public static double armParkLeftAutoX = 0;
-    public static double armParkLeftAutoY = 0;
+    public static double armParkLeftAutoX = 11.01;
+    public static double armParkLeftAutoY = 17.58;
 
     //arm when climbing
     //climbing to first rung

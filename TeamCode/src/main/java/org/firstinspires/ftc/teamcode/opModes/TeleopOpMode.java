@@ -99,7 +99,7 @@ public class TeleopOpMode extends Robot {
         start2.whenPressed(intakeWhenHighBasketCommand);
         start2.whenPressed(armManualCommand);
         triangle2.whenPressed(armPositionToClimb);
-        triangle2.whenReleased(new Climb(armSubsystem));
+        triangle2.whenReleased(new Climb(armSubsystem, intakeSubsystem));
 
         //testing
         start1.whenPressed(setIntakeCommand);

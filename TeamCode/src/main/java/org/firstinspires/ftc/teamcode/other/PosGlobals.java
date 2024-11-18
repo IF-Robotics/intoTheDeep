@@ -34,5 +34,5 @@ public class PosGlobals {
     public static double obsZoneHeading = 0;
 
     //parking
-    public static Pose2d leftAutoPark = new Pose2d(-18, -12, Rotation2d.fromDegrees(90));
+    public static Pose2d leftAutoPark = new Pose2d(-24, -7.09, Rotation2d.fromDegrees(-90));
 }

@@ -146,8 +146,6 @@ public abstract class Robot extends CommandOpMode {
         slideRight.setInverted(true);
         arm.setInverted(false);
 
-        slideLeft.resetEncoder();
-
         slide = new MotorGroup(slideLeft, slideRight);
 
         armSubsystem = new ArmSubsystem(arm, slideLeft, slide, diffyLeft, diffyRight, armEncoder, telemetry);

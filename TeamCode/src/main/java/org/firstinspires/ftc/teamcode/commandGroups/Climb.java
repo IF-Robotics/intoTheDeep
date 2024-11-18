@@ -6,13 +6,17 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
+
 
 public class Climb extends SequentialCommandGroup {
 
-    public Climb(ArmSubsystem armSubsystem){
+    public Climb(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem){
         addCommands(
                 //Climb to first rung
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
                 new WaitCommand(2000),
 
