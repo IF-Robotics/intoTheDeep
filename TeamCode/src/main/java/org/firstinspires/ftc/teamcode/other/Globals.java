@@ -8,8 +8,8 @@ public class Globals {
     //intaking
     public static int pitchWhenIntake = 0;
     public static int rollWhenIntake = -190;
-    public static int pitchLastLeftAuto = 0;
-    public static int rollLastLeftAuto = -200;
+    public static int pitchLastLeftAuto = 60;
+    public static int rollLastLeftAuto = -190;
     //intake from the wall
     public static int pitchIntakeWall = 0;
     public static int rollIntakeWall = 10;
@@ -24,7 +24,7 @@ public class Globals {
     public static int rollWhenBasket = 150;
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
-    public static double pitchFrontHighChamber = 70;
+    public static double pitchFrontHighChamber = 40;
     public static double rollFrontHighChamber = 140;
 
     //home
@@ -45,8 +45,8 @@ public class Globals {
     public static double armHighBasketX = 0;
     public static double  armHighBasketY = 48;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 25;
-    public static double armFrontHighChamberY = 18.2;
+    public static double armFrontHighChamberX = 27;
+    public static double armFrontHighChamberY = 18.8;
     //arm when high chamber
     public static double armHighChamberX = -3;
     public static double armHighChamberY = 18.5;
@@ -86,7 +86,7 @@ public class Globals {
     public static double armCompleteRetractY = 4.0;
 
 //drive to point
-    public static double translationKP = 0.02;
+    public static double translationKP = 0.03;
     public static double translationKI = 0.0;
     public static double translationKD = 0.0005;
     public static double headingKP = 0.008;

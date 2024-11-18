@@ -32,31 +32,35 @@ public class autoLeft extends Robot {
                 new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
+                new InstantCommand(() -> armSubsystem.setArm(20)),
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
                 //drive to high chamber
-                new DriveToPointCommand(driveSubsystem, highChamberLeft ,1, 5,1000),
-                new WaitCommand(1000),
+                new DriveToPointCommand(driveSubsystem, highChamberLeft ,3, 5,1000),
+                new WaitCommand(100),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchFrontHighChamber, rollFrontHighChamber),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
-                new WaitCommand(1000),
+                new WaitCommand(300),
+                // back up from front chamber
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -43, Rotation2d.fromDegrees(0)),  5, 10,0),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
                 //drive to first sample on the spikemark
                 new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1.5, 5,500),
-                new WaitCommand(1000),
+                new WaitCommand(800),
                 //grab and retract
                 retractAfterIntake,
                 new WaitCommand(500),
                 //arm & intake to high basket
                 armHighBasketCommand,
                 intakeWhenHighBasketCommand,
-                new WaitCommand(1000),
+                new WaitCommand(500),
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
                 //drop sample & arm down
                 retractFromBasket,
-                new WaitCommand(1000),
+                new WaitCommand(300),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
@@ -67,42 +71,44 @@ public class autoLeft extends Robot {
 //                new DriveToPointCommand(driveSubsytem, )
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
-                new WaitCommand(1000),
+                new WaitCommand(500),
                 //grab and retract
                 retractAfterIntake,
                 new WaitCommand(500),
                 //arm & intake to high basket
                 armHighBasketCommand,
                 intakeWhenHighBasketCommand,
-                new WaitCommand(500),
+                new WaitCommand(800),
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
                 //drop sample & arm down
                 retractFromBasket,
-                new WaitCommand(1000),
+                new WaitCommand(300),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
 
 
                 //drive to third sample on the spikemark
-                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,1, 5,1000),
-                intakeLastLeftAutoCommand, //find positions
+                intakeLastLeftAutoCommand,
+                new DriveToPointCommand(driveSubsystem, leftSideLeftSpike,1, 5,1000),
                 armWhenCloseIntakeCommand,
-                new WaitCommand(1000),
+                new WaitCommand(500),
                 //grab and retract
                 retractAfterIntake,
+                new WaitCommand(800),
                 //arm & intake to high basket
                 armHighBasketCommand,
                 intakeWhenHighBasketCommand,
+                new WaitCommand(800),
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 1, 5, 1000),
                 //drop sample & arm down
                 retractFromBasket,
-                new WaitCommand(1000),
+                new WaitCommand(500)
                 // park
-                armLeftAutoParkCommand, // find position
-                new DriveToPointCommand(driveSubsystem, leftAutoPark, 1, 5, 1000) //tune position
+//                armLeftAutoParkCommand, // find position
+//                new DriveToPointCommand(driveSubsystem, leftAutoPark, 1, 5, 1000) //tune position
 
 
 
