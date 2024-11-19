@@ -17,22 +17,36 @@ import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
-@Disabled
+
 @Autonomous(name="autoRight")
 public class autoRight extends Robot {
 
     @Override
     public void initialize(){
         super.initialize();
+        slideLeft.resetEncoder();
+
 
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosRight)),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchFrontHighChamber, rollFrontHighChamber),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(3.37, 24.4, Rotation2d.fromDegrees(-34.9)) ,1, 5,10000),
-                new WaitCommand(200),
-                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
-                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(20, 20, Rotation2d.fromDegrees(0)), 1, 5,10000)
+                new WaitCommand(1000),
+                //raise intake and arm
+                intakeRightFrontHighChamber,
+                new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY),
+                // Drive to high chamber
+                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5,10000),
+//                new DriveToPointCommand((driveSubsystem, new Pose2d(-53, -54, Rotation2d.fromDegrees(-45)), 1, 5, 10000),
+                // Score specimen
+                intakeRightScoreFrontHighChamber,
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
+                new WaitCommand(100),
+                // Drive to middle
+
+//                new DriveToPointCommand(driveSubsystem, new Pose2d(20, 20, Rotation2d.fromDegrees(0)), 1, 5,10000),
+                // intake right left specimen
+                intakeCloseCommand,
+                armWhenCloseIntakeCommand
+
 
 
 

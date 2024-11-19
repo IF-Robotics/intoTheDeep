@@ -14,6 +14,9 @@ public class Globals {
     //intake from the wall
     public static int pitchIntakeWall = 0;
     public static int rollIntakeWall = 170;
+    // Right left specimens
+    public static int pitchRightLeftSpecimen = 0;
+    public static int rollRightLeftSpecimen = 0;
 
     //claw poses
     public static double clawOpen = .72;
@@ -28,6 +31,11 @@ public class Globals {
     public static double autoPitchFrontHighChamber = 40;
     public static double pitchFrontHighChamber = 300;
     public static double rollFrontHighChamber = 140;
+    public static double pitchFrontRightHighChamber = 0;
+    public static double rollFrontRightHighChamber = 130;
+    public static double pitchPlaceFrontHighRightChamber = 0;
+    public static double rollPlaceFrontHighRightChamber = 230;
+
 
     //home
     public static int rollWhenArmBack = -150;
@@ -53,6 +61,8 @@ public class Globals {
     //arm when high chamber
     public static double armHighChamberX = -3;
     public static double armHighChamberY = 18.5;
+    public static double armRightHighChamberX = -.02;
+    public static double armRightHighChamberY = 22.3;
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 26;
