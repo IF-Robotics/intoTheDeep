@@ -65,9 +65,9 @@ public class Globals {
     public static double armRightHighChamberY = 22.3;
 
     //arm when intaking from sub
-    public static double armReadySubIntakeX = 26;
-    public static double armReadySubIntakeY = 9;
-    public static double armSubIntakeY = 7;
+    public static double armReadySubIntakeX = 23;
+    public static double armReadySubIntakeY = 9.3;
+    public static double armSubIntakeY = 6.5;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 8;

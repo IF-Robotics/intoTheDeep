@@ -198,6 +198,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
+        telemetry.addData("armKP", armController.getP());
         telemetry.addData("armError", setArmTargetAngle - correctedAngle);
         telemetry.addData("armAngleError", setArmTargetAngle - correctedAngle);
 

@@ -8,12 +8,14 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -39,7 +41,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     //driveToPoint squid
     private PIDController translationController, headingController;
-    private double errorX, errorY, errorHeading;
+    private double errorX, errorY, rawErrorHeading, correctedErrorHeading;
     private GoBildaPinpointDriver pinpoint;
     private Pose2d currentPos;
     private double rawVectorMagnitude;
@@ -126,12 +128,25 @@ public class DriveSubsystem extends SubsystemBase {
         //error calculation
         errorX = currentPos.getX() - targetPos.getX();
         errorY = currentPos.getY() - targetPos.getY();
-        errorHeading = currentPos.getRotation().getDegrees() - targetPos.getRotation().getDegrees();
+
+        //angular difference correction
+        rawErrorHeading = currentPos.getRotation().getDegrees() - targetPos.getRotation().getDegrees();
+        rawErrorHeading = rawErrorHeading % 360;
+
+        if (rawErrorHeading < -180) {
+            correctedErrorHeading = rawErrorHeading + 360;
+        } else if (rawErrorHeading > 180) {
+            correctedErrorHeading = rawErrorHeading - 360;
+        } else {
+            correctedErrorHeading = rawErrorHeading;
+        }
 
         //testing
         telemetry.addData("errorX", errorX);
         telemetry.addData("errorY", errorY);
-        telemetry.addData("errorHeading", errorHeading);
+        telemetry.addData("targetHeading", targetPos.getRotation().getDegrees());
+        telemetry.addData("rawErrorHeading", rawErrorHeading);
+        telemetry.addData("correctedHeading", correctedErrorHeading);
 
         //vector calculation
         rawVectorMagnitude = Math.hypot(errorX, errorY);
@@ -139,7 +154,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         //pid calculation
         correctedVectorMagnitude = -Math.sqrt(Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude);
-        headingCalculation = -headingController.calculate(targetPos.getRotation().getDegrees(), currentPos.getRotation().getDegrees());
+        headingCalculation = -headingController.calculate(-correctedErrorHeading);
 
         //testing
         telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
@@ -180,7 +195,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getHeadingError(){
-        return errorHeading;
+        return correctedErrorHeading;
     }
 
     public void setStartingPos(Pose2d pos){

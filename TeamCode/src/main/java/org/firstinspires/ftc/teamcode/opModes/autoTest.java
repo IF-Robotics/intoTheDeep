@@ -22,7 +22,7 @@ public class autoTest extends Robot {
 
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(testX, testY, new Rotation2d(.1)) ,0, 0,1000000)
+                new DriveToPointCommand(driveSubsystem, new Pose2d(testX, testY, new Rotation2d(0)) ,0, 0,1000000)
         ));
 
     }

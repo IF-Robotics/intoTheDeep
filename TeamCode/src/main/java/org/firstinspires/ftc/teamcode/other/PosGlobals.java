@@ -18,7 +18,7 @@ public class PosGlobals {
 
     //high chamber
     public static Pose2d highChamberLeft = new Pose2d(-17.36, -38, Rotation2d.fromDegrees(-34));
-    public static Pose2d highChamberRight = new Pose2d(12.45, -32.5, Rotation2d.fromDegrees(179));
+    public static Pose2d highChamberRight = new Pose2d(12.45, -32.5, Rotation2d.fromDegrees(180));
 
 
     //baskets
