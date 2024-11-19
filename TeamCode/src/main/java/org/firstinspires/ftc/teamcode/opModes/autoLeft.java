@@ -11,15 +11,12 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
-import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.other.Robot;
 
 @Autonomous(name="autoLeft")
 public class autoLeft extends Robot {
@@ -31,12 +28,12 @@ public class autoLeft extends Robot {
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
                 //raise intake and arm
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new InstantCommand(() -> armSubsystem.setArm(20)),
-                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
+                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
                 //drive to high chamber
                 new DriveToPointCommand(driveSubsystem, highChamberLeft ,4, 10,500),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchFrontHighChamber, rollFrontHighChamber),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new WaitCommand(200),

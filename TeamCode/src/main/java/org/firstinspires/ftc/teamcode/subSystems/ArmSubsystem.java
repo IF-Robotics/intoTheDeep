@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -140,6 +142,10 @@ public class ArmSubsystem extends SubsystemBase {
     //toggle wall state
     public void toggleWallState(){
         wallActive = !wallActive;
+    }
+
+    public Command getArmSubsystemCurrentCommand() {
+        return CommandScheduler.getInstance().requiring(this);
     }
 
     @Override

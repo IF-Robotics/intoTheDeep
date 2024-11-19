@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.other.Robot;
 
 @Autonomous(name="1+3")
 public class auto_1plus3 extends Robot {

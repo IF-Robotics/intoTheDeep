@@ -1,21 +1,17 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
-import static org.firstinspires.ftc.teamcode.other.Globals.testHeading;
 import static org.firstinspires.ftc.teamcode.other.Globals.testX;
 import static org.firstinspires.ftc.teamcode.other.Globals.testY;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.other.Robot;
 
 @Autonomous(name="autoTest")
 public class autoTest extends Robot {

@@ -18,16 +18,14 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 //tilts slides down a tad
                 new InstantCommand(() -> armSubsystem.setArmY(armSubIntakeY)),
                 //wait
-                new WaitCommand(500),
+                new WaitCommand(400),
                 //grab the sample
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenIntake),
                 //wait
-                new WaitCommand(200),
-                //retract slides & flip up intake
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenArmHome),
-                new WaitForSlideCommand(armSubsystem, 8, 1),
-                //wait
                 new WaitCommand(100),
+                //retract slides & flip up intake
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 0),
+                new WaitForSlideCommand(armSubsystem, 8, .15),
                 //move arm back
                 new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY),
                 //move intake out of the way

@@ -36,7 +36,7 @@ public class IntakeCommand extends CommandBase {
             case CLOSE:
                 intakeSubsystem.closeClaw();
             /*case EXTRAOPEN:
-                intakeSubsystem.extraOpenClaw();
+                intakeSubsystem.clawExtraOpen();
                 break;*/
         }
 

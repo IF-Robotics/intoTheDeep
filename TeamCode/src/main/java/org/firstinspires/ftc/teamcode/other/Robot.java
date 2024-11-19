@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opModes;
+package org.firstinspires.ftc.teamcode.other;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
@@ -106,6 +106,7 @@ public abstract class Robot extends CommandOpMode {
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        manual = false;
 
         //Pinpoint
         configurePinpoint();
@@ -129,7 +130,7 @@ public abstract class Robot extends CommandOpMode {
 
         mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint);
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint, armSubsystem);
         register(driveSubsystem);
 
         //arm
@@ -184,13 +185,17 @@ public abstract class Robot extends CommandOpMode {
 
         super.run();
 
-        //clear cache
+
+        //random
+        //telemetry.addData("currentArmCommand", driveSubsystem.currentArmCommand);
+
         //other telemetry
         telemetry.addData("manual", manualArm);
         //loopTime
         telemetry.addData("hz ", 1/(time.seconds()));
         telemetry.update();
         time.reset();
+        //clear cache
         controlHub.clearBulkCache();
 
         if (gamepad1.start){
@@ -215,7 +220,7 @@ public abstract class Robot extends CommandOpMode {
 
         //intaking
         //intake from sub
-        armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY);
+        //armWhenIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY);
         //intake from closer
         armWhenCloseIntakeCommand = new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY);
         //intaking from the wall
@@ -237,7 +242,7 @@ public abstract class Robot extends CommandOpMode {
         intakeFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber);
         //intaking
         intakeLastLeftAutoCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchLastLeftAuto, rollLastLeftAuto);
-        intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
+        //intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchIntakeWall, rollIntakeWall);

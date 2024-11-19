@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
@@ -32,7 +33,7 @@ public class DriveSubsystem extends SubsystemBase {
     private double backLeftPower;
     private double frontRightPower;
     private double backRightPower;
-    private double power;
+    private double power = 1;
 
     private Telemetry telemetry;
 
@@ -52,9 +53,16 @@ public class DriveSubsystem extends SubsystemBase {
 
     private MecanumDrive mecanumDrive;
 
+    public Drive drive;
+    public enum Drive {
+        FAST,
+        SLOW
+    }
+    ArmSubsystem armSubsystem;
+
 
     //constructor for auto
-    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive mecanumDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint) {
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive mecanumDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint, ArmSubsystem armSubsystem) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
@@ -62,6 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
         this.mecanumDrive = mecanumDrive;
         this.telemetry = telemetry;
         this.pinpoint = pinpoint;
+        this.armSubsystem = armSubsystem;
     }
 
     //constructor for teleop
@@ -77,6 +86,8 @@ public class DriveSubsystem extends SubsystemBase {
         mecanumDrive.stop();
     }
 
+    //current arm command
+    //public Command currentArmCommand = armSubsystem.getCurrentCommand();
 
     //drive with arc tan dead zones (teleop)
     public void teleDrive(GamepadEx driver, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
@@ -86,6 +97,7 @@ public class DriveSubsystem extends SubsystemBase {
         } else {
             power = 1;
         }
+
 
         //arc tan dead zones
         if (arcTanZones) {
@@ -100,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
             }
 
             //actually moving
-            mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, -turnSpeed);
+            mecanumDrive.driveRobotCentric(strafeSpeed * power, forwardSpeed * power, -turnSpeed * power);
     }
 
     public void driveToPoint(Pose2d targetPos){
@@ -145,7 +157,6 @@ public class DriveSubsystem extends SubsystemBase {
         telemetry.addData("turnSpeed", turnVelocity);
 
         //actually driving
-        power = 1;
         mecanumDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, getHeadingInDegrees(currentPos));
     }
 

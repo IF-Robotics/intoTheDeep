@@ -1,17 +1,16 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosLeft;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.other.Robot;
 
 @Autonomous(name="4+0")
 public class auto_4plus0 extends Robot {

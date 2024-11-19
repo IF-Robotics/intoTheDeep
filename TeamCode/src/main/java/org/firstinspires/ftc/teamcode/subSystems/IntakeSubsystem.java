@@ -25,10 +25,8 @@ public class IntakeSubsystem extends SubsystemBase {
     //the value in the parentheses is our desired angle range in degrees
     public static double diffyScalar = 360/(350) * 355/255/*axon programming software is scaled to 255 degress max*/;
 
-    //intakeing poses
-    //first pos is normal, second is 45, third is 90, fourth is 135 degrees
-    public int[] intakePitchPoses = {-90, 50, 200, 300};
-    //roll when intaking should be -200
+    //intake rotation
+    private int intakePitchAngle = 0;
 
     public IntakeSubsystem(ServoEx intake, ServoEx diffyLeft, ServoEx diffyRight, Telemetry telemetry) {
         this.intake = intake;
@@ -45,7 +43,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intake.setPosition(clawClose);
     }
 
-    /*public void extraOpenClaw () {
+    /*public void clawExtraOpen () {
         intake.setPosition(clawExtraOpen);
     }*/
 
@@ -62,6 +60,23 @@ public class IntakeSubsystem extends SubsystemBase {
         rollAngle += rollAngleOffset;
         diffyLeft.turnToAngle(((pitchAngle + rollAngle) / 2) * diffyScalar);
         diffyRight.turnToAngle(((pitchAngle - rollAngle) / 2) * diffyScalar);
+    }
+
+    public void rotateIntake(){
+        //switching to next rotation
+        intakePitchAngle += 45;
+
+        //rotation reset
+        if (intakePitchAngle >= 135){
+            intakePitchAngle = 0;
+        }
+        switch (intakePitchAngle){
+            case 0:
+                intake.setPosition(pitchesWhenIntake[0]);
+                break;
+            case 90:
+                intake.setPosition(pitchesWhenIntake[1  ]);
+        }
     }
 
     @Override

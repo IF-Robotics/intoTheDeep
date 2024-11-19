@@ -15,9 +15,13 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandGroups.Climb;
+import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.other.Robot;
 import org.firstinspires.ftc.teamcode.other.Touchpad;
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
@@ -62,10 +66,7 @@ public class TeleopOpMode extends Robot {
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
 
         //sub intake
-        dUp1.whenPressed(armWhenIntakeCommand);
-        dUp1.whenPressed(intakeReadyCommand);
-        bLeft1.whenPressed(intakeCommand);
-        bLeft1.whenReleased(intakeReadyCommand);
+        dUp1.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
         tLeft1.whenActive(outakeReadyCommand);
         //intake close
         dRight1.whenPressed(armWhenCloseIntakeCommand);
@@ -75,9 +76,7 @@ public class TeleopOpMode extends Robot {
         //wall intake
         dLeft1.whenPressed(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
-                new SequentialCommandGroup(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                        new WaitCommand(1000),
-                        armBackCommand),
+                new RetractAfterWallIntake(armSubsystem, intakeSubsystem),
                 () -> {
                     armSubsystem.toggleWallState();
                     return armSubsystem.getWallState();
@@ -85,8 +84,7 @@ public class TeleopOpMode extends Robot {
         ));
 
         //chambers
-        square1.whenPressed(armWhenHighChamberCommand);
-        square1.whenPressed(intakeWhenHighChamberCommand);
+        square1.whenPressed(new HighChamberCommand(armSubsystem, intakeSubsystem));
 
         //baskets
         triangle1.whenPressed(armHighBasketCommand);
