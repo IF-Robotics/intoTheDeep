@@ -56,10 +56,25 @@ public class IntakeSubsystem extends SubsystemBase {
         //accounting for the fact that we are using 2:1 bevel gears
         pitchAngle/= 2;
 
-        pitchAngle += pitchAngleOffset;
-        rollAngle += rollAngleOffset;
-        diffyLeft.turnToAngle(((pitchAngle + rollAngle) / 2) * diffyScalar);
-        diffyRight.turnToAngle(((pitchAngle - rollAngle) / 2) * diffyScalar);
+        diffyLeft.turnToAngle((((pitchAngle + pitchAngleOffset) + (rollAngle + rollAngleOffset)) / 2) * diffyScalar);
+        diffyRight.turnToAngle((((pitchAngle + pitchAngleOffset) - (rollAngle + rollAngleOffset)) / 2) * diffyScalar);
+    }
+
+    public void setDiffy(double pitchAngle){
+        this.pitchAngle = pitchAngle;
+
+        //pitch is like the wrist and roll is like the twist             if that makes any sense at all
+
+        //accounting for the fact that we are using 2:1 bevel gears
+        pitchAngle/= 2;
+
+        diffyLeft.turnToAngle((((pitchAngle + pitchAngleOffset) + (rollAngle + rollAngleOffset)) / 2) * diffyScalar);
+        diffyRight.turnToAngle((((pitchAngle + pitchAngleOffset) - (rollAngle + rollAngleOffset)) / 2) * diffyScalar);
+    }
+
+
+    public void resetRotateIntake(){
+        intakePitchAngle = 0;
     }
 
     public void rotateIntake(){
@@ -67,15 +82,22 @@ public class IntakeSubsystem extends SubsystemBase {
         intakePitchAngle += 45;
 
         //rotation reset
-        if (intakePitchAngle >= 135){
+        if (intakePitchAngle > 135){
             intakePitchAngle = 0;
         }
         switch (intakePitchAngle){
             case 0:
-                intake.setPosition(pitchesWhenIntake[0]);
+                setDiffy(pitchesWhenIntake[0]);
+                break;
+            case 45:
+                setDiffy(pitchesWhenIntake[1]);
                 break;
             case 90:
-                intake.setPosition(pitchesWhenIntake[1  ]);
+                setDiffy(pitchesWhenIntake[2]);
+                break;
+            case 135:
+                setDiffy(pitchesWhenIntake[3]);
+                break;
         }
     }
 

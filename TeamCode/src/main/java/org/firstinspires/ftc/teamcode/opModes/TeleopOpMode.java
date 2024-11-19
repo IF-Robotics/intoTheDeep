@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
 
 import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -66,11 +67,14 @@ public class TeleopOpMode extends Robot {
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
 
         //sub intake
-        dUp1.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
-        tLeft1.whenActive(outakeReadyCommand);
+        dUp1.whenPressed(new ParallelCommandGroup(new IntakeSub(armSubsystem, intakeSubsystem),
+                new InstantCommand(() -> intakeSubsystem.resetRotateIntake())));
+        bLeft1.whenPressed(new InstantCommand(() -> intakeSubsystem.rotateIntake()));
         //intake close
-        dRight1.whenPressed(armWhenCloseIntakeCommand);
-        dRight1.whenPressed(intakeCloseCommand);
+        dRight1.whenPressed(new SequentialCommandGroup(armWhenCloseIntakeCommand,
+                intakeCloseCommand,
+                new InstantCommand(() -> intakeSubsystem.resetRotateIntake())
+                ));
         //retract after intaking
         dDown1.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake

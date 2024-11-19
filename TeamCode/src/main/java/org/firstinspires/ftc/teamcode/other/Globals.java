@@ -7,7 +7,7 @@ public class Globals {
 //intake subsystem
     //intaking
     public static int pitchWhenIntake = 0;
-    public static int[] pitchesWhenIntake = {0/*normal*/, 210/*OrthogonalIntake*/};
+    public static int[] pitchesWhenIntake = {0/*normal*/, 105, 210/*OrthogonalIntake*/, 315};
     public static int rollWhenIntake = -190;
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
@@ -66,7 +66,7 @@ public class Globals {
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 26;
-    public static double armReadySubIntakeY = 10;
+    public static double armReadySubIntakeY = 9;
     public static double armSubIntakeY = 7;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
