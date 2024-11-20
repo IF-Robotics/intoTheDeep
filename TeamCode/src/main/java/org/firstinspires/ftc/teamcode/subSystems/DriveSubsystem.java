@@ -60,11 +60,10 @@ public class DriveSubsystem extends SubsystemBase {
         FAST,
         SLOW
     }
-    ArmSubsystem armSubsystem;
 
 
     //constructor for auto
-    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive mecanumDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint, ArmSubsystem armSubsystem) {
+    public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive mecanumDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint) {
         this.FR = FR;
         this.FL = FL;
         this.BR = BR;
@@ -72,7 +71,6 @@ public class DriveSubsystem extends SubsystemBase {
         this.mecanumDrive = mecanumDrive;
         this.telemetry = telemetry;
         this.pinpoint = pinpoint;
-        this.armSubsystem = armSubsystem;
     }
 
     //constructor for teleop
@@ -153,8 +151,8 @@ public class DriveSubsystem extends SubsystemBase {
         vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
-        correctedVectorMagnitude = -Math.sqrt(Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude);
         headingCalculation = -headingController.calculate(-correctedErrorHeading);
+        correctedVectorMagnitude = -Math.pow((Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude), translationKR);
 
         //testing
         telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);

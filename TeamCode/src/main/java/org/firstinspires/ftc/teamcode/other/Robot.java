@@ -133,7 +133,7 @@ public abstract class Robot extends CommandOpMode {
 
         mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
 
-        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint, armSubsystem);
+        driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint);
         register(driveSubsystem);
 
         //arm

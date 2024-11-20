@@ -99,13 +99,16 @@ public class Globals {
     public static double armCompleteRetractY = 4.0;
 
 //drive to point
-    public static double translationKP = 0.03;
+    public static double translationKP = 0.015;
     public static double translationKI = 0.0;
-    public static double translationKD = 0.0005;
+    public static double translationKD = 0.001;
+    //KR is the constant for the root of the pid
+    public static double translationKR = .55;
     public static double headingKP = 0.008;
     public static double headingKI = 0.0;
-    public static double headingKD = 0.0001;
-    public static double lateralMutliplier = 1.5;
+    public static double headingKD = 0.0002;
+    public static double headingKR = .5;
+    public static double lateralMutliplier = 1.3;
 
     public static double testX = 0.0;
     public static double testY = 0.0;

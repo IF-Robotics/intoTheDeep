@@ -22,6 +22,8 @@ public class DriveToPointCommand extends CommandBase {
         this.translationalTolerance = translationalTolerance;
         this.headingTolerance = headingTolerance;
         this.timeInTolerance = timeInTolerance;
+
+        addRequirements(driveSubsystem);
     }
 
 
