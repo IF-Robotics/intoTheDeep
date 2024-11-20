@@ -29,15 +29,12 @@ public class IntakeCommand extends CommandBase {
     @Override
     public void execute() {
 
-        switch (claw) {
-            case OPEN:
-                intakeSubsystem.openClaw();
-                break;
-            case CLOSE:
-                intakeSubsystem.closeClaw();
-            case EXTRAOPEN:
-                intakeSubsystem.clawExtraOpen();
-                break;
+        if(claw == Claw.OPEN) {
+            intakeSubsystem.openClaw();
+        } else if (claw == Claw.CLOSE) {
+            intakeSubsystem.closeClaw();
+        } else if (claw == Claw.EXTRAOPEN){
+            intakeSubsystem.clawExtraOpen();
         }
 
         intakeSubsystem.setDiffy(pitchAngle, rollAngle);
