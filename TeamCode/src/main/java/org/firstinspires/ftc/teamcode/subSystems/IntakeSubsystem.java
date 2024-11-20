@@ -43,9 +43,9 @@ public class IntakeSubsystem extends SubsystemBase {
         intake.setPosition(clawClose);
     }
 
-    /*public void clawExtraOpen () {
+    public void clawExtraOpen () {
         intake.setPosition(clawExtraOpen);
-    }*/
+    }
 
     public void setDiffy(double pitchAngle, double rollAngle){
         this.pitchAngle = pitchAngle;

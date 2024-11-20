@@ -20,7 +20,7 @@ public class Globals {
 
     //claw poses
     public static double clawOpen = .72;
-    //public static double clawExtraOpen = .9;
+    public static double clawExtraOpen = .9;
     public static double clawClose = .38;
 
     //scoring
