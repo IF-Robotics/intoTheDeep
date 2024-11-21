@@ -18,7 +18,7 @@ public class RetractFromBasket extends SequentialCommandGroup {
 
         addCommands(
                 //outtake
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenBasket),
                 //wait
                 new WaitCommand(500),
                 //move intake out of the way

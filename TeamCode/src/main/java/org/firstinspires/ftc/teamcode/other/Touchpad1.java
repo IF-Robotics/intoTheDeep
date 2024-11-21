@@ -5,7 +5,7 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 
 import com.arcrobotics.ftclib.command.button.Button;
 
-public class Touchpad extends Button {
+public class Touchpad1 extends Button {
     @Override
     public boolean get() {
         if(gamepad1.touchpad){
