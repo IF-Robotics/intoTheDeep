@@ -51,6 +51,7 @@ public abstract class Robot extends CommandOpMode {
     public ArmCoordinatesCommand armFrontHighChamberCommand;
     public ArmCoordinatesCommand armPositionToClimb;
     public ArmCoordinatesCommand armLeftAutoParkCommand;
+    public ArmCoordinatesCommand armAutoRightCommand;
     public IntakeCommand setIntakeCommand;
     public IntakeCommand intakeWhenArmBackCommand;
     public IntakeCommand intakeWhenHighBasketCommand;
@@ -63,9 +64,10 @@ public abstract class Robot extends CommandOpMode {
     public IntakeCommand intakeWallCommand;
     public IntakeCommand intakeFrontHighChamberCommand;
     public IntakeCommand intakeLastLeftAutoCommand;
-    public IntakeCommand intakeRightFrontHighChamber;
-    public IntakeCommand intakeRightScoreFrontHighChamber;
-    public IntakeCommand intakeRightLeftSpecimen;
+    public IntakeCommand intakeRightFrontHighChamberCommand;
+    public IntakeCommand intakeRightScoreFrontHighChamberCommand;
+    public IntakeCommand intakeAutoRightCommand;
+    public IntakeCommand intakeAutoRightGrabCommand;
 
 
     //commmand groups
@@ -231,6 +233,8 @@ public abstract class Robot extends CommandOpMode {
         armWhenIntakeWallCommand = new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY);
         //arm auto parking
         armLeftAutoParkCommand = new ArmCoordinatesCommand(armSubsystem, armParkLeftAutoX, armParkLeftAutoY);
+        // arm for auto right spcimen pick up
+        armAutoRightCommand = new ArmCoordinatesCommand(armSubsystem, armAutoRightX, armAutoRightY);
 
 
 
@@ -247,17 +251,22 @@ public abstract class Robot extends CommandOpMode {
         intakeWhenHighBasketCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket);
         intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenHighChamber, rollWhenHighChamber);
         intakeFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber);
-        intakeRightFrontHighChamber = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber);
-        intakeRightScoreFrontHighChamber = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber);
+        intakeRightFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber);
+        intakeRightScoreFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber);
         //intaking
         intakeLastLeftAutoCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchLastLeftAuto, rollLastLeftAuto);
         //intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
+
+        intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
+        intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall);
+
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake);
         intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchIntakeWall, rollIntakeWall);
-        // intake the left spike on right auto
-        intakeRightLeftSpecimen = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchRightLeftSpecimen, rollRightLeftSpecimen);
 
+        // intake the left spike on right auto
+        intakeAutoRightCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchRightAutoSpecimen, rollRightAutoSpecimen);
+        intakeAutoRightGrabCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchRightAutoSpecimen, rollRightAutoSpecimen);
         //home poses
         intakeWhenArmHomeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenArmHome);
         intakeWhenArmBackCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenArmBack);

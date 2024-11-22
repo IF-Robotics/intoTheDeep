@@ -18,7 +18,7 @@ public class PosGlobals {
 
     //high chamber
     public static Pose2d highChamberLeft = new Pose2d(-17.36, -38, Rotation2d.fromDegrees(-34));
-    public static Pose2d highChamberRight = new Pose2d(12.45, -32.5, Rotation2d.fromDegrees(180));
+    public static Pose2d highChamberRight = new Pose2d(6.9, -33, Rotation2d.fromDegrees(180));
 
 
     //baskets
@@ -28,8 +28,8 @@ public class PosGlobals {
     public static Pose2d leftSideRightSpike = new Pose2d(-46.5, -40, Rotation2d.fromDegrees(0));
     public static Pose2d leftSideMidSpike = leftSideRightSpike.transformBy(new Transform2d(new Translation2d(-10.0, 0.0), new Rotation2d()));
     public static Pose2d leftSideLeftSpike = new Pose2d(-58.8, -37.9, Rotation2d.fromDegrees(30));
-    public static Pose2d rightSideLeftSpike = new Pose2d(0,0, Rotation2d.fromDegrees(0));
-    public static Pose2d rightSideMiddleSpike = new Pose2d(0,0,Rotation2d.fromDegrees(0));
+//    public static Pose2d rightSideLeftSpike = new Pose2d(0,0, Rotation2d.fromDegrees(0));
+//    public static Pose2d rightSideMiddleSpike = new Pose2d(0,0,Rotation2d.fromDegrees(0));
     //observation zone pickup
     public static double obsZoneX = 0;
     public static double obsZoneY = 0;

@@ -12,11 +12,11 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 0;
-    public static int rollIntakeWall = 170;
+    public static int pitchIntakeWall = 390;
+    public static int rollIntakeWall = 0;
     // Right left specimens
-    public static int pitchRightLeftSpecimen = 0;
-    public static int rollRightLeftSpecimen = 0;
+    public static int pitchRightAutoSpecimen = 340;
+    public static int rollRightAutoSpecimen = -190;
 
     //claw poses
     public static double clawOpen = .72;
@@ -62,7 +62,7 @@ public class Globals {
     public static double armHighChamberX = -3;
     public static double armHighChamberY = 18.5;
     public static double armRightHighChamberX = -.02;
-    public static double armRightHighChamberY = 22.3;
+    public static double armRightHighChamberY = 23;
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 23;
@@ -75,6 +75,9 @@ public class Globals {
     //arm when intaking form the wall
     public static double armIntakeWallX = -4.7;
     public static double armIntakeWallY = 13.9;
+    // arm when intaking for AutoRight
+    public static double armAutoRightX = 16.6;
+    public static double armAutoRightY = 1.3;
 
     //manual arm boolean
     public static boolean manualArm = false;
@@ -100,11 +103,11 @@ public class Globals {
     public static double armCompleteRetractY = 4.0;
 
 //drive to point
-    public static double translationKP = 0.015;
+    public static double translationKP = 0.02;
     public static double translationKI = 0.0;
     public static double translationKD = 0.001;
     //KR is the constant for the root of the pid
-    public static double translationKR = .55;
+    public static double translationKR = .45;
     public static double headingKP = 0.008;
     public static double headingKI = 0.0;
     public static double headingKD = 0.0002;
