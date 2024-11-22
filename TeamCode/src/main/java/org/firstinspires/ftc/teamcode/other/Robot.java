@@ -194,6 +194,11 @@ public abstract class Robot extends CommandOpMode {
         //random
         //telemetry.addData("currentArmCommand", driveSubsystem.currentArmCommand);
 
+
+        if (gamepad1.start){
+            schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
+        }
+
         //other telemetry
         telemetry.addData("manual", manualArm);
         //loopTime
@@ -202,10 +207,6 @@ public abstract class Robot extends CommandOpMode {
         time.reset();
         //clear cache
         controlHub.clearBulkCache();
-
-        if (gamepad1.start){
-            schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
-        }
     }
 
     public void configureCommands(){
@@ -262,7 +263,6 @@ public abstract class Robot extends CommandOpMode {
         intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall);
 
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake);
-        intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchIntakeWall, rollIntakeWall);
 
         // intake the left spike on right auto
         intakeAutoRightCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchRightAutoSpecimen, rollRightAutoSpecimen);

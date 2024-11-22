@@ -24,12 +24,16 @@ public class DriveToPointCommand extends CommandBase {
     }
 
 
+    @Override
+    public void initialize() {
+        driveSubsystem.toggleAutoDrive(true);
+    }
 
     @Override
     public void execute() {
         driveSubsystem.readPinpoint();
         driveSubsystem.driveToPoint(targetPos);
-        driveSubsystem.autoDrive();
+        driveSubsystem.autoDrive(false, false);
     }
 
     @Override
@@ -48,6 +52,6 @@ public class DriveToPointCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         //hold position
-        new AutoDriveCommand(driveSubsystem).schedule(true);
+        driveSubsystem.toggleAutoDrive(true);
     }
 }

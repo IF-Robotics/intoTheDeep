@@ -10,10 +10,16 @@ public class AutoDriveCommand extends CommandBase {
 
     public AutoDriveCommand(DriveSubsystem driveSubsystem){
         this.driveSubsystem = driveSubsystem;
+        addRequirements(driveSubsystem);
     }
 
     @Override
     public void execute(){
-        driveSubsystem.autoDrive();
+        driveSubsystem.autoDrive(false, false);
+    }
+
+    @Override
+    public boolean isFinished(){
+        return false;
     }
 }

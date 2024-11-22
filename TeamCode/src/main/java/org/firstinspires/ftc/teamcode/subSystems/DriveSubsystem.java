@@ -41,18 +41,21 @@ public class DriveSubsystem extends SubsystemBase {
 
     //driveToPoint squid
     private PIDController translationController, headingController;
+    private ProfiledPIDController profiledTranslationController, profiledHeadingController;
     private double errorX, errorY, rawErrorHeading, correctedErrorHeading;
     private GoBildaPinpointDriver pinpoint;
-    private Pose2d currentPos;
+    private Pose2d currentPos = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
     private double rawVectorMagnitude;
     private double correctedVectorMagnitude;
     private double vectorTheta;
     private double headingCalculation;
-    private Pose2d targetPos;
+    private Pose2d targetPos = new Pose2d(0,0, Rotation2d.fromDegrees(0));
 
     private double strafeVelocity;
     private double forwardVelocity;
     private double turnVelocity;
+
+    private boolean autoDriveToggle = false;
 
     private MecanumDrive mecanumDrive;
 
@@ -118,16 +121,20 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driveToPoint(Pose2d targetPos){
         this.targetPos = targetPos;
-        //autoDrive();
     }
 
-    public void autoDrive(){
+    public void autoDrive(boolean profiledTranslation, boolean profiledHeading){
         //completely temperary testing - delete if causing problems
         /*targetPos = new Pose2d(testX, testY, Rotation2d.fromDegrees(testHeading));*/
 
         //pids
-        translationController = new PIDController(translationKP, translationKI, translationKD);
-        headingController = new PIDController(headingKP, headingKI, headingKD);
+        if(profiledTranslation){
+            profiledTranslationController = new ProfiledPIDController(translationKP, translationKI, translationKD, new TrapezoidProfile.Constraints(1, 1));
+        } else {translationController = new PIDController(translationKP, translationKI, translationKD);}
+
+        if(profiledHeading){
+            profiledHeadingController = new ProfiledPIDController(headingKP, headingKI, headingKD, new TrapezoidProfile.Constraints(1, 1));
+        } else {headingController = new PIDController(headingKP, headingKI, headingKD);}
 
         //error calculation
         errorX = currentPos.getX() - targetPos.getX();
@@ -179,6 +186,10 @@ public class DriveSubsystem extends SubsystemBase {
         mecanumDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, getHeadingInDegrees(currentPos));
     }
 
+    public void toggleAutoDrive(boolean toggle){
+        autoDriveToggle = toggle;
+    }
+
     public void readPinpoint() {
         pinpoint.update();
         Pose2D tempPos = pinpoint.getPosition();
@@ -224,6 +235,15 @@ public class DriveSubsystem extends SubsystemBase {
         packet.fieldOverlay().setStroke("#3F51B5");
         Drawing.drawRobot(packet.fieldOverlay(), new com.acmerobotics.roadrunner.Pose2d(pose.getX(), pose.getY(), pose.getRotation().getRadians() + Math.PI/2));
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
+    }
+
+    @Override
+    public void periodic() {
+        if(autoDriveToggle){
+            autoDrive(false, false);
+        }
+
+
     }
 
 }

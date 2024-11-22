@@ -12,8 +12,8 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 390;
-    public static int rollIntakeWall = 0;
+    public static int pitchIntakeWall = 340;
+    public static int rollIntakeWall = -190;
     // Right left specimens
     public static int pitchRightAutoSpecimen = 340;
     public static int rollRightAutoSpecimen = -190;
@@ -24,13 +24,20 @@ public class Globals {
     public static double clawClose = .38;
 
     //scoring
+    //basket
     public static int pitchWhenBasket = 0;
     public static int rollWhenBasket = 150;
+
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
+
+    //autoLeft
     public static double autoPitchFrontHighChamber = 40;
-    public static double pitchFrontHighChamber = 300;
     public static double rollFrontHighChamber = 140;
+
+    public static double pitchFrontHighChamber = 300;
+
+    //autoright
     public static double pitchFrontRightHighChamber = 0;
     public static double rollFrontRightHighChamber = 130;
     public static double pitchPlaceFrontHighRightChamber = 0;
@@ -73,8 +80,8 @@ public class Globals {
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 7.5;
     //arm when intaking form the wall
-    public static double armIntakeWallX = -4.7;
-    public static double armIntakeWallY = 13.9;
+    public static double armIntakeWallX = 16.6;
+    public static double armIntakeWallY = 1.3;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;
@@ -106,12 +113,14 @@ public class Globals {
     public static double translationKP = 0.01;
     public static double translationKI = 0.0;
     public static double translationKD = 0.001;
-    //KR is the constant for the root of the pid
-    public static double translationKR = .5;
+    public static double translationKR = .5; //KR is the constant for the root of the pid
+    public static double translationMaxVel = 1; //in inches per second
+
     public static double headingKP = 0.005;
     public static double headingKI = 0.0;
     public static double headingKD = 0.0002;
     public static double headingKR = .5;
+    public static double headingMaxVel = 1; //in degrees per second
     public static double lateralMutliplier = 1.5;
 
     public static double testX = 0.0;
