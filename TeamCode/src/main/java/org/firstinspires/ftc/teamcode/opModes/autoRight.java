@@ -39,7 +39,11 @@ public class autoRight extends Robot {
                 new WaitCommand(300),
                 intakeRightFrontHighChamberCommand,
                 // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5,1000),
+                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5).withTimeout(2000),
+                //wait
+                new WaitCommand(1000),
+                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5),
+
 //                new DriveToPointCommand((driveSubsystem, new Pose2d(-53, -54, Rotation2d.fromDegrees(-45)), 1, 5, 10000),
                 new WaitCommand(200),
                 // Score specimen
@@ -49,12 +53,14 @@ public class autoRight extends Robot {
                 armBackCommand,
                 new WaitCommand(200),
 
-                // Drive to middle
-                new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-37)), 5, 10, 0),
+                // Drive to middle    
+                new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-37)), 5, 10),
                 new InstantCommand(() -> armSubsystem.setArm(0)),
                 // sample intake positions
                 intakeAutoRightCommand,
-                new DriveToPointCommand(driveSubsystem, new Pose2d(33.8, -42, Rotation2d.fromDegrees(-37)), 1, 5,1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(33.8, -42, Rotation2d.fromDegrees(-37)), 1, 5),
+                //wait
+                new WaitCommand(1000),
                 // intake sample
                 new WaitCommand(300),
                 new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
@@ -66,14 +72,18 @@ public class autoRight extends Robot {
                 new WaitCommand(200),
                 new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
                 new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(33.8, -44, Rotation2d.fromDegrees(-140)), 1, 5,1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(33.8, -44, Rotation2d.fromDegrees(-140)), 1, 5),
+                //wait
+                new WaitCommand(1000),
                 //open claw
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 315, rollWhenIntake),
                 new WaitCommand(200),
                 //retract slide
 
                 intakeAutoRightCommand,
-                new DriveToPointCommand(driveSubsystem, new Pose2d(43.8, -43, Rotation2d.fromDegrees(-37)), 1, 5,1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(43.8, -43, Rotation2d.fromDegrees(-37)), 1, 5),
+                //wait
+                new WaitCommand(1000),
                 // intake sample
                 new WaitCommand(300),
                 new InstantCommand(() -> armSubsystem.setArmY(armSubIntakeY -3/4)),
@@ -81,7 +91,9 @@ public class autoRight extends Robot {
                 intakeAutoRightGrabCommand,
                 // wait?
                 new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(43.8, -41, Rotation2d.fromDegrees(-140)), 1, 5,1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(43.8, -41, Rotation2d.fromDegrees(-140)), 1, 5),
+                //wait
+                new WaitCommand(1000),
                 //open claw
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake),
                 new WaitCommand(200),

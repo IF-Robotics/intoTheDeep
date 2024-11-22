@@ -13,15 +13,12 @@ public class DriveToPointCommand extends CommandBase {
     private double translationalTolerance;
     private double headingTolerance;
 
-    private double timeInTolerance; //in milliseconds
-    private ElapsedTime time = new ElapsedTime();
 
-    public DriveToPointCommand(DriveSubsystem driveSubsystem, Pose2d targetPos, double translationalTolerance,double headingTolerance, double timeInTolerance) {
+    public DriveToPointCommand(DriveSubsystem driveSubsystem, Pose2d targetPos, double translationalTolerance,double headingTolerance) {
         this.driveSubsystem = driveSubsystem;
         this.targetPos = targetPos;
         this.translationalTolerance = translationalTolerance;
         this.headingTolerance = headingTolerance;
-        this.timeInTolerance = timeInTolerance;
 
         addRequirements(driveSubsystem);
     }
@@ -32,11 +29,7 @@ public class DriveToPointCommand extends CommandBase {
     public void execute() {
         driveSubsystem.readPinpoint();
         driveSubsystem.driveToPoint(targetPos);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        driveSubsystem.stopDrive();
+        driveSubsystem.autoDrive();
     }
 
     @Override
@@ -46,14 +39,15 @@ public class DriveToPointCommand extends CommandBase {
         //if in tolerance and the timer matured enough, then finished
         //else not finished
         if(Math.abs(driveSubsystem.getTranslationalError()) > translationalTolerance || Math.abs(driveSubsystem.getHeadingError()) > headingTolerance){
-            time.reset();
             return false;
-        } else if(time.milliseconds() > timeInTolerance){
-            return true;
         } else {
-            return false;
+            return true;
         }
+    }
 
-        //this makes it so that the command will only finish when it reaches the target position and stays in the target position for a certain amount of time
+    @Override
+    public void end(boolean interrupted) {
+        //hold position
+        new AutoDriveCommand(driveSubsystem).schedule(true);
     }
 }

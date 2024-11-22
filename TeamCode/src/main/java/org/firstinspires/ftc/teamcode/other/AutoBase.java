@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.other;
 
+import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
+
 public abstract class AutoBase extends Robot{
 
     public void initialize() {
@@ -7,9 +9,14 @@ public abstract class AutoBase extends Robot{
 
         //reset slide encoder
         slideLeft.resetEncoder();
+
+        //setdefault commands
+        driveSubsystem.setDefaultCommand(new AutoDriveCommand(driveSubsystem));
     }
 
     public void configureAutoCommands(){
 
     }
+
+
 }

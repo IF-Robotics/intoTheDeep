@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.LinkedList;
+
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
@@ -60,6 +62,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     //intakeFromWall
     private boolean wallActive;
+
+    //slide velocity
+    private LinkedList<TimeStampedPosition> positionHistory = new LinkedList<>();
+    private static final long VELOCITY_TIME_FRAME_MS = 50; // Time frame in milliseconds
 
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, ServoEx diffyLeft, ServoEx diffyRight, AnalogInput armEncoder, Telemetry telemetry) {
@@ -144,8 +150,67 @@ public class ArmSubsystem extends SubsystemBase {
         wallActive = !wallActive;
     }
 
-    public Command getArmSubsystemCurrentCommand() {
-        return CommandScheduler.getInstance().requiring(this);
+
+    //slide velocity
+    public double getSlideVelocity() {
+
+        long currentTime = System.currentTimeMillis();
+
+        // Add the new position with its timestamp
+        positionHistory.add(new TimeStampedPosition(getSlideExtention(), currentTime));
+
+        // Remove old entries beyond the time frame
+        while (!positionHistory.isEmpty() &&
+                currentTime - positionHistory.getFirst().getTimestamp() > VELOCITY_TIME_FRAME_MS) {
+            positionHistory.removeFirst();
+        }
+
+
+        if (positionHistory.size() < 2) {
+            // Not enough data to calculate velocity
+            return 0.0;
+        }
+
+        // Get the oldest and newest positions in the time frame
+        TimeStampedPosition oldestPosition = positionHistory.getFirst();
+        TimeStampedPosition newestPosition = positionHistory.getLast();
+
+        // Calculate velocity: Δposition / Δtime
+        double deltaPosition = newestPosition.getPosition() - oldestPosition.getPosition();
+        double deltaTime = (newestPosition.getTimestamp() - oldestPosition.getTimestamp()) / 1000.0; // Convert ms to seconds
+
+        // Avoid divide-by-zero errors
+        if (deltaTime == 0) {
+            return 0.0;
+        }
+
+        return deltaPosition / deltaTime; // Velocity in INCHES per second
+    }
+
+    public class TimeStampedPosition {
+        private final double position; // For the arm, could be degrees or extension length
+        private final long timestamp;  // Timestamp in milliseconds
+
+        public TimeStampedPosition(double position, long timestamp) {
+            this.position = position;
+            this.timestamp = timestamp;
+        }
+
+        public double getPosition() {
+            return position;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        @Override
+        public String toString() {
+            return "TimeStampedPosition{" +
+                    "position=" + position +
+                    ", timestamp=" + timestamp +
+                    '}';
+        }
     }
 
     @Override
@@ -207,6 +272,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         telemetry.addData("xArmPos", getCurrentX());
         telemetry.addData("yArmPos", getCurrentY());
+        telemetry.addData("slideVelocity", getSlideVelocity());
 
     }
 

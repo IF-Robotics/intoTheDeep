@@ -48,6 +48,7 @@ public class DriveSubsystem extends SubsystemBase {
     private double correctedVectorMagnitude;
     private double vectorTheta;
     private double headingCalculation;
+    private Pose2d targetPos;
 
     private double strafeVelocity;
     private double forwardVelocity;
@@ -116,6 +117,11 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void driveToPoint(Pose2d targetPos){
+        this.targetPos = targetPos;
+        //autoDrive();
+    }
+
+    public void autoDrive(){
         //completely temperary testing - delete if causing problems
         /*targetPos = new Pose2d(testX, testY, Rotation2d.fromDegrees(testHeading));*/
 

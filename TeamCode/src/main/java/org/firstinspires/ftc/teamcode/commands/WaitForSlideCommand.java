@@ -24,7 +24,7 @@ public class WaitForSlideCommand extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        if(Math.abs(armSubsystem.getSlideError()) < tolerance){
+        if((Math.abs(armSubsystem.getSlideError()) < tolerance) && armSubsystem.getSlideVelocity() < .1){
             return true;
         } else {
             return false;

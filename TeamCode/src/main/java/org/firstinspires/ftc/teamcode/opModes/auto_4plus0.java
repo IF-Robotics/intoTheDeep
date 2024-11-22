@@ -24,7 +24,7 @@ public class auto_4plus0 extends Robot {
                 //move arm to high chamber
                 armWhenHighChamberCommand,
                 //drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 0, new Rotation2d(0)) ,0, 0,0)
+                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 0, new Rotation2d(0)) ,0, 0)
 
 
 

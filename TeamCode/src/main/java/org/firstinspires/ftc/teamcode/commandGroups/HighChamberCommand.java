@@ -19,7 +19,7 @@ public class HighChamberCommand extends SequentialCommandGroup {
 
         addCommands(
                 //angle the arm to right angle
-                new WaitForArmCommand(armSubsystem, 10, 5),
+                new WaitForArmCommand(armSubsystem, 10, 2),
                 //extend
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
                 //spin intake around
