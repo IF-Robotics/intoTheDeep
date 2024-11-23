@@ -222,6 +222,7 @@ public abstract class Robot extends CommandOpMode {
         //scoring
         armFrontHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY);
         armHighBasketCommand = new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY);
+        //teleop high chamber
         armWhenHighChamberCommand = new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY);
 
         //intaking

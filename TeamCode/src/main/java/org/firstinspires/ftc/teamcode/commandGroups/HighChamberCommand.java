@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armFrontHighChamberX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armFrontHighChamberY;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchFrontHighChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollFrontHighChamber;
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
@@ -18,12 +15,10 @@ public class HighChamberCommand extends SequentialCommandGroup {
     public HighChamberCommand(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem) {
 
         addCommands(
-                //angle the arm to right angle
-                new WaitForArmCommand(armSubsystem, 10, 2),
                 //extend
-                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, armFrontHighChamberY),
+                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY),
                 //spin intake around
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchTeleopHighChamber, rollTeleopHighChamber)
         );
 
         addRequirements(armSubsystem, intakeSubsystem);

@@ -12,7 +12,7 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 390;
+    public static int pitchIntakeWall = 420;
     public static int rollIntakeWall = 0;
     // Right left specimens
     public static int pitchRightAutoSpecimen = 340;
@@ -43,6 +43,10 @@ public class Globals {
     public static double pitchPlaceFrontHighRightChamber = 0;
     public static double rollPlaceFrontHighRightChamber = 250;
 
+    //teleop high chamber
+    public static double pitchTeleopHighChamber = 0;
+    public static double rollTeleopHighChamber = -20;
+
 
     //home
     public static int rollWhenArmBack = -150;
@@ -60,14 +64,14 @@ public class Globals {
     public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = 0;
-    public static double  armHighBasketY = 48;
+    public static double  armHighBasketY = 46;
     //arm when front high chamber
     public static double armFrontHighChamberX = 27;
     public static double armFrontHighChamberY = 18;
     public static double autoArmFrontHighChamberY = 18.8;
     //arm when high chamber
-    public static double armHighChamberX = -3;
-    public static double armHighChamberY = 18.5;
+    public static double armHighChamberX = -8;
+    public static double armHighChamberY = 18;
     public static double armRightHighChamberX = -.02;
     public static double armRightHighChamberY = 23;
 
@@ -78,10 +82,10 @@ public class Globals {
     public static double armInSubIntakeY = 8;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
-    public static double armCloseIntakeY = 7.7;
+    public static double armCloseIntakeY = 8;
     //arm when intaking form the wall
-    public static double armIntakeWallX = 16.6;
-    public static double armIntakeWallY = 1.3;
+    public static double armIntakeWallX = 7.7;
+    public static double armIntakeWallY = 8.7;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;
