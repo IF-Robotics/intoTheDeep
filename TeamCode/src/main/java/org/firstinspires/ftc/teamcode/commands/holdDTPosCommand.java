@@ -15,8 +15,8 @@ public class holdDTPosCommand extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsystem.driveToPoint(driveSubsystem.getTargetPos());
-        driveSubsystem.autoDrive(false, false);
+//        driveSubsystem.driveToPoint(driveSubsystem.getTargetPos());
+        driveSubsystem.autoDrive();
     }
 
 }

@@ -255,7 +255,7 @@ public abstract class Robot extends CommandOpMode {
         intakeRightFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber);
         intakeRightScoreFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber);
         //intaking
-        intakeLastLeftAutoCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchLastLeftAuto, rollLastLeftAuto);
+        intakeLastLeftAutoCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchLastLeftAuto, rollLastLeftAuto);
         //intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
 

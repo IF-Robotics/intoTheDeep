@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subSystems;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
@@ -40,8 +42,7 @@ public class DriveSubsystem extends SubsystemBase {
     private Telemetry telemetry;
 
     //driveToPoint squid
-    private PIDController translationController, headingController;
-    private ProfiledPIDController profiledTranslationController, profiledHeadingController;
+//    private ProfiledPIDController profiledTranslationController, profiledHeadingController;
     private double errorX, errorY, rawErrorHeading, correctedErrorHeading;
     private GoBildaPinpointDriver pinpoint;
     private Pose2d currentPos = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
@@ -50,6 +51,10 @@ public class DriveSubsystem extends SubsystemBase {
     private double vectorTheta;
     private double headingCalculation;
     private Pose2d targetPos = new Pose2d(0,0, Rotation2d.fromDegrees(0));
+//    private PIDController translationController = new PIDController(translationKP, translationKI, translationKD);
+    private PIDController headingController = new PIDController(headingKP, headingKI, headingKD);
+    BasicPID translationController = new BasicPID(new PIDCoefficients(translationKP, translationKI, translationKD));
+
 
     private double strafeVelocity;
     private double forwardVelocity;
@@ -123,7 +128,7 @@ public class DriveSubsystem extends SubsystemBase {
         this.targetPos = targetPos;
     }
 
-    public void autoDrive(boolean profiledTranslation, boolean profiledHeading){
+    public void autoDrive(){
         //completely temperary testing - delete if causing problems
         /*targetPos = new Pose2d(testX, testY, Rotation2d.fromDegrees(testHeading));*/
 
@@ -131,13 +136,16 @@ public class DriveSubsystem extends SubsystemBase {
         readPinpoint();
 
         //pids
-        if(profiledTranslation){
-            profiledTranslationController = new ProfiledPIDController(translationKP, translationKI, translationKD, new TrapezoidProfile.Constraints(1, 1));
-        } else {translationController = new PIDController(translationKP, translationKI, translationKD);}
-
-        if(profiledHeading){
-            profiledHeadingController = new ProfiledPIDController(headingKP, headingKI, headingKD, new TrapezoidProfile.Constraints(1, 1));
-        } else {headingController = new PIDController(headingKP, headingKI, headingKD);}
+//        if(profiledTranslation){
+//            profiledTranslationController = new ProfiledPIDController(translationKP, translationKI, translationKD, new TrapezoidProfile.Constraints(1, 1));
+//        } else {translationController = new PIDController(translationKP, translationKI, translationKD);}
+//
+//        if(profiledHeading){
+//            profiledHeadingController = new ProfiledPIDController(headingKP, headingKI, headingKD, new TrapezoidProfile.Constraints(1, 1));
+//        } else {headingController = new PIDController(headingKP, headingKI, headingKD);
+//        translationController.setPID(translationKP, translationKI, translationKD);
+        translationController = new BasicPID(new PIDCoefficients(translationKP, translationKI, translationKD));
+        headingController.setPID(headingKP, headingKI, headingKD);
 
         //error calculation
         errorX = currentPos.getX() - targetPos.getX();
@@ -168,7 +176,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         //pid calculation
         headingCalculation = -headingController.calculate(-correctedErrorHeading);
-        correctedVectorMagnitude = -Math.pow((Math.abs(translationController.calculate(0, rawVectorMagnitude))) * Math.signum(rawVectorMagnitude), translationKR);
+        correctedVectorMagnitude = -Math.pow((Math.abs(translationController.calculate(rawVectorMagnitude,0))) * Math.signum(rawVectorMagnitude), translationKR);
 
         //testing
         telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
@@ -187,10 +195,6 @@ public class DriveSubsystem extends SubsystemBase {
 
         //actually driving
         mecanumDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, getHeadingInDegrees(currentPos));
-    }
-
-    public void toggleAutoDrive(boolean toggle){
-        autoDriveToggle = toggle;
     }
 
     public void readPinpoint() {

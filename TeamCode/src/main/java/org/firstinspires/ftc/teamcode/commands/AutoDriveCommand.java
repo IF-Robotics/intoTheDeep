@@ -15,7 +15,7 @@ public class AutoDriveCommand extends CommandBase {
 
     @Override
     public void execute(){
-        driveSubsystem.autoDrive(false, false);
+        driveSubsystem.autoDrive();
     }
 
     @Override

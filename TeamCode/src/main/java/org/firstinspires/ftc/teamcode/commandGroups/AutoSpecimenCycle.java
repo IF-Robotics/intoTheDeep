@@ -81,6 +81,6 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
         );
 
-        addRequirements(armSubsystem, intakeSubsystem, driveSubsystem);
+        addRequirements(armSubsystem, intakeSubsystem);
     }
 }

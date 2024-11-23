@@ -39,8 +39,6 @@ public class TeleopOpMode extends Robot {
         configureButtons();
         manualArm = false;
 
-        //turn off auto drive
-        new InstantCommand(() -> driveSubsystem.toggleAutoDrive(false));
     }
 
     /*public void configureMoreCommands() {

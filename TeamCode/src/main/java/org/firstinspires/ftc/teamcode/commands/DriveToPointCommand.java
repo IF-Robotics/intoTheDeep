@@ -25,7 +25,6 @@ public class DriveToPointCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        driveSubsystem.toggleAutoDrive(true);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class DriveToPointCommand extends CommandBase {
         //if not in tolerance, then timer reset
         //if in tolerance and the timer matured enough, then finished
         //else not finished
-        if(Math.abs(driveSubsystem.getTranslationalError()) > translationalTolerance || Math.abs(driveSubsystem.getHeadingError()) > headingTolerance){
+        if(Math.abs(driveSubsystem.getTranslationalError()) > translationalTolerance || Math.abs(driveSubsystem.getHeadingError()) > headingTolerance ){
             return false;
         } else {
             return true;

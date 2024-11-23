@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -30,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm PIDF
     public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
     public static double armWeakKP = 0.03;
-    public static double armAngleOffset = 47;   //53.5-30;
+    public static double armAngleOffset = 140;
     private double ff;
     private PIDController armController;
     private double setArmTargetAngle = 0;
@@ -274,6 +275,10 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("yArmPos", getCurrentY());
         telemetry.addData("slideVelocity", getSlideVelocity());
 
+    }
+
+    public void setPowerZero(){
+        arm.set(0);
     }
 
 }

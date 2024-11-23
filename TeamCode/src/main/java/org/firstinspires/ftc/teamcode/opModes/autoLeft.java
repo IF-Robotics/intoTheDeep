@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -32,8 +33,6 @@ public class autoLeft extends Robot {
         slideLeft.resetEncoder();
 
         //turn on auto drive
-        new InstantCommand(() -> driveSubsystem.toggleAutoDrive(true));
-
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
 
@@ -47,13 +46,13 @@ public class autoLeft extends Robot {
                 new InstantCommand(() -> armSubsystem.setArm(20)),
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
                 //drive to high chamber
-                new DriveToPointCommand(driveSubsystem, highChamberLeft,4, 10),
+                new DriveToPointCommand(driveSubsystem, highChamberLeft,5, 10).withTimeout(3000),
                 //wait
                 new WaitCommand(500),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
-                new WaitCommand(200),
+                new WaitCommand(500),
                 // back up from front chamber
                 new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -43, Rotation2d.fromDegrees(0)),  5, 10),
                 //reach out the arm and intake
@@ -72,7 +71,7 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(1000),
+                new WaitCommand(1500),
                 //drop sample & arm down
                 retractFromBasket,
                 new WaitCommand(200),
@@ -88,7 +87,7 @@ public class autoLeft extends Robot {
 //                new DriveToPointCommand(driveSubsytem, )
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
-                new WaitCommand(400),
+                new WaitCommand(800),
                 //grab and retract
                 retractAfterIntake,
                 new WaitCommand(400),
@@ -99,7 +98,7 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(1000),
+                new WaitCommand(1200),
                 //drop sample & arm down
                 retractFromBasket,
                 new WaitCommand(300),
@@ -112,7 +111,7 @@ public class autoLeft extends Robot {
                 intakeLastLeftAutoCommand,
                 new DriveToPointCommand(driveSubsystem, leftSideLeftSpike,2, 5),
                 armWhenCloseIntakeCommand,
-                new WaitCommand(500),
+                new WaitCommand(1300),
                 //grab and retract
                 retractAfterIntake,
                 new WaitCommand(600),
@@ -123,13 +122,18 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(500),
+                new WaitCommand(1200),
                 //drop sample & arm down
                 retractFromBasket,
+                new WaitCommand(1200),
                 // park
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-39.59, -7.52, Rotation2d.fromDegrees(-86.27)), 5, 5),
                 armLeftAutoParkCommand, // find position
-                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10)//tune position*/
+
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-50, -7, Rotation2d.fromDegrees(-90)), 5, 5),
+
+                new WaitCommand(2500),
+                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10).withTimeout(3000),//tune position*/
+                new RunCommand(() -> armSubsystem.setPowerZero(), armSubsystem)
         ));
 
 

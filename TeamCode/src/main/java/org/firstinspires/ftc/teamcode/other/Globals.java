@@ -12,15 +12,15 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 340;
-    public static int rollIntakeWall = -190;
+    public static int pitchIntakeWall = 390;
+    public static int rollIntakeWall = 0;
     // Right left specimens
     public static int pitchRightAutoSpecimen = 340;
     public static int rollRightAutoSpecimen = -190;
 
     //claw poses
     public static double clawOpen = .72;
-    public static double clawExtraOpen = .9;
+    public static double clawExtraOpen = .8;
     public static double clawClose = .38;
 
     //scoring
@@ -41,7 +41,7 @@ public class Globals {
     public static double pitchFrontRightHighChamber = 0;
     public static double rollFrontRightHighChamber = 130;
     public static double pitchPlaceFrontHighRightChamber = 0;
-    public static double rollPlaceFrontHighRightChamber = 230;
+    public static double rollPlaceFrontHighRightChamber = 250;
 
 
     //home
@@ -63,7 +63,7 @@ public class Globals {
     public static double  armHighBasketY = 48;
     //arm when front high chamber
     public static double armFrontHighChamberX = 27;
-    public static double armFrontHighChamberY = 17.5;
+    public static double armFrontHighChamberY = 18;
     public static double autoArmFrontHighChamberY = 18.8;
     //arm when high chamber
     public static double armHighChamberX = -3;
@@ -78,7 +78,7 @@ public class Globals {
     public static double armInSubIntakeY = 8;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
-    public static double armCloseIntakeY = 7.5;
+    public static double armCloseIntakeY = 7.7;
     //arm when intaking form the wall
     public static double armIntakeWallX = 16.6;
     public static double armIntakeWallY = 1.3;
@@ -89,8 +89,8 @@ public class Globals {
     //manual arm boolean
     public static boolean manualArm = false;
     //arm auto park
-    public static double armParkLeftAutoX = 11.01;
-    public static double armParkLeftAutoY = 17.58;
+    public static double armParkLeftAutoX = 13;
+    public static double armParkLeftAutoY = 23;
 
     //arm when climbing
     //climbing to first rung
@@ -110,9 +110,11 @@ public class Globals {
     public static double armCompleteRetractY = 4.0;
 
 //drive to point
-    public static double translationKP = 0.01;
+    public static double translationKP = 0.015;
     public static double translationKI = 0.0;
-    public static double translationKD = 0.001;
+    public static double translationKD = 0.01;
+//    public static double translationKD = 0.001;
+
     public static double translationKR = .5; //KR is the constant for the root of the pid
     public static double translationMaxVel = 1; //in inches per second
 
