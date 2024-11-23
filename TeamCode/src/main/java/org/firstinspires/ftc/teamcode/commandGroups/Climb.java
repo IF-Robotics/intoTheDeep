@@ -19,26 +19,26 @@ public class Climb extends SequentialCommandGroup {
                 //Climb to first rung
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
-                new WaitCommand(2000),
+                new WaitCommand(2000)
 
                 //Climb to second rung
                 //Rotate arm up just past the second rung
-                new InstantCommand(() -> armSubsystem.setArm(75)),
+                //new InstantCommand(() -> armSubsystem.setArm(75)),
                 //new ArmCoordinatesCommand(armSubsystem, armAngleToSecondRungX, armAngleToSecondRungY),
-                new WaitCommand(1000),
+                //new WaitCommand(1000),
                 //Extend the slides until the moving hook is above the second rung
-                new InstantCommand(() -> armSubsystem.setSlide(23)),
+                //new InstantCommand(() -> armSubsystem.setSlide(23)),
                 //new ArmCoordinatesCommand(armSubsystem, armExtendPastSecondRungX, armExtendPastSecondRungY),
-                new WaitCommand(1000),
+                //new WaitCommand(1000),
                 //Move arm to second rung
-                new InstantCommand(() -> armSubsystem.setArm(55)),
-                new WaitCommand(1000),
+                //new InstantCommand(() -> armSubsystem.setArm(55)),
+                //new WaitCommand(1000),
                 //Move arm back to rotate the robot down while retracting linear slides until first rung is at the end of the robot ramp
-                new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
-                new WaitCommand(1000),
+                //new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
+                //new WaitCommand(1000),
                 //Retract linear slides completely while moving arm down until the second rung into the stationary hook
-                new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
-                new WaitCommand(3000)
+                //new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
+                //new WaitCommand(3000)
         );
         addRequirements(armSubsystem);
     }

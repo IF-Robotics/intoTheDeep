@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandGroups.Climb;
+import org.firstinspires.ftc.teamcode.commandGroups.DropCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeCloseCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
@@ -27,7 +28,7 @@ public class TeleopOpMode extends Robot {
     //private
 
     //buttons
-    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, start1, square2, dUp2, bRight2, bLeft2, dRight2, dDown2, cross2;
+    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, start1, square2, dUp2, bRight2, bLeft2, dRight2, dDown2, cross2, circle1, circle2;
     private Trigger tLeft1, tRight1;
 
 
@@ -70,6 +71,8 @@ public class TeleopOpMode extends Robot {
         tLeft1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
         tRight1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
+        circle1 = new GamepadButton(m_driver, GamepadKeys.Button.B);
+        circle2 = new GamepadButton(m_driverOp, GamepadKeys.Button.B);
 
 
 
@@ -100,6 +103,10 @@ public class TeleopOpMode extends Robot {
 
         //chambers
         square1.whenPressed(new HighChamberCommand(armSubsystem, intakeSubsystem));
+
+        //dropping sample (into observation zone)
+        circle1.whenPressed(new DropCommand(armSubsystem, intakeSubsystem));
+        circle2.whenPressed(new DropCommand(armSubsystem, intakeSubsystem));
 
         //baskets
         triangle1.whenPressed(armHighBasketCommand);
