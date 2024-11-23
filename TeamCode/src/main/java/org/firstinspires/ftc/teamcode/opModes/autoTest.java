@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 @Config
 @Autonomous(name="autoTest")
@@ -36,18 +37,18 @@ public class autoTest extends Robot {
         dLeft1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_LEFT);
         dRight1 = new GamepadButton(m_driver, GamepadKeys.Button.DPAD_RIGHT);
 
-        dUp1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(0, sprintDistance, new Rotation2d(0)), 0, 0));
-        dDown1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(0, -sprintDistance, new Rotation2d(0)), 0, 0));
-        dLeft1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(-sprintDistance, 0, new Rotation2d(0)), 0, 0));
-        dRight1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(sprintDistance, 0, new Rotation2d(0)), 0, 0));
+        dUp1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(0, sprintDistance, new Rotation2d(0)), 2, 2));
+        dDown1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(0, -sprintDistance, new Rotation2d(0)), 2, 2));
+        dLeft1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(-sprintDistance, 0, new Rotation2d(0)), 2, 2));
+        dRight1.whenPressed(new DriveToPointCommand(driveSubsystem, new Pose2d(sprintDistance, 0, new Rotation2d(0)), 2, 2));
 
 
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 0, new Rotation2d(0)), 0, 0)
+                new DriveToPointCommand(driveSubsystem, new Pose2d(0, 0, new Rotation2d(0)), 2, 2)
         ));
 
-        driveSubsystem.setDefaultCommand(new AutoDriveCommand(driveSubsystem));
+        driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
     }
 

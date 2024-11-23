@@ -20,7 +20,6 @@ public class DriveToPointCommand extends CommandBase {
         this.translationalTolerance = translationalTolerance;
         this.headingTolerance = headingTolerance;
 
-        addRequirements(driveSubsystem);
     }
 
 
@@ -31,9 +30,7 @@ public class DriveToPointCommand extends CommandBase {
 
     @Override
     public void execute() {
-        driveSubsystem.readPinpoint();
         driveSubsystem.driveToPoint(targetPos);
-        driveSubsystem.autoDrive(false, false);
     }
 
     @Override
@@ -52,6 +49,6 @@ public class DriveToPointCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         //hold position
-        driveSubsystem.toggleAutoDrive(true);
+        //driveSubsystem.toggleAutoDrive(true);
     }
 }

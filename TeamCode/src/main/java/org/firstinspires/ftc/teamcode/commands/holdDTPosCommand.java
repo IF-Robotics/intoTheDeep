@@ -4,22 +4,19 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 
-public class AutoDriveCommand extends CommandBase {
+public class holdDTPosCommand extends CommandBase {
 
-    DriveSubsystem driveSubsystem;
+    private DriveSubsystem driveSubsystem;
 
-    public AutoDriveCommand(DriveSubsystem driveSubsystem){
+    public holdDTPosCommand(DriveSubsystem driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
-        //addRequirements(driveSubsystem);
+        addRequirements(driveSubsystem);
     }
 
     @Override
-    public void execute(){
+    public void execute() {
+        driveSubsystem.driveToPoint(driveSubsystem.getTargetPos());
         driveSubsystem.autoDrive(false, false);
     }
 
-    @Override
-    public boolean isFinished(){
-        return false;
-    }
 }

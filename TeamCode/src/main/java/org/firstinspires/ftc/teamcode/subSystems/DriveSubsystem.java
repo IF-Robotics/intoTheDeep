@@ -127,6 +127,9 @@ public class DriveSubsystem extends SubsystemBase {
         //completely temperary testing - delete if causing problems
         /*targetPos = new Pose2d(testX, testY, Rotation2d.fromDegrees(testHeading));*/
 
+        //read pinpoint
+        readPinpoint();
+
         //pids
         if(profiledTranslation){
             profiledTranslationController = new ProfiledPIDController(translationKP, translationKI, translationKD, new TrapezoidProfile.Constraints(1, 1));
@@ -205,6 +208,10 @@ public class DriveSubsystem extends SubsystemBase {
         return currentPos;
     }
 
+    public Pose2d getTargetPos(){
+        return targetPos;
+    }
+
     public double getTranslationalError(){
         return rawVectorMagnitude;
     }
@@ -240,7 +247,7 @@ public class DriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if(autoDriveToggle){
-            autoDrive(false, false);
+            //autoDrive(false, false);
         }
 
 

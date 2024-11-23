@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
 @Autonomous(name="autoLeft")
@@ -32,6 +33,8 @@ public class autoLeft extends Robot {
 
         //turn on auto drive
         new InstantCommand(() -> driveSubsystem.toggleAutoDrive(true));
+
+        driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
 
         schedule(new SequentialCommandGroup(
@@ -52,14 +55,12 @@ public class autoLeft extends Robot {
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new WaitCommand(200),
                 // back up from front chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -43, Rotation2d.fromDegrees(0)),  5, 10)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -43, Rotation2d.fromDegrees(0)),  5, 10),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
                 //drive to first sample on the spikemark
-                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,2, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,2, 5),
                 new WaitCommand(1000),
                 //grab and retract
                 retractAfterIntake,
@@ -69,8 +70,7 @@ public class autoLeft extends Robot {
                 intakeWhenHighBasketCommand,
                 new WaitCommand(400),
                 //drive to high basket
-                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
                 new WaitCommand(1000),
                 //drop sample & arm down
@@ -82,8 +82,7 @@ public class autoLeft extends Robot {
 
 
                 //drive to second sample on the spikemark
-                new DriveToPointCommand(driveSubsystem, leftSideMidSpike,2, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, leftSideMidSpike,2, 5),
                 //wait
                 new WaitCommand(1000),
 //                new DriveToPointCommand(driveSubsytem, )
@@ -98,8 +97,7 @@ public class autoLeft extends Robot {
                 intakeWhenHighBasketCommand,
                 new WaitCommand(600),
                 //drive to high basket
-                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
                 new WaitCommand(1000),
                 //drop sample & arm down
@@ -112,8 +110,7 @@ public class autoLeft extends Robot {
 
                 //drive to third sample on the spikemark
                 intakeLastLeftAutoCommand,
-                new DriveToPointCommand(driveSubsystem, leftSideLeftSpike,2, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, leftSideLeftSpike,2, 5),
                 armWhenCloseIntakeCommand,
                 new WaitCommand(500),
                 //grab and retract
@@ -124,29 +121,20 @@ public class autoLeft extends Robot {
                 intakeWhenHighBasketCommand,
                 new WaitCommand(600),
                 //drive to high basket
-                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
                 new WaitCommand(500),
                 //drop sample & arm down
                 retractFromBasket,
                 // park
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-39.59, -7.52, Rotation2d.fromDegrees(-86.27)), 5, 5)
-                        .andThen(new AutoDriveCommand(driveSubsystem)),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-39.59, -7.52, Rotation2d.fromDegrees(-86.27)), 5, 5),
                 armLeftAutoParkCommand, // find position
-                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10)
-                        .andThen(new AutoDriveCommand(driveSubsystem))//tune position*/
+                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10)//tune position*/
         ));
 
 
 
     }
 
-    @Override
-    public void run(){
-        super.run();
-
-        driveSubsystem.autoDrive(false, false);
-    }
 
 }
