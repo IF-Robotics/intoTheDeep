@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -22,14 +23,16 @@ public class Climb extends SequentialCommandGroup {
 
                 //Climb to second rung
                 //Rotate arm up just past the second rung
-                new ArmCoordinatesCommand(armSubsystem, armAngleToSecondRungX, armAngleToSecondRungY),
+                new InstantCommand(() -> armSubsystem.setArm(75)),
+                //new ArmCoordinatesCommand(armSubsystem, armAngleToSecondRungX, armAngleToSecondRungY),
                 new WaitCommand(1000),
                 //Extend the slides until the moving hook is above the second rung
-                new ArmCoordinatesCommand(armSubsystem, armExtendPastSecondRungX, armExtendPastSecondRungY),
+                new InstantCommand(() -> armSubsystem.setSlide(23)),
+                //new ArmCoordinatesCommand(armSubsystem, armExtendPastSecondRungX, armExtendPastSecondRungY),
                 new WaitCommand(1000),
                 //Move arm to second rung
-                new ArmCoordinatesCommand(armSubsystem, armMoveToSecondRungX, armMoveToSecondRungY),
-                new WaitCommand(300),
+                new InstantCommand(() -> armSubsystem.setArm(55)),
+                new WaitCommand(1000),
                 //Move arm back to rotate the robot down while retracting linear slides until first rung is at the end of the robot ramp
                 new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
                 new WaitCommand(1000),

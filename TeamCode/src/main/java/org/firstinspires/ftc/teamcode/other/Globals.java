@@ -103,9 +103,9 @@ public class Globals {
     //climbing to second rung
     public static double armAngleToSecondRungX = 3.5;
     public static double armAngleToSecondRungY = 14.6;
-    public static double armExtendPastSecondRungX = 12;
+    public static double armExtendPastSecondRungX = 6;//12;
     public static double armExtendPastSecondRungY = 27.5;
-    public static double armMoveToSecondRungX = 13.5;
+    public static double armMoveToSecondRungX = 15;
     public static double armMoveToSecondRungY = 27;
     public static double armPositionRobotToEdgeOfFirstRungX = -8;
     public static double armPositionRobotToEdgeOfFirstRungY = 19;
