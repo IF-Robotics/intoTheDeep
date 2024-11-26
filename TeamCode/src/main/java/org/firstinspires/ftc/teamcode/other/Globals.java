@@ -26,7 +26,7 @@ public class Globals {
     //scoring
     //basket
     public static int pitchWhenBasket = 0;
-    public static int rollWhenBasket = 150;
+    public static int rollWhenBasket = 400;
 
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;

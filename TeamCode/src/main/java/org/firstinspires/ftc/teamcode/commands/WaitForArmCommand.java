@@ -14,7 +14,13 @@ public class WaitForArmCommand extends CommandBase {
         this.targetAngle = targetAngle;
         this.tolerance = tolerance;
 
+
         addRequirements(armSubsystem);
+    }
+
+    @Override
+    public void initialize(){
+        armSubsystem.setArm(targetAngle);
     }
 
     @Override

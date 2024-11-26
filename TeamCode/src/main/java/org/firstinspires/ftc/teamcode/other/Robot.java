@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -12,8 +13,11 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
@@ -85,6 +89,7 @@ public abstract class Robot extends CommandOpMode {
     public AnalogInput armEncoder;
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive mecanumDrive;
+    public IMU gyro;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -134,6 +139,14 @@ public abstract class Robot extends CommandOpMode {
 //        BR.setInverted(true);
 
         mecanumDrive = new MecanumDrive(FL, FR, BL, BR);
+        gyro = hardwareMap.get(IMU.class, "imu");
+        gyro.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                                RevHubOrientationOnRobot.UsbFacingDirection.UP)
+                )
+        );
 
         driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint);
         register(driveSubsystem);
@@ -179,6 +192,7 @@ public abstract class Robot extends CommandOpMode {
         telemetry.update();
 
         new ArmCoordinatesCommand(armSubsystem, armFoldX, armFoldY).schedule(true);
+        CommandScheduler.getInstance().schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 250));
     }
 
     @Override

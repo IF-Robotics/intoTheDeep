@@ -52,9 +52,12 @@ public class autoLeft extends Robot {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
-                new WaitCommand(500),
+                //wait
+                new WaitCommand(400),
                 // back up from front chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -43, Rotation2d.fromDegrees(0)),  5, 10),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -45, Rotation2d.fromDegrees(0)),  5, 10),
+                //wait
+                new WaitCommand(300),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
@@ -71,7 +74,7 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(1500),
+                new WaitCommand(2000),
                 //drop sample & arm down
                 retractFromBasket,
                 new WaitCommand(200),

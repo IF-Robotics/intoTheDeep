@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
@@ -14,18 +16,19 @@ import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
 public class Climb extends SequentialCommandGroup {
 
-    public Climb(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem){
+    public Climb(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, IMU gyro){
         addCommands(
                 //Climb to first rung
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
-                new WaitCommand(2000)
+                new WaitCommand(2000),
 
                 //Climb to second rung
                 //Rotate arm up just past the second rung
-                //new InstantCommand(() -> armSubsystem.setArm(75)),
+                new InstantCommand(() -> armSubsystem.setArm(85)),
+//                new RunCommand(()-> armSubsystem.setArm(95-gyro.getRobotYawPitchRollAngles().getPitch())),
                 //new ArmCoordinatesCommand(armSubsystem, armAngleToSecondRungX, armAngleToSecondRungY),
-                //new WaitCommand(1000),
+                new WaitCommand(1000)
                 //Extend the slides until the moving hook is above the second rung
                 //new InstantCommand(() -> armSubsystem.setSlide(23)),
                 //new ArmCoordinatesCommand(armSubsystem, armExtendPastSecondRungX, armExtendPastSecondRungY),

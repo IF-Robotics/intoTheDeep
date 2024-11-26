@@ -120,7 +120,7 @@ public class TeleopOpMode extends Robot {
 
         //climbing
         bRight2.whenPressed(armPositionToClimb);
-        bRight2.whenReleased(new Climb(armSubsystem, intakeSubsystem));
+        bRight2.whenReleased(new Climb(armSubsystem, intakeSubsystem, gyro));
 
         //testing
         start1.whenPressed(setIntakeCommand);

@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm PIDF
     public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
     public static double armWeakKP = 0.03;
-    public static double armAngleOffset = 140.5;
+    public static double armAngleOffset = 141;
     private double ff;
     private PIDController armController;
     private double setArmTargetAngle = 0;
@@ -40,7 +40,7 @@ public class ArmSubsystem extends SubsystemBase {
     private double correctedAngle = 0;
 
     //slide pidf
-    public static double slideKP = .6, slideKI = 0.0, slideKD = 0.0, slideKF = 0.1;
+    public static double slideKP = .4, slideKI = 0.0, slideKD = 0.0, slideKF = 0;
     private PIDController slideController;
     private final double ticksPerIn = 2786/32.75;
     private int slideTicks = 1;
@@ -260,7 +260,7 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         //calculate slide extension
-        slideExtention = slideTicks/ticksPerIn + slideWristOffset;
+        slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
 
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
