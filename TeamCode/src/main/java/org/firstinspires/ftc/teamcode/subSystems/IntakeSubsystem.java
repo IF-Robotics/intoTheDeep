@@ -19,8 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private double pitchAngle;
     private double rollAngle;
 
-    public static int pitchAngleOffset = 295;
-    public static int rollAngleOffset = 60;
+    public static int pitchAngleOffset = 290;
+    public static int rollAngleOffset = 85;
 
     //the value in the parentheses is our desired angle range in degrees
     public static double diffyScalar = 360/(350) * 355/255/*axon programming software is scaled to 255 degress max*/;

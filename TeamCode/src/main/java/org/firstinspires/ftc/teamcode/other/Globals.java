@@ -26,7 +26,7 @@ public class Globals {
     //scoring
     //basket
     public static int pitchWhenBasket = 0;
-    public static int rollWhenBasket = 400;
+    public static int rollWhenBasket = 150;
 
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
@@ -114,7 +114,7 @@ public class Globals {
     public static double armCompleteRetractY = 4.0;
 
 //drive to point
-    public static double translationKP = 0.015;
+    public static double translationKP = 0.02;
     public static double translationKI = 0.0;
     public static double translationKD = 0.01;
 //    public static double translationKD = 0.001;
