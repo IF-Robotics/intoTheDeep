@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -18,6 +19,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
@@ -86,6 +88,7 @@ public abstract class Robot extends CommandOpMode {
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
     public ServoEx diffyLeft, diffyRight, claw;
+    public Servo endStop;
     public AnalogInput armEncoder;
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive mecanumDrive;
@@ -156,6 +159,7 @@ public abstract class Robot extends CommandOpMode {
         slideLeft = new MotorEx(hardwareMap, "slideL");
         slideRight = new MotorEx(hardwareMap, "slideR");
         armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
+        endStop = hardwareMap.get(Servo.class, "backstop");
         arm.setRunMode(Motor.RunMode.RawPower);
         slideLeft.setRunMode(Motor.RunMode.RawPower);
         slideRight.setRunMode(Motor.RunMode.RawPower);
@@ -167,7 +171,7 @@ public abstract class Robot extends CommandOpMode {
 
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, diffyLeft, diffyRight, armEncoder, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
 
         //intake
@@ -192,7 +196,9 @@ public abstract class Robot extends CommandOpMode {
         telemetry.update();
 
         new ArmCoordinatesCommand(armSubsystem, armFoldX, armFoldY).schedule(true);
+        
         CommandScheduler.getInstance().schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 250));
+        schedule(new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.UP)));
     }
 
     @Override

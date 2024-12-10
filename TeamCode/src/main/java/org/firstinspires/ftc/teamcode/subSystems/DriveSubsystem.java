@@ -118,10 +118,13 @@ public class DriveSubsystem extends SubsystemBase {
             || Math.toDegrees(Math.atan(y / x)) > 180 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 180 + arcTanAngleRange / 2) {
                 y = 0;
             }
-            }
+        }
 
-            //actually moving
-            mecanumDrive.driveRobotCentric(strafeSpeed * power, forwardSpeed * power, -turnSpeed * power);
+        //actually moving
+        mecanumDrive.driveFieldCentric(strafeSpeed * power, forwardSpeed * power, -turnSpeed * power, currentPos.getRotation().getDegrees());
+
+        //read pinpoint
+        readPinpoint();
     }
 
     public void driveToPoint(Pose2d targetPos){
@@ -226,6 +229,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void setStartingPos(Pose2d pos){
         pinpoint.setPosition( new Pose2D(DistanceUnit.INCH, pos.getY(), -pos.getX(), AngleUnit.RADIANS, pos.getHeading()));
+    }
+
+    public void resetPinpointIMU(){
+        pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, currentPos.getX(), currentPos.getY(), AngleUnit.DEGREES, 0));
     }
 
     public static double getHeadingInDegrees(Pose2d pose) {

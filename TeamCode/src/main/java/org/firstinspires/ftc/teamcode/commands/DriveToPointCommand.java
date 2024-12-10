@@ -19,7 +19,6 @@ public class DriveToPointCommand extends CommandBase {
         this.targetPos = targetPos;
         this.translationalTolerance = translationalTolerance;
         this.headingTolerance = headingTolerance;
-
     }
 
 

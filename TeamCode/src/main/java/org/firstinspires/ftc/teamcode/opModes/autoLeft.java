@@ -74,10 +74,10 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(2000),
+                new WaitCommand(1000),
                 //drop sample & arm down
                 retractFromBasket,
-                new WaitCommand(200),
+                new WaitCommand(500),
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
@@ -101,7 +101,7 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(1200),
+                new WaitCommand(800),
                 //drop sample & arm down
                 retractFromBasket,
                 new WaitCommand(300),
@@ -125,7 +125,7 @@ public class autoLeft extends Robot {
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(1200),
+                new WaitCommand(1000),
                 //drop sample & arm down
                 retractFromBasket,
                 new WaitCommand(1200),

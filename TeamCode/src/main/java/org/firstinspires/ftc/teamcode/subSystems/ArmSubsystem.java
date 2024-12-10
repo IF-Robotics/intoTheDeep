@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -23,7 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private MotorEx arm, slideL;
     private MotorGroup slide;
-    private ServoEx diffyLeft, diffyRight;
+    private Servo endStop;
     private AnalogInput armEncoder;
     private Telemetry telemetry;
 
@@ -31,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm PIDF
     public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
     public static double armWeakKP = 0.03;
-    public static double armAngleOffset = 141;
+    public static double armAngleOffset = 141-60;
     private double ff;
     private PIDController armController;
     private double setArmTargetAngle = 0;
@@ -68,11 +69,19 @@ public class ArmSubsystem extends SubsystemBase {
     private LinkedList<TimeStampedPosition> positionHistory = new LinkedList<>();
     private static final long VELOCITY_TIME_FRAME_MS = 50; // Time frame in milliseconds
 
+    //endstop
+    private Endstop endstop;
+    public enum Endstop{
+        UP,
+        DOWN
+    }
+
     //constructor
-    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, ServoEx diffyLeft, ServoEx diffyRight, AnalogInput armEncoder, Telemetry telemetry) {
+    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
         this.slide = slide;
         this.slideL = slideL;
+        this.endStop = endStop;
         this.armEncoder = armEncoder;
         this.telemetry = telemetry;
         wallActive = false;
@@ -112,6 +121,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void setArmX(double x){
         targetX = x;
         setArmCoordinates(x, targetY);
+    }
+
+    public void setEndstop(Endstop endstop){
+        if(endstop == Endstop.UP){
+            endStop.setPosition(endstopUp);
+        } else if (endstop == Endstop.DOWN){
+            endStop.setPosition(endstopDown);
+        }
     }
 
     //forward kinematics

@@ -18,6 +18,8 @@ public class Climb extends SequentialCommandGroup {
 
     public Climb(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, IMU gyro){
         addCommands(
+                //move endstop out of the way
+                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
                 //Climb to first rung
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),

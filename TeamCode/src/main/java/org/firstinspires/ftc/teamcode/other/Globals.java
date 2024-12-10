@@ -12,7 +12,7 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 420;
+    public static int pitchIntakeWall = 390;
     public static int rollIntakeWall = 0;
     // Right left specimens
     public static int pitchRightAutoSpecimen = 340;
@@ -32,8 +32,8 @@ public class Globals {
     public static double rollWhenHighChamber = -20;
 
     //autoLeft
-    public static double autoPitchFrontHighChamber = 40;
-    public static double rollFrontHighChamber = 140;
+    public static double autoPitchFrontHighChamber = 0;
+    public static double rollFrontHighChamber = 100;
 
     public static double pitchFrontHighChamber = 300;
 
@@ -45,7 +45,7 @@ public class Globals {
 
     //teleop high chamber
     public static double pitchTeleopHighChamber = 0;
-    public static double rollTeleopHighChamber = -20;
+    public static double rollTeleopHighChamber = 130;
 
 
     //home
@@ -63,17 +63,17 @@ public class Globals {
     public static double armBackX = -3;
     public static double armBackY = 16;
     //arm high basket
-    public static double armHighBasketX = 0;
+    public static double armHighBasketX = -4;
     public static double  armHighBasketY = 46;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 27;
-    public static double armFrontHighChamberY = 18;
-    public static double autoArmFrontHighChamberY = 18.8;
+    public static double armFrontHighChamberX = 16.2;
+    public static double armFrontHighChamberY = 17.6;
+    public static double autoArmFrontHighChamberY = 17;
     //arm when high chamber
-    public static double armHighChamberX = -8;
-    public static double armHighChamberY = 18;
+    public static double armHighChamberX = -1;
+    public static double armHighChamberY = 23.5;
     public static double armRightHighChamberX = -.02;
-    public static double armRightHighChamberY = 23;
+    public static double armRightHighChamberY = 23.5;
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 23;
@@ -85,7 +85,7 @@ public class Globals {
     public static double armCloseIntakeY = 8;
     //arm when intaking form the wall
     public static double armIntakeWallX = 7.7;
-    public static double armIntakeWallY = 8.7;
+    public static double armIntakeWallY = 9.2  ;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;
@@ -95,6 +95,10 @@ public class Globals {
     //arm auto park
     public static double armParkLeftAutoX = 13;
     public static double armParkLeftAutoY = 23;
+
+    //endstop
+    public static double endstopUp = .44;
+    public static double endstopDown = 0;
 
     //arm when climbing
     //climbing to first rung
