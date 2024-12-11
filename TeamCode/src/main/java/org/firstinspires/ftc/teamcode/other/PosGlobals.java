@@ -22,12 +22,12 @@ public class PosGlobals {
 
 
     //baskets
-    public static Pose2d leftBasketPose = new Pose2d(-53, -53, Rotation2d.fromDegrees(-45));
+    public static Pose2d leftBasketPose = new Pose2d(-55, -55, Rotation2d.fromDegrees(-45));
 
     //spikemarks
     public static Pose2d leftSideRightSpike = new Pose2d(-46.5, -38.5, Rotation2d.fromDegrees(0));
     public static Pose2d leftSideMidSpike = leftSideRightSpike.transformBy(new Transform2d(new Translation2d(-10.0, 0.0), new Rotation2d()));
-    public static Pose2d leftSideLeftSpike = new Pose2d(-59.3, -36.5, Rotation2d.fromDegrees(30));
+    public static Pose2d leftSideLeftSpike = new Pose2d(-59.3, -35.5, Rotation2d.fromDegrees(35));
 //    public static Pose2d rightSideLeftSpike = new Pose2d(0,0, Rotation2d.fromDegrees(0));
 //    public static Pose2d rightSideMiddleSpike = new Pose2d(0,0,Rotation2d.fromDegrees(0));
     //observation zone pickup

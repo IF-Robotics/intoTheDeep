@@ -13,6 +13,7 @@ public class DriveToPointCommand extends CommandBase {
     private double translationalTolerance;
     private double headingTolerance;
 
+    private ElapsedTime timer = new ElapsedTime();
 
     public DriveToPointCommand(DriveSubsystem driveSubsystem, Pose2d targetPos, double translationalTolerance,double headingTolerance) {
         this.driveSubsystem = driveSubsystem;
@@ -24,6 +25,7 @@ public class DriveToPointCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        timer.reset();
     }
 
     @Override
@@ -37,7 +39,7 @@ public class DriveToPointCommand extends CommandBase {
         //if not in tolerance, then timer reset
         //if in tolerance and the timer matured enough, then finished
         //else not finished
-        if(Math.abs(driveSubsystem.getTranslationalError()) > translationalTolerance || Math.abs(driveSubsystem.getHeadingError()) > headingTolerance ){
+        if((Math.abs(driveSubsystem.getTranslationalError()) > translationalTolerance || Math.abs(driveSubsystem.getHeadingError()) > headingTolerance) || timer.milliseconds() < 50){
             return false;
         } else {
             return true;

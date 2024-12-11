@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm PIDF
     public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
     public static double armWeakKP = 0.03;
-    public static double armAngleOffset = 141-60;
+    public static double armAngleOffset = -39/*141-60*/;
     private double ff;
     private PIDController armController;
     private double setArmTargetAngle = 0;
@@ -235,13 +235,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         //read
         slideTicks = slideL.getCurrentPosition();
-        rawAngle = armEncoder.getVoltage()/3.3 * 360;;
-
-        if(rawAngle <= 360 && rawAngle > 203){
-            correctedAngle = armAngleOffset + (360 - rawAngle);
-        } else {
-            correctedAngle = armAngleOffset - rawAngle;
-        }
+        rawAngle = armEncoder.getVoltage()/3.3 * 360;
+        correctedAngle = rawAngle + armAngleOffset;
 
         //arm pid
         //lowering the kp when the arm is up

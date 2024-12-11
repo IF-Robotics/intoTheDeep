@@ -33,7 +33,7 @@ public class Globals {
 
     //autoLeft
     public static double autoPitchFrontHighChamber = 0;
-    public static double rollFrontHighChamber = 100;
+    public static double rollFrontHighChamber = 120;
 
     public static double pitchFrontHighChamber = 300;
 
@@ -63,12 +63,12 @@ public class Globals {
     public static double armBackX = -3;
     public static double armBackY = 16;
     //arm high basket
-    public static double armHighBasketX = -4;
+    public static double armHighBasketX = -5;
     public static double  armHighBasketY = 46;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 16.2;
+    public static double armFrontHighChamberX = 17.5;
     public static double armFrontHighChamberY = 17.6;
-    public static double autoArmFrontHighChamberY = 17;
+    public static double autoArmFrontHighChamberY = 17.5;
     //arm when high chamber
     public static double armHighChamberX = -1;
     public static double armHighChamberY = 23.5;
@@ -82,7 +82,7 @@ public class Globals {
     public static double armInSubIntakeY = 8;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
-    public static double armCloseIntakeY = 8;
+    public static double armCloseIntakeY = 7.5;
     //arm when intaking form the wall
     public static double armIntakeWallX = 7.7;
     public static double armIntakeWallY = 9.2  ;
@@ -97,7 +97,7 @@ public class Globals {
     public static double armParkLeftAutoY = 23;
 
     //endstop
-    public static double endstopUp = .44;
+    public static double endstopUp = .42;
     public static double endstopDown = 0;
 
     //arm when climbing

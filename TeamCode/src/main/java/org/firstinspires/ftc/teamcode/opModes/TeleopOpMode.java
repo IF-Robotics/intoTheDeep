@@ -23,7 +23,9 @@ import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
+import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 import org.firstinspires.ftc.teamcode.other.Touchpad1;
 @TeleOp(name="teleOpFunnyTest")
@@ -133,6 +135,9 @@ public class TeleopOpMode extends Robot {
         //climbing
         bRight2.whenPressed(armPositionToClimb);
         bRight2.whenReleased(new Climb(armSubsystem, intakeSubsystem, gyro));
+
+        //auto scoring
+        tLeft1.whenActive(new scoreHighBasket(driveSubsystem, armSubsystem, intakeSubsystem));
 
         //testing
         start1.whenPressed(setIntakeCommand);
