@@ -14,10 +14,10 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -31,6 +31,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.DropCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
@@ -41,44 +42,45 @@ import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 public abstract class Robot extends CommandOpMode {
 
     //commands
-    public TeleDriveCommand teleDriveCommand;
-    public ArmCommand armCommand;
-    public SlideCommand slideCommand;
-    public ArmCoordinatesCommand armCoordinatesCommand;
-    public ArmManualCommand armManualCommand;
-    public ArmCoordinatesCommand armHomeCommand;
-    public ArmCoordinatesCommand armHighBasketCommand;
-    public ArmCoordinatesCommand armBackCommand;
-    public ArmCoordinatesCommand armWhenIntakeCommand;
-    public ArmCoordinatesCommand armInSubCommand;
-    public ArmCoordinatesCommand armWhenIntakeWallCommand;
-    public ArmCoordinatesCommand armWhenCloseIntakeCommand;
-    public ArmCoordinatesCommand armWhenHighChamberCommand;
-    public ArmCoordinatesCommand armFrontHighChamberCommand;
-    public ArmCoordinatesCommand armPositionToClimb;
-    public ArmCoordinatesCommand armLeftAutoParkCommand;
-    public ArmCoordinatesCommand armAutoRightCommand;
-    public IntakeCommand setIntakeCommand;
-    public IntakeCommand intakeWhenArmBackCommand;
-    public IntakeCommand intakeWhenHighBasketCommand;
-    public IntakeCommand outakeWhenHighBasketCommand;
-    public IntakeCommand outakeReadyCommand;
-    public IntakeCommand intakeWhenArmHomeCommand;
-    public IntakeCommand intakeCommand;
-    public IntakeCommand intakeWhenHighChamberCommand;
-    public IntakeCommand intakeCloseCommand;
-    public IntakeCommand intakeWallCommand;
-    public IntakeCommand intakeFrontHighChamberCommand;
-    public IntakeCommand intakeLastLeftAutoCommand;
-    public IntakeCommand intakeRightFrontHighChamberCommand;
-    public IntakeCommand intakeRightScoreFrontHighChamberCommand;
-    public IntakeCommand intakeAutoRightCommand;
-    public IntakeCommand intakeAutoRightGrabCommand;
+    public static TeleDriveCommand teleDriveCommand;
+    public static ArmCommand armCommand;
+    public static SlideCommand slideCommand;
+    public static ArmCoordinatesCommand armCoordinatesCommand;
+    public static ArmManualCommand armManualCommand;
+    public static ArmCoordinatesCommand armHomeCommand;
+    public static ArmCoordinatesCommand armHighBasketCommand;
+    public static ArmCoordinatesCommand armBackCommand;
+    public static ArmCoordinatesCommand armWhenIntakeCommand;
+    public static ArmCoordinatesCommand armInSubCommand;
+    public static ArmCoordinatesCommand armWhenIntakeWallCommand;
+    public static ArmCoordinatesCommand armWhenCloseIntakeCommand;
+    public static ArmCoordinatesCommand armWhenHighChamberCommand;
+    public static ArmCoordinatesCommand armFrontHighChamberCommand;
+    public static ArmCoordinatesCommand armPositionToClimb;
+    public static ArmCoordinatesCommand armLeftAutoParkCommand;
+    public static ArmCoordinatesCommand armAutoRightCommand;
+    public static IntakeCommand setIntakeCommand;
+    public static IntakeCommand intakeWhenArmBackCommand;
+    public static IntakeCommand intakeWhenHighBasketCommand;
+    public static IntakeCommand outakeWhenHighBasketCommand;
+    public static IntakeCommand outakeReadyCommand;
+    public static IntakeCommand intakeWhenArmHomeCommand;
+    public static IntakeCommand intakeCommand;
+    public static IntakeCommand intakeWhenHighChamberCommand;
+    public static IntakeCommand intakeCloseCommand;
+    public static IntakeCommand intakeWallCommand;
+    public static IntakeCommand intakeFrontHighChamberCommand;
+    public static IntakeCommand intakeLastLeftAutoCommand;
+    public static IntakeCommand intakeRightFrontHighChamberCommand;
+    public static IntakeCommand intakeRightScoreFrontHighChamberCommand;
+    public static IntakeCommand intakeAutoRightCommand;
+    public static IntakeCommand intakeAutoRightGrabCommand;
 
 
     //commmand groups
-    public RetractAfterIntake retractAfterIntake;
-    public RetractFromBasket retractFromBasket;
+    public static RetractAfterIntake retractAfterIntake;
+    public static RetractFromBasket retractFromBasket;
+    public static DropCommand dropCommand;
 
     //test statics
     public static double x = 0, y = 0;
@@ -104,6 +106,14 @@ public abstract class Robot extends CommandOpMode {
     //gamePads
     public GamepadEx m_driver;
     public GamepadEx m_driverOp;
+    public Gamepad standardDriver1;
+    public Gamepad standardDriver2;
+
+    public CustomButton customButton;
+    enum CustomButton {
+        TOUCH, LEFTSTICKBUTTON, RIGHTSTICKBUTTON
+    }
+    public static Robot.CustomButton CustomButton;
 
     //random Todo: Need to clean up my loop time telemetry
     ElapsedTime time = new ElapsedTime();
@@ -257,6 +267,8 @@ public abstract class Robot extends CommandOpMode {
         armLeftAutoParkCommand = new ArmCoordinatesCommand(armSubsystem, armParkLeftAutoX, armParkLeftAutoY);
         // arm for auto right spcimen pick up
         armAutoRightCommand = new ArmCoordinatesCommand(armSubsystem, armAutoRightX, armAutoRightY);
+        //drop command
+        dropCommand = new DropCommand(armSubsystem, intakeSubsystem);
 
 
 

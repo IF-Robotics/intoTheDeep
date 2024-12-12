@@ -17,14 +17,14 @@ public class PosGlobals {
     public static Pose2d startingPosLeft = new Pose2d(startLeftX, startLeftY, Rotation2d.fromDegrees(0));
 
     //high chamber
-    public static Pose2d highChamberLeft = new Pose2d(-8, -32.4, Rotation2d.fromDegrees(0));
+    public static Pose2d highChamberLeft = new Pose2d(-7, -32.4, Rotation2d.fromDegrees(0));
     public static Pose2d highChamberRight = new Pose2d(6.9, -31, Rotation2d.fromDegrees(179));
 
 
     //baskets
     public static Pose2d leftBasketPose = new Pose2d(-55, -55, Rotation2d.fromDegrees(-45));
 
-    //spikemarks
+    //spikemarks   
     public static Pose2d leftSideRightSpike = new Pose2d(-46.5, -38.5, Rotation2d.fromDegrees(0));
     public static Pose2d leftSideMidSpike = leftSideRightSpike.transformBy(new Transform2d(new Translation2d(-10.0, 0.0), new Rotation2d()));
     public static Pose2d leftSideLeftSpike = new Pose2d(-59.3, -35.5, Rotation2d.fromDegrees(35));

@@ -71,13 +71,13 @@ public class Globals {
     public static double autoArmFrontHighChamberY = 17.5;
     //arm when high chamber
     public static double armHighChamberX = -1;
-    public static double armHighChamberY = 23.5;
+    public static double armHighChamberY = 23;
     public static double armRightHighChamberX = -.02;
     public static double armRightHighChamberY = 23.5;
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 23;
-    public static double armSubIntakeY = 6.5;
+    public static double armSubIntakeY = 6.25;
     public static double armReadySubIntakeY = 9.5;
     public static double armInSubIntakeY = 8;
     //arm when close (distance) intake

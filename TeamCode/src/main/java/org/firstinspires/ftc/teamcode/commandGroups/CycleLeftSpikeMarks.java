@@ -1,66 +1,26 @@
-package org.firstinspires.ftc.teamcode.opModes;
+package org.firstinspires.ftc.teamcode.commandGroups;
 
-
-import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftBasketPose;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.highChamberLeft;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftSideLeftSpike;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftSideMidSpike;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftSideRightSpike;
+import static org.firstinspires.ftc.teamcode.other.Robot.*;
 
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.PerpetualCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
-import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
-@Autonomous(name="autoLeft")
-public class autoLeft extends Robot {
+public class CycleLeftSpikeMarks extends SequentialCommandGroup {
 
-    @Override
-    public void initialize(){
-        super.initialize();
-        slideLeft.resetEncoder();
-
-        //turn on auto drive
-        driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
-
-
-        schedule(new SequentialCommandGroup(
-                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
-                //wait
-                new WaitCommand(6),
-                //stay at startpoint
-                new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosLeft)),
-
-                //raise intake and arm
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(20)),
-                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
-                //wait
-                new WaitCommand(800),
-                //drive to high chamber
-                new DriveToPointCommand(driveSubsystem, highChamberLeft,5, 10).withTimeout(2000),
-                //wait
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
-                //arm to home pos
-                new InstantCommand(() -> armSubsystem.setSlide(8)),
-                //wait
-                new WaitCommand(400),
-                // back up from front chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-17.36, -45, Rotation2d.fromDegrees(0)),  5, 10),
-                //wait
-                new WaitCommand(300),
+    public CycleLeftSpikeMarks(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
+        addCommands(
                 //reach out the arm and intake
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
@@ -131,19 +91,9 @@ public class autoLeft extends Robot {
                 new WaitCommand(500),
                 //drop sample & arm down
                 retractFromBasket,
-                new WaitCommand(500),
-                // park
-                armLeftAutoParkCommand, // find position
+                new WaitCommand(500)
+        );
 
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-50, -7, Rotation2d.fromDegrees(-90)), 5, 5),
-
-                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10).withTimeout(3000),//tune position*/
-                new RunCommand(() -> armSubsystem.setPowerZero(), armSubsystem)
-        ));
-
-
-
+        addRequirements(intakeSubsystem, armSubsystem);
     }
-
-
 }
