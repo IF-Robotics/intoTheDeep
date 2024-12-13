@@ -30,6 +30,9 @@ public class autoRight extends Robot {
         //schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber));
         manualArm = false;
 
+        new InstantCommand(() -> armSubsystem.setArm(90)).schedule(true);
+        schedule(intakeRightFrontHighChamberCommand);
+
         //turn on auto drive
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
