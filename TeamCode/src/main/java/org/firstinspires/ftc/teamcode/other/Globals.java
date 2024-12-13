@@ -78,6 +78,7 @@ public class Globals {
     public static double armRightHighChamberY = 23.5;
 
     //arm when intaking from sub
+    public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 23;
     public static double armSubIntakeY = 6.25;
     public static double armReadySubIntakeY = 9.5;
@@ -91,6 +92,8 @@ public class Globals {
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;
+    public static double armAutoPushY = .4;
+    public static double armAutoReadyPushY = 5;
 
     //manual arm boolean
     public static boolean manualArm = false;

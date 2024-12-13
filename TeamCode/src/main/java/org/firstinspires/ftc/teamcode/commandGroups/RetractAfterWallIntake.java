@@ -23,7 +23,7 @@ public class RetractAfterWallIntake extends SequentialCommandGroup {
         addCommands(
                 //grab the specimen
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new WaitCommand(300),
+                new WaitCommand(200),
                 //flip up the intake
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
                 //arm to home

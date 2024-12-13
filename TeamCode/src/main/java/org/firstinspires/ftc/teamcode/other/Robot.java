@@ -28,7 +28,9 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
+import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
@@ -51,7 +53,6 @@ public abstract class Robot extends CommandOpMode {
     public static ArmCoordinatesCommand armHomeCommand;
     public static ArmCoordinatesCommand armHighBasketCommand;
     public static ArmCoordinatesCommand armBackCommand;
-    public static ArmCoordinatesCommand armWhenIntakeCommand;
     public static ArmCoordinatesCommand armInSubCommand;
     public static ArmCoordinatesCommand armWhenIntakeWallCommand;
     public static ArmCoordinatesCommand armWhenCloseIntakeCommand;
@@ -73,7 +74,7 @@ public abstract class Robot extends CommandOpMode {
     public static IntakeCommand intakeFrontHighChamberCommand;
     public static IntakeCommand intakeLastLeftAutoCommand;
     public static IntakeCommand intakeRightFrontHighChamberCommand;
-    public static IntakeCommand intakeRightScoreFrontHighChamberCommand;
+    //public static IntakeCommand intakeRightScoreFrontHighChamberCommand;
     public static IntakeCommand intakeAutoRightCommand;
     public static IntakeCommand intakeAutoRightGrabCommand;
 
@@ -83,6 +84,8 @@ public abstract class Robot extends CommandOpMode {
     public static RetractFromBasket retractFromBasket;
     public static DropCommand dropCommand;
     public static HighChamberCommand highChamberCommand;
+    public static ScoreHighChamberCommand scoreHighChamberCommand;
+    public static RetractAfterWallIntake retractAfterWallIntake;
 
     //test statics
     public static double x = 0, y = 0;
@@ -288,7 +291,7 @@ public abstract class Robot extends CommandOpMode {
         intakeWhenHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenHighChamber, rollWhenHighChamber);
         intakeFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber);
         intakeRightFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber);
-        intakeRightScoreFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber);
+        //intakeRightScoreFrontHighChamberCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber);
         //intaking
         intakeLastLeftAutoCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchLastLeftAuto, rollLastLeftAuto);
         //intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
@@ -311,6 +314,8 @@ public abstract class Robot extends CommandOpMode {
         retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem);
         retractFromBasket = new RetractFromBasket(armSubsystem, intakeSubsystem);
         highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
+        scoreHighChamberCommand = new ScoreHighChamberCommand(armSubsystem, intakeSubsystem);
+        retractAfterWallIntake = new RetractAfterWallIntake(armSubsystem, intakeSubsystem);
 
     }
 

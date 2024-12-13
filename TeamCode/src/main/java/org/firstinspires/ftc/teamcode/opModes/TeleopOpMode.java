@@ -107,7 +107,7 @@ public class TeleopOpMode extends Robot {
         //wall intake
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
-                new RetractAfterWallIntake(armSubsystem, intakeSubsystem),
+                retractAfterIntake,
                 () -> {
                     armSubsystem.toggleWallState();
                     return armSubsystem.getWallState();
