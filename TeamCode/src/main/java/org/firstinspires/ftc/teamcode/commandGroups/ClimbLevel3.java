@@ -47,7 +47,7 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                     new RunCommand(()-> armSubsystem.setArm(87-gyro.getRobotYawPitchRollAngles().getPitch()))
                 ),
                 //rotate arm to second rung with imu
-                new RunCommand(()-> armSubsystem.setArm(80-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(500),
+                new RunCommand(()-> armSubsystem.setArm(80-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(1000),
                 new InstantCommand(() -> armSubsystem.setArmP(kParm)),
                 //Move arm back to rotate the robot down while retracting linear slides until first rung is at the end of the robot ramp
                 new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
