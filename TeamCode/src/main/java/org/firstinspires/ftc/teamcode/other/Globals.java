@@ -37,15 +37,17 @@ public class Globals {
 
     public static double pitchFrontHighChamber = 300;
 
-    //autoright
-    public static double pitchFrontRightHighChamber = 0;
-    public static double rollFrontRightHighChamber = 130;
-    public static double pitchPlaceFrontHighRightChamber = 0;
-    public static double rollPlaceFrontHighRightChamber = 250;
 
     //teleop high chamber
     public static double pitchTeleopHighChamber = 0;
-    public static double rollTeleopHighChamber = 130;
+    public static double rollTeleopHighChamber = 160;
+
+
+    //autoright
+    public static double pitchFrontRightHighChamber = 0;
+    public static double rollFrontRightHighChamber = rollTeleopHighChamber;
+    public static double pitchPlaceFrontHighRightChamber = 0;
+    public static double rollPlaceFrontHighRightChamber = 280;
 
 
     //home
@@ -64,7 +66,7 @@ public class Globals {
     public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = -5;
-    public static double  armHighBasketY = 46;
+    public static double  armHighBasketY = 45.5;
     //arm when front high chamber
     public static double armFrontHighChamberX = 17.5;
     public static double armFrontHighChamberY = 17.6;
@@ -72,8 +74,8 @@ public class Globals {
     //arm when high chamber
     public static double armHighChamberX = -1;
     public static double armHighChamberY = 23;
-    public static double armRightHighChamberX = -.02;
-    public static double armRightHighChamberY = 22.6;
+    public static double armRightHighChamberX = -1;
+    public static double armRightHighChamberY = 23.5;
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 23;

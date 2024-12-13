@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
-
+@Disabled
 @Autonomous(name="autoRight2")
 
 
@@ -48,7 +49,7 @@ public class autoRightTwo extends Robot {
 
                 //raise intake and arm
                 new InstantCommand(() -> armSubsystem.setArm(90)),
-//                new WaitCommand(200),
+                new WaitCommand(300),
                 new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY),
 //                new WaitCommand(300),
                 intakeRightFrontHighChamberCommand,

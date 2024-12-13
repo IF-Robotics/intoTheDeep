@@ -32,6 +32,8 @@ public class onePlusThreeAuto extends Robot {
         //turn on auto drive
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
+        manualArm = false;
+
 
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
@@ -42,10 +44,13 @@ public class onePlusThreeAuto extends Robot {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(20)),
+                new InstantCommand(() -> armSubsystem.setArm(40)),
+                //wait
+                new WaitCommand(300),
+                //extend slides
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
                 //wait
-                new WaitCommand(800),
+                new WaitCommand(400),
                 //drive to high chamber
                 new DriveToPointCommand(driveSubsystem, highChamberLeft,5, 10).withTimeout(2000),
                 //wait

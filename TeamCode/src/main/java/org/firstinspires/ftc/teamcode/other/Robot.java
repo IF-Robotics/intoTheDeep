@@ -26,6 +26,7 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
@@ -81,6 +82,7 @@ public abstract class Robot extends CommandOpMode {
     public static RetractAfterIntake retractAfterIntake;
     public static RetractFromBasket retractFromBasket;
     public static DropCommand dropCommand;
+    public static HighChamberCommand highChamberCommand;
 
     //test statics
     public static double x = 0, y = 0;
@@ -308,6 +310,7 @@ public abstract class Robot extends CommandOpMode {
         //command groups
         retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem);
         retractFromBasket = new RetractFromBasket(armSubsystem, intakeSubsystem);
+        highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
 
     }
 

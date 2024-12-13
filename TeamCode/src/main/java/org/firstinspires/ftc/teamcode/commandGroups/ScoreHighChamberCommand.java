@@ -22,6 +22,8 @@ public class ScoreHighChamberCommand extends SequentialCommandGroup {
         addCommands(
                 //score the specimen
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
+                //retract slides slightly
+                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -2 ),
                 //wait
                 new WaitCommand(500),
                 //open the claw
