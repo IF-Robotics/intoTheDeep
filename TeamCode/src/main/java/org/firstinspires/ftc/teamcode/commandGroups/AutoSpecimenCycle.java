@@ -21,8 +21,6 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
                 new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 1, 5),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -53.5, Rotation2d.fromDegrees(180)), 1, 5),
 
 
                 // drive to specimen on wall
