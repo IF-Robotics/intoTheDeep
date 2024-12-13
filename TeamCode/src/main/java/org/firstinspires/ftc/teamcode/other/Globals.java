@@ -73,7 +73,7 @@ public class Globals {
     public static double armHighChamberX = -1;
     public static double armHighChamberY = 23;
     public static double armRightHighChamberX = -.02;
-    public static double armRightHighChamberY = 23.5;
+    public static double armRightHighChamberY = 22.6;
 
     //arm when intaking from sub
     public static double armReadySubIntakeX = 23;
