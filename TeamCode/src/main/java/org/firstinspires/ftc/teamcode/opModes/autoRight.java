@@ -76,27 +76,28 @@ public class autoRight extends Robot {
                 new WaitCommand(500),
 //                intakeAutoRightGrabCommand,
                 //place in observation zone
-                new WaitCommand(200),
-                new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
+//                new WaitCommand(200),
+//                new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
                 new WaitCommand(200),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(33.8, -44, Rotation2d.fromDegrees(-140)), 1, 5),
                 //wait
-                new WaitCommand(1000),
+                new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),\
+                new WaitCommand(500),
                 //open claw
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 315, rollWhenIntake),
-                new WaitCommand(200),
+//                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 315, rollWhenIntake),
+//                new WaitCommand(200),
                 //retract slide
 
-                intakeRightFrontHighChamberCommand,
+//                intakeRightFrontHighChamberCommand,
                 new DriveToPointCommand(driveSubsystem, new Pose2d(43.8, -43, Rotation2d.fromDegrees(-37)), 1, 5),
                 //wait
-                new WaitCommand(1000),
+//                new WaitCommand(1000),
                 // intake sample
                 new WaitCommand(300),
                 new InstantCommand(() -> armSubsystem.setArmY(3)),
                 new WaitCommand(300),
                 // wait?
-                new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
+//                new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(43.8, -41, Rotation2d.fromDegrees(-140)), 1, 5),
                 //wait
                 new WaitCommand(1000),
