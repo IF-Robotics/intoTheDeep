@@ -20,17 +20,17 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
                 // drive to specimen on wall
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 1, 5),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -53, Rotation2d.fromDegrees(180)), 1, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -53.5, Rotation2d.fromDegrees(180)), 1, 5),
                 //wait
-                new WaitCommand(300),
+                new WaitCommand(200),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5),
                 //wait
-                new WaitCommand(1000),
+                new WaitCommand(300),
                 // Intake specimen from wall
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(35, -55, Rotation2d.fromDegrees(180)), 1, 5),
                 //wait
-                new WaitCommand(1000),
+                new WaitCommand(200),
                // set wrist to ready position for high chamber
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, 130),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber),
@@ -38,22 +38,22 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY),
                 new WaitCommand(200),
                 // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(6.9, -45, Rotation2d.fromDegrees(180)),3, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(9.6, -35, Rotation2d.fromDegrees(180)),10, 10),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(10, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(1000),
+                new WaitCommand(200),
                 new DriveToPointCommand(driveSubsystem, highChamberRight ,3, 5),
                 //wait
-                new WaitCommand(1000),
 //                new DriveToPointCommand((driveSubsystem, new Pose2d(-53, -54, Rotation2d.fromDegrees(-45)), 1, 5, 10000),
-                new WaitCommand(300),
+                new WaitCommand(200),
                 // Score specimen
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
-                new WaitCommand(300),
+                new WaitCommand(200),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
                 // reset arm and slides
                 new InstantCommand(() -> armSubsystem.setArm(12.5)),
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 // reset diffy wrist
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall),
-                new WaitCommand(300)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall)
 
                   //new DriveToPointCommand(driveSubsystem, new Pose2d(35, -53, Rotation2d.fromDegrees(180)), 1, 5,1000),
 //                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5,1000),

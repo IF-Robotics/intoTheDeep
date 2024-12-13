@@ -73,7 +73,7 @@ public class Globals {
     public static double autoArmFrontHighChamberY = 17.5;
     //arm when high chamber
     public static double armHighChamberX = -1;
-    public static double armHighChamberY = 23;
+    public static double armHighChamberY = 23.2;
     public static double armRightHighChamberX = -1;
     public static double armRightHighChamberY = 23.5;
 
