@@ -112,7 +112,7 @@ public class Globals {
     public static double armMoveToSecondRungX = 15;
     public static double armMoveToSecondRungY = 27;
     public static double armPositionRobotToEdgeOfFirstRungX = -8;
-    public static double armPositionRobotToEdgeOfFirstRungY = 19;
+    public static double armPositionRobotToEdgeOfFirstRungY = 18;
     //completely retracting when climbing
     public static double armCompleteRetractX = 7.0;
     public static double armCompleteRetractY = 4.0;

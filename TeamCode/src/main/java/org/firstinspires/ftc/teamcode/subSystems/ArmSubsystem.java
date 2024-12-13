@@ -33,6 +33,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static double kParm = 0.07, kIarm = 0, kDarm = 0.01, kFarm = .3;
     public static double armWeakKP = 0.03;
     public static double armAngleOffset = -39/*141-60*/;
+    public static double armSuperWeakKP = .007;
     private double ff;
     private PIDController armController;
     private double setArmTargetAngle = 0;
@@ -129,6 +130,10 @@ public class ArmSubsystem extends SubsystemBase {
         } else if (endstop == Endstop.DOWN){
             endStop.setPosition(endstopDown);
         }
+    }
+
+    public void setArmP(double p){
+        armController.setP(p);
     }
 
     //forward kinematics

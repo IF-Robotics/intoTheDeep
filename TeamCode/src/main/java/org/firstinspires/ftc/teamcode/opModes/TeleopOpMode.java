@@ -15,6 +15,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandGroups.Climb;
+import org.firstinspires.ftc.teamcode.commandGroups.ClimbLevel3;
+import org.firstinspires.ftc.teamcode.commandGroups.DropCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeCloseCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
@@ -79,6 +81,7 @@ public class TeleopOpMode extends Robot {
         tRight1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         tLeft2 = new Trigger(() -> m_driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
         tRight2 = new Trigger(() -> m_driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
+        tRight2 = new Trigger(() -> m_driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
         circle1 = new GamepadButton(m_driver, GamepadKeys.Button.B);
         circle2 = new GamepadButton(m_driverOp, GamepadKeys.Button.B);
@@ -133,7 +136,7 @@ public class TeleopOpMode extends Robot {
 
         //climbing
         bRight2.whenPressed(armPositionToClimb);
-        bRight2.whenReleased(new Climb(armSubsystem, intakeSubsystem, gyro));
+        bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //auto scoring
         tLeft1.whenActive(new scoreHighBasket(driveSubsystem, armSubsystem, intakeSubsystem));
