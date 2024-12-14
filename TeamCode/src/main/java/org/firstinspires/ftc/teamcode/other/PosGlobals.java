@@ -12,12 +12,13 @@ public class PosGlobals {
     public static final double startRightX = (3 + 7/16) + 14.74/2;//the 3&7/16 is the length a sample
     public static final double startLeftX = -startRightX;
     public static final double startLeftY = -70.9 + (8.18898);
-    public static final double startRightY = -70.9 + (8.18898 + 0.944882);
-    public static Pose2d startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(180));
+    public static final double startRightY = startLeftY;
+    public static Pose2d startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(0));
     public static Pose2d startingPosLeft = new Pose2d(startLeftX, startLeftY, Rotation2d.fromDegrees(0));
 
     //high chamber
     public static Pose2d highChamberLeft = new Pose2d(-5, -32.4, Rotation2d.fromDegrees(0));
+    public static Pose2d firstHighChamberRight = new Pose2d(0, -32.4, Rotation2d.fromDegrees(0));
     public static Pose2d highChamberRight = new Pose2d(6.9, -32, Rotation2d.fromDegrees(180));
 
 

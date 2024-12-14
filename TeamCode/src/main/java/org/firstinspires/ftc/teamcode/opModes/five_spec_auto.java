@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
@@ -47,18 +48,24 @@ public class five_spec_auto extends Robot {
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
 
                 //raise intake and arm
-                new InstantCommand(() -> armSubsystem.setArm(90)),
-                intakeRightFrontHighChamberCommand,
-                new WaitCommand(150),
-                highChamberCommand,
-                // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5).withTimeout(2000),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
+                new InstantCommand(() -> armSubsystem.setArm(35)),
                 //wait
+                new WaitCommand(300),
+                //extend slides
+                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
+                //wait
+                new WaitCommand(500),
+
+
+                // Drive to high chamber
                 // Score specimen
-                new WaitCommand(200),
-                scoreHighChamberCommand,
-                armBackCommand,
-                new InstantCommand(() -> armSubsystem.setArm(0)),
+                new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(2000),
+                //wait
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
+                //arm to home pos
+                new InstantCommand(() -> armSubsystem.setSlide(8)),
+
 
                 // Drive to middle
                 new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-37)), 10, 20),

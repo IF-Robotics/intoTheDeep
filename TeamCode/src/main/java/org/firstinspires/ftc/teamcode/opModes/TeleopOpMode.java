@@ -35,7 +35,7 @@ public class TeleopOpMode extends Robot {
     //private
 
     //buttons
-    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, touchpad2, start1, square2, dUp2, bRight2, bLeft2, dRight2, dDown2, cross2, circle1, circle2, dLeft2;
+    private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, touchpad2, start1, square2, dUp2, bRight2, bLeft2, dRight2, dDown2, cross2, circle1, circle2, dLeft2, back1;
     private Trigger tLeft1, tRight1, tLeft2, tRight2;
 
 
@@ -146,6 +146,9 @@ public class TeleopOpMode extends Robot {
         start2.whenPressed(intakeWhenHighBasketCommand);
         start2.whenPressed(armManualCommand);
 
+        //reset pinpoint imu
+
+        back1.whenPressed(new InstantCommand(() -> driveSubsystem.resetPinpointIMU()));
         //Default Commands
         driveSubsystem.setDefaultCommand(teleDriveCommand);
     }
