@@ -96,6 +96,18 @@ public class five_spec_auto extends Robot {
                 new WaitCommand(200),
                 // wait?
                 new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-140)), 5, 5),
+                // Third sample
+                // arm up
+                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(45, -37, Rotation2d.fromDegrees(-37)), 1, 2),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(48.5, -37, Rotation2d.fromDegrees(-37)), 1, 2),
+                //wait
+//                new WaitCommand(1000),
+                // intake sample
+                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
+                new WaitCommand(200),
+                // wait?
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 5, 5),
 
                 //open claw
                 //retract slide
@@ -105,7 +117,8 @@ public class five_spec_auto extends Robot {
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(0)), 1, 5)
+                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-180)), 1, 5)
 
 
 

@@ -27,14 +27,14 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
                 new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
                 //wait
                 new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56.5, Rotation2d.fromDegrees(180)), 1, 5),
                 //wait
-                new WaitCommand(200),
+                new WaitCommand(100),
 
 
                 // Intake specimen from wall
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -55, Rotation2d.fromDegrees(180)), 1, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5).withTimeout(200),
                 //wait
                 new WaitCommand(200),
                // set wrist to ready position for high chamber
@@ -45,7 +45,7 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
                 // Drive to high chamber
                 new DriveToPointCommand(driveSubsystem, new Pose2d(9.6, -35, Rotation2d.fromDegrees(180)),10, 10),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(10, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(1000),
                 new WaitCommand(200),
                 new DriveToPointCommand(driveSubsystem, highChamberRight ,3, 5),
                 //wait
