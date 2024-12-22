@@ -79,7 +79,7 @@ public class Globals {
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
-    public static double armReadySubIntakeX = 23;
+    public static double armReadySubIntakeX = 27;
     public static double armSubIntakeY = 6.25;
     public static double armReadySubIntakeY = 9.5;
     public static double armInSubIntakeY = 8;
@@ -102,7 +102,7 @@ public class Globals {
     public static double armParkLeftAutoY = 23;
 
     //endstop
-    public static double endstopUp = .42;
+    public static double endstopUp = .445    ;
     public static double endstopDown = 0;
 
     //arm when climbing

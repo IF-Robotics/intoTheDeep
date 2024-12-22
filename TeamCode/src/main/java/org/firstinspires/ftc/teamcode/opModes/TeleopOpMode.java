@@ -85,6 +85,7 @@ public class TeleopOpMode extends Robot {
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
         circle1 = new GamepadButton(m_driver, GamepadKeys.Button.B);
         circle2 = new GamepadButton(m_driverOp, GamepadKeys.Button.B);
+        back1 = new GamepadButton(m_driver, GamepadKeys.Button.BACK);
 
 
 
