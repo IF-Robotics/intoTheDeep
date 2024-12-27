@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -49,9 +50,9 @@ public class five_spec_auto extends Robot {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(35)),
+                new InstantCommand(() -> armSubsystem.setArm(22)),
                 //wait
-                new WaitCommand(300),
+                new WaitCommand(200),
                 //extend slides
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
                 //wait
@@ -60,27 +61,31 @@ public class five_spec_auto extends Robot {
 
                 // Drive to high chamber
                 // Score specimen
-                new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(2000),
-                //wait
+                new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
+                //open
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
+                new InstantCommand(() -> armSubsystem.setArm(45)),
 
 
                 // Drive to middle
-                new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-37)), 10, 20),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-45)), 10, 10),
+                new ArmCoordinatesCommand(armSubsystem, 15, armAutoReadyPushY),
 
 
                 //first sample
-                intakeRightFrontHighChamberCommand,
-                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(30, -37, Rotation2d.fromDegrees(-37)), 2, 2),
-                //wait
-//                new WaitCommand(500),
+                new ParallelDeadlineGroup(new DriveToPointCommand(driveSubsystem, new Pose2d(29, -37, Rotation2d.fromDegrees(-37)), 5, 5),
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
+                                intakeRightFrontHighChamberCommand
+                        )
+                ),
                 // intake down
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
                 new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(34, -47, Rotation2d.fromDegrees(-120)), 5, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(34, -47, Rotation2d.fromDegrees(-120)), 5, 10),
                 //arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
 
@@ -88,31 +93,29 @@ public class five_spec_auto extends Robot {
 
 
                 //second sample
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -37, Rotation2d.fromDegrees(-37)), 1, 2),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(40, -37, Rotation2d.fromDegrees(-37)), 5, 5),
                 //wait
 //                new WaitCommand(1000),
                 // intake sample
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
-                new WaitCommand(200),
                 // wait?
+                new WaitCommand(200),
                 new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-140)), 5, 5),
                 // Third sample
                 // arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(45, -37, Rotation2d.fromDegrees(-37)), 1, 2),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(48.5, -37, Rotation2d.fromDegrees(-37)), 1, 2),
-                //wait
-//                new WaitCommand(1000),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(50, -37, Rotation2d.fromDegrees(-37)), 2, 5),
                 // intake sample
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
-                new WaitCommand(200),
                 // wait?
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 5, 5),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 10, 10),
 
                 //open claw
                 //retract slide
                 armWhenIntakeWallCommand,
                 intakeWallCommand,
+                //drive close to pickup point
+                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
 
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
