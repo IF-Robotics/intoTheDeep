@@ -141,7 +141,7 @@ public class five_spec_oneSample_auto extends Robot {
 //                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
                 //wait
 //                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -57.5, Rotation2d.fromDegrees(180)), 1, 3),
+                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3),
                 //wait
                 new WaitCommand(100),
 
@@ -161,16 +161,18 @@ public class five_spec_oneSample_auto extends Robot {
                 //arm and intake to high basket
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket),
-                //drive to in front of high basket
-                new DriveToPointCommand(driveSubsystem, leftBasketPose.transformBy(new Transform2d(new Translation2d(0, 6), new Rotation2d(0))), 3, 20),
-                //wait for slides
-                new WaitForSlideCommand(armSubsystem, 38.5, 2),
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
                 //wait
-                new WaitCommand(0),
+                new WaitCommand(500),
                 //drop sample & arm down
-                new RetractFromBasket(armSubsystem, intakeSubsystem)
+                new RetractFromBasket(armSubsystem, intakeSubsystem),
+
+
+
+
+                //park
+                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-90)), 10, 5)
         ));
 
 

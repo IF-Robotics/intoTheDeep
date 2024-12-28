@@ -36,6 +36,9 @@ public class PosGlobals {
     public static double obsZoneY = 0;
     public static double obsZoneHeading = 0;
 
+    //wallPickUp
+    public static Pose2d wallPickUp = new Pose2d(37, -57, Rotation2d.fromDegrees(180));
+
     //parking
     public static Pose2d leftAutoPark = new Pose2d(-24, -7.09, Rotation2d.fromDegrees(-90));
 }
