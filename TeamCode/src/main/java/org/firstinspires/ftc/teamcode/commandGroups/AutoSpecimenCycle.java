@@ -27,7 +27,7 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 //                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
                 //wait
 //                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -57.5, Rotation2d.fromDegrees(180)), 1, 3),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -57.5, Rotation2d.fromDegrees(180)), 1, 3),
                 //wait
                 new WaitCommand(100),
 
