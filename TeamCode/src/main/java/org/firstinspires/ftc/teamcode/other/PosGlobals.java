@@ -9,8 +9,8 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 @Config
 public class PosGlobals {
     //starting pos
-    public static final double startRightX = (3 + 7/16) + 14.74/2;//the 3&7/16 is the length a sample
-    public static final double startLeftX = -startRightX;
+    public static final double startRightX = 14.74/2 + .5;//the 3&7/16 is the length a sample
+    public static final double startLeftX = -(2*(3 + 7/16) + 14.74/2);
     public static final double startLeftY = -70.9 + (8.18898);
     public static final double startRightY = startLeftY;
     public static Pose2d startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(0));
@@ -38,6 +38,9 @@ public class PosGlobals {
     public static double obsZoneX = 0;
     public static double obsZoneY = 0;
     public static double obsZoneHeading = 0;
+
+    //wallPickUp
+    public static Pose2d wallPickUp = new Pose2d(37, -57, Rotation2d.fromDegrees(180));
 
     //parking
     public static Pose2d leftAutoPark = new Pose2d(-24, -7.09, Rotation2d.fromDegrees(-90));
