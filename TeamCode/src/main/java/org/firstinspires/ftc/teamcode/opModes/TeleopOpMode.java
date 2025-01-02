@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
 import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenIntake;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
 
 import com.arcrobotics.ftclib.command.ConditionalCommand;
@@ -108,7 +113,7 @@ public class TeleopOpMode extends Robot {
         //wall intake
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
-                retractAfterIntake,
+                retractAfterWallIntake,
                 () -> {
                     armSubsystem.toggleWallState();
                     return armSubsystem.getWallState();
@@ -126,10 +131,10 @@ public class TeleopOpMode extends Robot {
         circle2.whenReleased(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake));
 
         //baskets
-        triangle1.whenPressed(armHighBasketCommand);
-        triangle1.whenPressed(intakeWhenHighBasketCommand);
-        triangle2.whenPressed(armHighBasketCommand);
-        triangle2.whenPressed(intakeWhenHighBasketCommand);
+        triangle1.whenPressed(new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY)/*armHighBasketCommand*/);
+        triangle1.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)/*intakeWhenHighBasketCommand*/);
+        triangle2.whenPressed(new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY)/*armHighBasketCommand*/);
+        triangle2.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)/*intakeWhenHighBasketCommand*/);
 
         //retract after scoring in the baskets
         cross1.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));

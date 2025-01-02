@@ -46,8 +46,10 @@ public class CycleLeftSpikeMarks2 extends SequentialCommandGroup {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 40),
                 new WaitCommand(300),
+
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
                 new WaitCommand(300),
+
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 350, rollWhenBasket),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 350, rollWhenBasket),
                 new WaitCommand(200),
