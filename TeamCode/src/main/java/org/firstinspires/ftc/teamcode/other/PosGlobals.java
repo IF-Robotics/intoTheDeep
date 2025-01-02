@@ -9,8 +9,10 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 @Config
 public class PosGlobals {
     //starting pos
-    public static final double startRightX = 14.74/2 + .5;//the 3&7/16 is the length a sample
-    public static final double startLeftX = -(2*(3 + 7/16) + 14.74/2);
+    public static final double startRightX = (3 + 7/16) + 14.74/2;//the 3&7/16 is the length a sample
+    public static final double startLeftX = -startRightX;
+//    public static final double startRightX = 14.74/2 + .5;//the 3&7/16 is the length a sample
+//    public static final double startLeftX = -(2*(3 + 7/16) + 14.74/2);
     public static final double startLeftY = -70.9 + (8.18898);
     public static final double startRightY = startLeftY;
     public static Pose2d startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(0));
@@ -26,7 +28,7 @@ public class PosGlobals {
 
     //baskets
     public static Pose2d leftBasketPose = new Pose2d(-55, -55, Rotation2d.fromDegrees(-45));
-    public static Pose2d leftBasketPose2 = new Pose2d(-56, -56, Rotation2d.fromDegrees(-45));
+    public static Pose2d leftBasketPose2 = new Pose2d(-56.5, -56.5, Rotation2d.fromDegrees(-45));
 
     //spikemarks
     public static Pose2d leftSideRightSpike = new Pose2d(-46.5, -38.5, Rotation2d.fromDegrees(0));

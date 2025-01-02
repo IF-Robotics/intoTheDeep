@@ -34,6 +34,8 @@ public class CycleLeftSpikeMarks2 extends SequentialCommandGroup {
     public CycleLeftSpikeMarks2(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
         addCommands(
                 //reach out the arm and intake
+                retractFromBasket,
+                new WaitCommand(300),
                 intakeCloseCommand,
                 armWhenCloseIntakeCommand,
                 //drive to first sample on the spikemark
@@ -44,14 +46,14 @@ public class CycleLeftSpikeMarks2 extends SequentialCommandGroup {
                 new WaitCommand(400),
                 //arm & intake to high basket
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 40),
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 41),
                 new WaitCommand(300),
 
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
                 new WaitCommand(300),
 
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 350, rollWhenBasket),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 350, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 370, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 370, rollWhenBasket),
                 new WaitCommand(200),
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 43),
 
@@ -75,12 +77,12 @@ public class CycleLeftSpikeMarks2 extends SequentialCommandGroup {
                 retractAfterIntake,
                 new WaitCommand(500),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 40),
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 41),
                 new WaitCommand(300),
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
                 new WaitCommand(300),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 390, rollWhenBasket),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 390, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 370, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 370, rollWhenBasket),
                 new WaitCommand(200),
                 //drop sample & arm down
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 43),
@@ -101,12 +103,12 @@ public class CycleLeftSpikeMarks2 extends SequentialCommandGroup {
                 retractAfterIntake,
                 new WaitCommand(500),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 40),
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 41),
                 new WaitCommand(300),
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
                 new WaitCommand(300),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 390, rollWhenBasket),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 390, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 370, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 370, rollWhenBasket),
                 new WaitCommand(200),
                 //drop sample & arm down
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 43),
