@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.VisionClawCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
 @TeleOp(name="teleOpFunnyTest")
@@ -98,6 +99,8 @@ public class TeleopOpMode extends Robot {
         //rotate intake
         bLeft1.whenPressed(new InstantCommand(() -> intakeSubsystem.rotateIntake()));
         bLeft2.whenPressed(new InstantCommand(() -> intakeSubsystem.rotateIntake()));
+//        bLeft1.whileActiveContinuous(new VisionClawCommand(intakeSubsystem, visionSubsystem));
+//        bLeft2.whileActiveContinuous(new VisionClawCommand(intakeSubsystem, visionSubsystem));
 
         //intake close
         dRight1.whenPressed(new IntakeCloseCommand(armSubsystem, intakeSubsystem));
