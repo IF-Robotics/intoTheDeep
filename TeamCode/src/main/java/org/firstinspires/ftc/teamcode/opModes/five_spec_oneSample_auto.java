@@ -56,7 +56,7 @@ public class five_spec_oneSample_auto extends Robot {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(22)),
+                new InstantCommand(() -> armSubsystem.setArm(18)),
                 //wait
                 new WaitCommand(200),
                 //extend slides
