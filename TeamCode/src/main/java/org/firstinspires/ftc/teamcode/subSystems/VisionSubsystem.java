@@ -77,7 +77,7 @@ public class VisionSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
 
         if (alliance == Alliance.BLUE){
-            allianceLocatorProcessBuilder.setTargetColorRange(red);
+            allianceLocatorProcessBuilder.setTargetColorRange(blue);
         }
         else{
             allianceLocatorProcessBuilder.setTargetColorRange(red);
