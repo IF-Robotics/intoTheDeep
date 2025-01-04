@@ -31,7 +31,7 @@ public class VisionSubsystem extends SubsystemBase {
         BLUE
     }
 
-    public static Alliance alliance = Alliance.BLUE;
+    public static Alliance alliance = Alliance.RED;
 
     Telemetry telemetry;
 
@@ -257,6 +257,10 @@ public class VisionSubsystem extends SubsystemBase {
 //        telemetry.addData("side2", side2);
 //        telemetry.addData("side1longer", side1>side2);
         return Math.toDegrees(angle);
+    }
+    
+    public void setAlliance(Alliance alliance){
+        this.alliance = alliance;
     }
 
 }
