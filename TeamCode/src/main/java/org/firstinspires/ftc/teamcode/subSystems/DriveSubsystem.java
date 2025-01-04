@@ -17,7 +17,8 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
+import com.qualcomm.robotcore.util.ElapsedTime;;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -201,7 +202,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void readPinpoint() {
+        ElapsedTime johnpork = new ElapsedTime();
+        johnpork.reset();
         pinpoint.update();
+        telemetry.addData("johnPork", johnpork.milliseconds());
         Pose2D tempPos = pinpoint.getPosition();
         currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
         telemetry.addData("xDTPos", currentPos.getX());
