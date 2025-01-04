@@ -24,19 +24,19 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
 
                 // drive to specimen on wall
-                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
+//                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
                 //wait
-                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56.5, Rotation2d.fromDegrees(180)), 1, 5),
+//                new WaitCommand(200),
+                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3),
                 //wait
                 new WaitCommand(100),
 
 
                 // Intake specimen from wall
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5).withTimeout(200),
+//                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5).withTimeout(200),
                 //wait
-                new WaitCommand(200),
+                new WaitCommand(100),
                // set wrist to ready position for high chamber
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber),
                 new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY),
@@ -44,12 +44,10 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
 
                 // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(9.6, -35, Rotation2d.fromDegrees(180)),10, 10),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(1000),
-                new WaitCommand(200),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(500),
                 new DriveToPointCommand(driveSubsystem, highChamberRight ,3, 5),
                 //wait
-                new WaitCommand(200),
+//                new WaitCommand(200),
                 // Score specimen
 
 
@@ -58,7 +56,7 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
                 //retract slides slightly
                 new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -2 ),
                 //wait
-                new WaitCommand(200),
+                new WaitCommand(100),
                 //open the claw
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber)
 

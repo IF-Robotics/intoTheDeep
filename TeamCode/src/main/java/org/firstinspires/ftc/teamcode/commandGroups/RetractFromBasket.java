@@ -18,11 +18,11 @@ public class RetractFromBasket extends SequentialCommandGroup {
 
         addCommands(
                 //outtake
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 350, rollWhenBasket),
                 //wait
-                new WaitCommand(500),
+                new WaitCommand(200),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 350, rollWhenIntake),
                 //retract slides
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 //wait

@@ -186,7 +186,7 @@ public abstract class Robot extends CommandOpMode {
         slideRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         slideLeft.setInverted(false);
         slideRight.setInverted(true);
-        arm.setInverted(false);
+        arm.setInverted(true);
 
         slide = new MotorGroup(slideLeft, slideRight);
 

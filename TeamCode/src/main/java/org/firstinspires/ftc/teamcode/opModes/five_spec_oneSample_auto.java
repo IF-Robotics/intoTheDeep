@@ -10,17 +10,23 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Transform2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
+import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
-@Autonomous(name="5+0")
-public class five_spec_auto extends Robot {
+@Autonomous(name="5+1")
+public class five_spec_oneSample_auto extends Robot {
 
     @Override
     public void initialize(){
@@ -50,7 +56,7 @@ public class five_spec_auto extends Robot {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(22)),
+                new InstantCommand(() -> armSubsystem.setArm(18)),
                 //wait
                 new WaitCommand(200),
                 //extend slides
@@ -121,7 +127,52 @@ public class five_spec_auto extends Robot {
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-180)), 1, 5)
+
+
+
+
+
+                //grab the yellow sample
+                new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall),
+
+
+                // drive to specimen on wall
+//                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -50, Rotation2d.fromDegrees(180)), 2, 5),
+                //wait
+//                new WaitCommand(200),
+                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3),
+                //wait
+                new WaitCommand(100),
+
+
+                // Intake specimen from wall
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
+//                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5).withTimeout(200),
+                //wait
+                new WaitCommand(100),
+                // set wrist to ready position for high chamber
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber),
+                new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY),
+
+
+
+                //score in the high basket
+                //arm and intake to high basket
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket),
+                //drive to high basket
+                new DriveToPointCommand(driveSubsystem, leftBasketPose, 2, 5),
+                //wait
+                new WaitCommand(500),
+                //drop sample & arm down
+                new RetractFromBasket(armSubsystem, intakeSubsystem),
+
+
+
+
+                //park
+                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-90)), 10, 5)
         ));
 
 

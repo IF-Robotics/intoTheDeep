@@ -26,14 +26,14 @@ public class Globals {
     //scoring
     //basket
     public static int pitchWhenBasket = 0;
-    public static int rollWhenBasket = 150;
+    public static int rollWhenBasket = 100;
 
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
 
     //autoLeft
     public static double autoPitchFrontHighChamber = 0;
-    public static double rollFrontHighChamber = 120;
+    public static double rollFrontHighChamber = 140;
 
     public static double pitchFrontHighChamber = 300;
 
@@ -66,7 +66,7 @@ public class Globals {
     public static double armBackY = 16;
     //arm high basket
     public static double armHighBasketX = -5;
-    public static double  armHighBasketY = 45.5;
+    public static double  armHighBasketY = 43;
     //arm when front high chamber
     public static double armFrontHighChamberX = 17.5;
     public static double armFrontHighChamberY = 17.6;
@@ -80,7 +80,7 @@ public class Globals {
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 27;
-    public static double armSubIntakeY = 6.25;
+    public static double armSubIntakeY = 5;
     public static double armReadySubIntakeY = 9.5;
     public static double armInSubIntakeY = 8;
     //arm when close (distance) intake
