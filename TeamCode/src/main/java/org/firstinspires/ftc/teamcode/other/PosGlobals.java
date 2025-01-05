@@ -15,7 +15,7 @@ public class PosGlobals {
 //    public static final double startLeftX = -(2*(3 + 7/16) + 14.74/2);
     public static final double startLeftY = -70.9 + (8.18898);
     public static final double startRightY = startLeftY;
-    public static Pose2d startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(0));
+    public static Pose2d      startingPosRight = new Pose2d(startRightX, startRightY, Rotation2d.fromDegrees(0));
     public static Pose2d startingPosLeft = new Pose2d(startLeftX, startLeftY, Rotation2d.fromDegrees(0));
     public static Pose2d startingPosLeft2 = new Pose2d(startLeftX - (3+7/16), startLeftY, Rotation2d.fromDegrees(0));
 

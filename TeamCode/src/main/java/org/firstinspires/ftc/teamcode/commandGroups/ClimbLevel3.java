@@ -30,12 +30,15 @@ public class ClimbLevel3 extends SequentialCommandGroup {
 
                 //Climb to first rung
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
-                new WaitCommand(2500),
+                new WaitCommand(1500),
+                new InstantCommand(() -> armSubsystem.setSlide(6)),
+                new WaitCommand(300),
 
                 //Climb to second rung
                 new InstantCommand(() -> armSubsystem.setArmP(armSuperWeakKP)),
                 //rotate arm up to second rung
-                new InstantCommand(()-> armSubsystem.setArm(70)),
+                new InstantCommand(() -> armSubsystem.setSlide(9)),
+                new InstantCommand(()-> armSubsystem.setArm(65)),
                 new WaitCommand(1300),
                 //correct with imu
                 new RunCommand(()-> armSubsystem.setArm(87-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(500),
@@ -47,14 +50,13 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                     new RunCommand(()-> armSubsystem.setArm(87-gyro.getRobotYawPitchRollAngles().getPitch()))
                 ),
                 //rotate arm to second rung with imu
-                new RunCommand(()-> armSubsystem.setArm(80-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(1000),
+                new RunCommand(()-> armSubsystem.setArm(75-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(1000),
                 new InstantCommand(() -> armSubsystem.setArmP(kParm)),
                 //Move arm back to rotate the robot down while retracting linear slides until first rung is at the end of the robot ramp
                 new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
-                new WaitCommand(3000),
+                new WaitCommand(2000),
                 //Retract linear slides completely
-                new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
-                new WaitCommand(3000)
+                new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY)
 
                 //Yay! We did a level 3 climb!!!!!!!
         );

@@ -55,12 +55,13 @@ public class zeroPlusFourAuto extends Robot {
                 new WaitCommand(6),
                 //stay at startpoint
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosLeft2)),
-
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-15, -50, Rotation2d.fromDegrees(0)), 2, 5),
                 //raise intake and arm
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 42),
-                new WaitCommand(300),
+                new WaitForArmCommand(armSubsystem, 100, 10),
+                new WaitCommand(100),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 43),
+                //drive to middle
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-15, -50, Rotation2d.fromDegrees(0)), 2, 5),
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 40),
                 new WaitCommand(300),
