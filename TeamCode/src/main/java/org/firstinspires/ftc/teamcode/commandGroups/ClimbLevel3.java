@@ -41,7 +41,7 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                 new InstantCommand(()-> armSubsystem.setArm(65)),
                 new WaitCommand(1300),
                 //correct with imu
-                new RunCommand(()-> armSubsystem.setArm(87-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(500),
+                new RunCommand(()-> armSubsystem.setArm(87-gyro.getRobotYawPitchRollAngles().getPitch())).withTimeout(1000),
                 //extend slides with imu correction
                 new ParallelDeadlineGroup(
                     new WaitCommand(600),
@@ -56,7 +56,7 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
                 new WaitCommand(2000),
                 //Retract linear slides completely
-                new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY)
+                new ArmCoordinatesCommand(armSubsystem, armFoldX, armFoldY)
 
                 //Yay! We did a level 3 climb!!!!!!!
         );
