@@ -1,18 +1,12 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
-import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -112,7 +106,13 @@ public class TeleopOpMode extends Robot {
         dRight1.whenPressed(new IntakeCloseCommand(armSubsystem, intakeSubsystem));
         dRight2.whenPressed(new IntakeCloseCommand(armSubsystem, intakeSubsystem));
         //retract after intaking
-        dDown1.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
+        dDown1.whenPressed(new SequentialCommandGroup(
+                new RetractAfterIntake(armSubsystem, intakeSubsystem),
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)
+                )
+        );
+
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake
         tLeft2.whenActive(new ConditionalCommand(
@@ -126,7 +126,8 @@ public class TeleopOpMode extends Robot {
 
 
         //auto align
-        tRight2.whenActive(new VisionClawCommand(intakeSubsystem, visionSubsystem));
+        tRight1.whenActive(new VisionClawCommand(intakeSubsystem, visionSubsystem), true);
+        tRight2.whenActive(new VisionClawCommand(intakeSubsystem, visionSubsystem), true);
 
         //chambers
         square1.whenPressed(new HighChamberCommand(armSubsystem, intakeSubsystem));
@@ -145,11 +146,16 @@ public class TeleopOpMode extends Robot {
         triangle2.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)/*intakeWhenHighBasketCommand*/);
 
         //retract after scoring in the baskets
-        cross1.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));
+        cross1.whenPressed(new SequentialCommandGroup(
+                new RetractFromBasket(armSubsystem, intakeSubsystem),
+                new IntakeSub(armSubsystem, intakeSubsystem)
+                )
+        );
         cross2.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));
 
         //climbing
-        bRight2.whenPressed(armPositionToClimb);
+        bRight2.whenPressed(new ParallelCommandGroup(armPositionToClimb,
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber)));
         bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //auto scoring

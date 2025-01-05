@@ -15,7 +15,7 @@ public class Globals {
     public static int pitchIntakeWall = 390;
     public static int rollIntakeWall = 0;
     // Right left specimens
-    public static int pitchRightAutoSpecimen = 340;
+    public static int pitchRightAutoSpecimen = pitchIntakeWall;
     public static int rollRightAutoSpecimen = -190;
 
     //claw poses
@@ -25,15 +25,15 @@ public class Globals {
 
     //scoring
     //basket
-    public static int pitchWhenBasket = 0;
-    public static int rollWhenBasket = 100;
+    public static int pitchWhenBasket = pitchIntakeWall;
+    public static int rollWhenBasket = 60;
 
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
 
     //autoLeft
     public static double autoPitchFrontHighChamber = 0;
-    public static double rollFrontHighChamber = 140;
+    public static double rollFrontHighChamber = 100;
 
     public static double pitchFrontHighChamber = 300;
 
@@ -68,9 +68,9 @@ public class Globals {
     public static double armHighBasketX = -3;
     public static double  armHighBasketY = 45;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 17.5;
+    public static double armFrontHighChamberX = 20;
     public static double armFrontHighChamberY = 17.6;
-    public static double autoArmFrontHighChamberY = 17.5;
+    public static double autoArmFrontHighChamberY = 17.75;
     //arm when high chamber
     public static double armHighChamberX = -1;
     public static double armHighChamberY = 25.2;
@@ -119,8 +119,8 @@ public class Globals {
     public static double armPositionRobotToEdgeOfFirstRungX = -8;
     public static double armPositionRobotToEdgeOfFirstRungY = 18;
     //completely retracting when climbing
-    public static double armCompleteRetractX = 7.0;
-    public static double armCompleteRetractY = 4.0;
+    public static double armCompleteRetractX = 8;
+    public static double armCompleteRetractY = 3.5;
 
 //drive to point
     public static double translationKP = 0.02;

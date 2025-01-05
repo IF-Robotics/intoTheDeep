@@ -34,9 +34,11 @@ public class onePlusThreeAuto extends Robot {
 
         manualArm = false;
 
+        claw.setPosition(clawClose);
+
 
         schedule(new SequentialCommandGroup(
-                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft)),
+                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft2)),
                 //wait
                 new WaitCommand(6),
                 //stay at startpoint
@@ -44,7 +46,7 @@ public class onePlusThreeAuto extends Robot {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(40)),
+                new InstantCommand(() -> armSubsystem.setArm(25)),
                 //wait
                 new WaitCommand(300),
                 //extend slides
@@ -55,8 +57,10 @@ public class onePlusThreeAuto extends Robot {
                 new DriveToPointCommand(driveSubsystem, highChamberLeft,5, 10).withTimeout(2000),
                 //wait
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
+                new WaitCommand(100),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
+                new InstantCommand(() -> armSubsystem.setArm(45)),
                 //wait
                 new WaitCommand(400),
                 // back up from front chamber
@@ -73,7 +77,8 @@ public class onePlusThreeAuto extends Robot {
                 //drive away from basket
                 new DriveToPointCommand(driveSubsystem, new Pose2d(-50, -7, Rotation2d.fromDegrees(-90)), 5, 5),
                 //drive to low bar
-                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10).withTimeout(3000),//tune position*/
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-30, -7.09, Rotation2d.fromDegrees(-90)), 10, 10).withTimeout(1000),
+                new DriveToPointCommand(driveSubsystem, leftAutoPark, 3, 10).withTimeout(500),//tune position*/
                 new RunCommand(() -> armSubsystem.setPowerZero(), armSubsystem)
         ));
 
