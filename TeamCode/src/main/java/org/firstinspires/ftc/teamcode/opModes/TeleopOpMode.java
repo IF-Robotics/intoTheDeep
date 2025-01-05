@@ -33,6 +33,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
@@ -97,6 +98,7 @@ public class TeleopOpMode extends Robot {
 
 
         //sub intake
+
         dUp1.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
         dUp2.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
         dUp2.whenReleased(armInSubCommand);
