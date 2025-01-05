@@ -64,6 +64,7 @@ public class five_spec_auto extends Robot {
                 new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
                 //open
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
+                new WaitCommand(100),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new InstantCommand(() -> armSubsystem.setArm(45)),
@@ -93,7 +94,7 @@ public class five_spec_auto extends Robot {
 
 
                 //second sample
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(40, -37, Rotation2d.fromDegrees(-37)), 5, 5),
+                new DriveToPointCommand(driveSubsystem,  rightSideMiddleSpike, 5, 5),
                 //wait
 //                new WaitCommand(1000),
                 // intake sample
@@ -104,7 +105,7 @@ public class five_spec_auto extends Robot {
                 // Third sample
                 // arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(50, -37, Rotation2d.fromDegrees(-37)), 2, 5),
+                new DriveToPointCommand(driveSubsystem,  rightSideRightSpike, 2, 5),
                 // intake sample
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
                 // wait?

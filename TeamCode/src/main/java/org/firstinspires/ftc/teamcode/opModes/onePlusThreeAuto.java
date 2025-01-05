@@ -57,6 +57,7 @@ public class onePlusThreeAuto extends Robot {
                 new DriveToPointCommand(driveSubsystem, highChamberLeft,5, 10).withTimeout(2000),
                 //wait
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
+                new WaitCommand(100),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new InstantCommand(() -> armSubsystem.setArm(45)),
