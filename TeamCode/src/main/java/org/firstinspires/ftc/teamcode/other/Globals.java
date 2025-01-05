@@ -19,9 +19,9 @@ public class Globals {
     public static int rollRightAutoSpecimen = -190;
 
     //claw poses
-    public static double clawOpen = 0.33;
-    public static double clawExtraOpen = .28;
-    public static double clawClose = .58;
+    public static double clawOpen = 0.65;
+    public static double clawExtraOpen = .7;
+    public static double clawClose = .4;
 
     //scoring
     //basket
