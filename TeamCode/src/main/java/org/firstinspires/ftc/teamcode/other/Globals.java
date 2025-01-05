@@ -19,9 +19,9 @@ public class Globals {
     public static int rollRightAutoSpecimen = -190;
 
     //claw poses
-    public static double clawOpen = .72;
-    public static double clawExtraOpen = .8;
-    public static double clawClose = .38;
+    public static double clawOpen = 0.33;
+    public static double clawExtraOpen = .28;
+    public static double clawClose = .58;
 
     //scoring
     //basket
@@ -62,33 +62,33 @@ public class Globals {
     public static double armFoldX = 6.5;
     public static double armFoldY = 4.0;
     //arm back
-    public static double armBackX = -3;
-    public static double armBackY = 16;
+    public static double armBackX = -1;
+    public static double armBackY = 17;
     //arm high basket
-    public static double armHighBasketX = -5;
-    public static double  armHighBasketY = 43;
+    public static double armHighBasketX = -3;
+    public static double  armHighBasketY = 45;
     //arm when front high chamber
     public static double armFrontHighChamberX = 17.5;
     public static double armFrontHighChamberY = 17.6;
     public static double autoArmFrontHighChamberY = 17.5;
     //arm when high chamber
     public static double armHighChamberX = -1;
-    public static double armHighChamberY = 23.2;
+    public static double armHighChamberY = 25.2;
     public static double armRightHighChamberX = -1;
     public static double armRightHighChamberY = 23.5;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 27;
-    public static double armSubIntakeY = 5;
-    public static double armReadySubIntakeY = 9.5;
-    public static double armInSubIntakeY = 8;
+    public static double armSubIntakeY = 3;
+    public static double armReadySubIntakeY = 7;
+    public static double armInSubIntakeY = 5;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
-    public static double armCloseIntakeY = 7.5;
+    public static double armCloseIntakeY = 6;
     //arm when intaking form the wall
     public static double armIntakeWallX = 7.7;
-    public static double armIntakeWallY = 9.2  ;
+    public static double armIntakeWallY = 8  ;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;

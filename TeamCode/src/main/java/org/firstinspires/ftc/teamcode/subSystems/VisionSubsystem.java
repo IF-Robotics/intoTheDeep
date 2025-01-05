@@ -31,7 +31,7 @@ public class VisionSubsystem extends SubsystemBase {
         BLUE
     }
 
-    public static Alliance alliance = Alliance.RED;
+    public static Alliance alliance;
 
     Telemetry telemetry;
 
@@ -163,6 +163,9 @@ public class VisionSubsystem extends SubsystemBase {
 
         return Optional.of(getAngleFromRotatedRect(blobs.get(0).getBoxFit()));
     }
+    public void setAlliance(Alliance alliance){
+        VisionSubsystem.alliance = alliance;
+    }
 
     private double getAngleFromRotatedRect(RotatedRect boxFitBlob){
         //This math is essentially to find the angle considering that the long side is vertical would be 0 degrees
@@ -259,8 +262,6 @@ public class VisionSubsystem extends SubsystemBase {
         return Math.toDegrees(angle);
     }
     
-    public void setAlliance(Alliance alliance){
-        this.alliance = alliance;
-    }
+
 
 }
