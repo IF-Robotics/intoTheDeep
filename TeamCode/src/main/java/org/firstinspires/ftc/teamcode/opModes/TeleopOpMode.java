@@ -146,8 +146,7 @@ public class TeleopOpMode extends Robot {
         cross2.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));
 
         //climbing
-        bRight2.whenPressed(new ParallelCommandGroup(armPositionToClimb,
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber)));
+        bRight2.whenPressed(new ParallelCommandGroup(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),armPositionToClimb));
         bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //auto scoring

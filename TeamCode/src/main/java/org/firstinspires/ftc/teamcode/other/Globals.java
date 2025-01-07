@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.other;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import java.util.function.DoubleSupplier;
+
 @Config
 public class Globals {
 //intake subsystem
@@ -107,6 +109,7 @@ public class Globals {
 
     //arm when climbing
     //climbing to first rung
+    public static double armAngleReady = 36.08;
     public static double armPositionToClimbX = 16.9;
     public static double armPositionToClimbY = 24.8;
     //climbing to second rung
