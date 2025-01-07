@@ -75,7 +75,7 @@ public class Globals {
     public static double armHighChamberX = -1;
     public static double armHighChamberY = 25.2;
     public static double armRightHighChamberX = -1;
-    public static double armRightHighChamberY = 23.5;
+    public static double armRightHighChamberY = 24.5;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;

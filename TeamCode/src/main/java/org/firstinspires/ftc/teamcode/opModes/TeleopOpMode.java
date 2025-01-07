@@ -137,7 +137,7 @@ public class TeleopOpMode extends Robot {
 
         //dropping sample (into observation zone)
         circle2.whenPressed(dropCommand);
-        circle2.whenReleased(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake));
+        circle2.whenReleased(new InstantCommand(() -> intakeSubsystem.openClaw()));
 
         //baskets
         triangle1.whenPressed(new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY)/*armHighBasketCommand*/);

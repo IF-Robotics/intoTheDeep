@@ -67,7 +67,7 @@ public class five_spec_auto extends Robot {
                 new WaitCommand(100),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
-                new InstantCommand(() -> armSubsystem.setArm(45)),
+                new InstantCommand(() -> armSubsystem.setArm(60)),
 
 
                 // Drive to middle
@@ -108,6 +108,7 @@ public class five_spec_auto extends Robot {
                 new DriveToPointCommand(driveSubsystem,  rightSideRightSpike, 2, 5),
                 // intake sample
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
+                new WaitCommand(300),
                 // wait?
                 new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 10, 10),
 
