@@ -32,12 +32,12 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armCompleteRetractX, armCompleteRetractY),
                 new WaitCommand(1500),
                 new InstantCommand(() -> armSubsystem.setSlide(6)),
-                new WaitCommand(300),
+                new WaitCommand(800),
 
                 //Climb to second rung
                 new InstantCommand(() -> armSubsystem.setArmP(armSuperWeakKP)),
                 //rotate arm up to second rung
-                new InstantCommand(() -> armSubsystem.setSlide(9)),
+                new InstantCommand(() -> armSubsystem.setSlide(8)),
                 new InstantCommand(()-> armSubsystem.setArm(65)),
                 new WaitCommand(1300),
                 //correct with imu
