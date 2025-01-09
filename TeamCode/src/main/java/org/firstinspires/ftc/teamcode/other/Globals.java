@@ -14,7 +14,7 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 390;
+    public static int pitchIntakeWall = 370;
     public static int rollIntakeWall = 0;
     // Right left specimens
     public static int pitchRightAutoSpecimen = pitchIntakeWall;
@@ -28,7 +28,7 @@ public class Globals {
     //scoring
     //basket
     public static int pitchWhenBasket = pitchIntakeWall;
-    public static int rollWhenBasket = 60;
+    public static int rollWhenBasket = 130;
 
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
@@ -82,9 +82,9 @@ public class Globals {
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 27;
-    public static double armSubIntakeY = 3;
+    public static double armSubIntakeY = 2.5;
     public static double armReadySubIntakeY = 7;
-    public static double armInSubIntakeY = 5;
+    public static double armInSubIntakeY = 4.5;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 6;
