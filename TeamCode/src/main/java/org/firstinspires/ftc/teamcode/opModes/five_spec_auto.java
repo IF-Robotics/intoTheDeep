@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
+import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle2;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
@@ -119,10 +120,10 @@ public class five_spec_auto extends Robot {
                 //drive close to pickup point
                 new DriveToPointCommand(driveSubsystem, new Pose2d(37, -50, Rotation2d.fromDegrees(180)), 2, 5),
 
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-180)), 1, 5)
         ));
 

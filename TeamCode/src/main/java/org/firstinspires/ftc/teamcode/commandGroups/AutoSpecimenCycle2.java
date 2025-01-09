@@ -1,22 +1,34 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.*;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
-import static org.firstinspires.ftc.teamcode.other.Robot.*;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeWallX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeWallY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armRightHighChamberX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armRightHighChamberY;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchFrontRightHighChamber;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchPlaceFrontHighRightChamber;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollFrontRightHighChamber;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollPlaceFrontHighRightChamber;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.highChamberRight;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.wallPickUp;
 
-import org.firstinspires.ftc.teamcode.commands.*;
-import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
-
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
-public class AutoSpecimenCycle extends SequentialCommandGroup {
-    public AutoSpecimenCycle(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
+import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
+import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
+
+public class AutoSpecimenCycle2 extends SequentialCommandGroup {
+    public AutoSpecimenCycle2(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
         addCommands(
 
                 new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY),
@@ -24,8 +36,8 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
 
                 // drive to specimen on wall
-//                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -46, Rotation2d.fromDegrees(180)), 20, 5),
-//                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -50, Rotation2d.fromDegrees(180)), 20, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -46, Rotation2d.fromDegrees(180)), 20, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -50, Rotation2d.fromDegrees(180)), 20, 5),
 
                 //wait
 //                new WaitCommand(200),
