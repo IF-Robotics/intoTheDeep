@@ -174,8 +174,8 @@ public class five_spec_oneSample_auto extends Robot {
 
 
                 //park
-                new DriveToPointCommand(driveSubsystem, new Pose2d(40, -56, Rotation2d.fromDegrees(-90)), 1, 5),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-90)), 10, 5)
+                new DriveToPointCommand(driveSubsystem, new Pose2d(30, -56, Rotation2d.fromDegrees(-90)), 1, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(40, -56, Rotation2d.fromDegrees(-90)), 10, 5)
         ));
 
 
