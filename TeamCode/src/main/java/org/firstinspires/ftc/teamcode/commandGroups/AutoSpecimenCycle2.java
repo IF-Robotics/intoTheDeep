@@ -61,7 +61,7 @@ public class AutoSpecimenCycle2 extends SequentialCommandGroup {
                 new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(500),
                 new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5),
                 //wait
-//                new WaitCommand(200),
+                new WaitCommand(200),
                 // Score specimen
 
 
