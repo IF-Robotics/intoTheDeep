@@ -92,7 +92,6 @@ public class TeleopOpMode extends Robot {
 
 
         //sub intake
-
         dUp1.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
         dUp2.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
         dUp2.whenReleased(armInSubCommand);

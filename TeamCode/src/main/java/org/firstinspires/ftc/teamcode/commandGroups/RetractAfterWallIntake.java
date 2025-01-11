@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchFrontHighChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchPlaceFrontHighRightChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollFrontHighChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
 
@@ -25,7 +26,7 @@ public class RetractAfterWallIntake extends SequentialCommandGroup {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
                 new WaitCommand(200),
                 //flip up the intake
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollFrontHighChamber),
                 //arm to home
                 new ArmCoordinatesCommand(armSubsystem, armBackX, armBackY)
 
