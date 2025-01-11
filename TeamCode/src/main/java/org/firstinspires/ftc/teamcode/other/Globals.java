@@ -14,7 +14,7 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 370;
+    public static int pitchIntakeWall = 400;
     public static int rollIntakeWall = 0;
     // Right left specimens
     public static int pitchRightAutoSpecimen = pitchIntakeWall;
@@ -49,7 +49,7 @@ public class Globals {
     public static double pitchFrontRightHighChamber = 0;
     public static double rollFrontRightHighChamber = rollTeleopHighChamber;
     public static double pitchPlaceFrontHighRightChamber = 0;
-    public static double rollPlaceFrontHighRightChamber = 280;
+    public static double rollPlaceFrontHighRightChamber = 200;
 
 
     //home
@@ -104,7 +104,7 @@ public class Globals {
     public static double armParkLeftAutoY = 23;
 
     //endstop
-    public static double endstopUp = .445    ;
+    public static double endstopUp = .43;
     public static double endstopDown = 0;
 
     //arm when climbing
