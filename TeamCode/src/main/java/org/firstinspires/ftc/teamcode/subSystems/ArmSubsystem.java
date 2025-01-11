@@ -32,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm PIDF
     public static double kParm = 0.05, kIarm = 0, kDarm = 0.01, kFarm = .3;
     public static double armWeakKP = 0.03;
-    public static double armAngleOffset = -208.5/*-39*/;
+    public static double armAngleOffset = -178.5/*-39*/;
     public static double armSuperWeakKP = .005;
     private double ff;
     private PIDController armController;
