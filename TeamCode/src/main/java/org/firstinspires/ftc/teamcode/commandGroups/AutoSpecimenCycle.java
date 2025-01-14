@@ -54,13 +54,7 @@ public class AutoSpecimenCycle extends SequentialCommandGroup {
 
 
                 //score the specimen
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
-                //retract slides slightly
-                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -2 ),
-                //wait
-                new WaitCommand(100),
-                //open the claw
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber)
+                new ScoreHighChamberCommand(armSubsystem, intakeSubsystem)
 
         );
 

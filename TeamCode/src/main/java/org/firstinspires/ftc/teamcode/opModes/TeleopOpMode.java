@@ -26,6 +26,8 @@ import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+
+import org.firstinspires.ftc.teamcode.commands.ResetSlides;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
 @TeleOp(name="teleOpFunnyTest")
@@ -157,8 +159,10 @@ public class TeleopOpMode extends Robot {
         start2.whenPressed(armManualCommand);
 
         //reset pinpoint imu
-
         back1.whenPressed(new InstantCommand(() -> driveSubsystem.resetPinpointIMU()));
+        //reset slides
+        tRight2.whenActive(new ResetSlides(armSubsystem));
+
         //Default Commands
         driveSubsystem.setDefaultCommand(teleDriveCommand);
     }

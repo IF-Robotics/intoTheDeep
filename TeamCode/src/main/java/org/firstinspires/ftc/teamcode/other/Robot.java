@@ -25,6 +25,7 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
@@ -186,7 +187,7 @@ public abstract class Robot extends CommandOpMode {
 
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, endStop, armEncoder, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideRight, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
 
         //intake
