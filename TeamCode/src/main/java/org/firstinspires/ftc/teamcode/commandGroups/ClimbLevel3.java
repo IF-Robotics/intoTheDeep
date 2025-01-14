@@ -54,7 +54,7 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                 new InstantCommand(() -> armSubsystem.setArmP(kParm)),
                 //Move arm back to rotate the robot down while retracting linear slides until first rung is at the end of the robot ramp
                 new ArmCoordinatesCommand(armSubsystem, armPositionRobotToEdgeOfFirstRungX, armPositionRobotToEdgeOfFirstRungY),
-                new WaitCommand(2000),
+                new WaitCommand(1000),
                 //Retract linear slides completely
                 new ArmCoordinatesCommand(armSubsystem, armFoldX, armFoldY)
 

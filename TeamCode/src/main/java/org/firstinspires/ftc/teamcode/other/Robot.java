@@ -108,7 +108,7 @@ public abstract class Robot extends CommandOpMode {
     public DriveSubsystem driveSubsystem;
     public ArmSubsystem armSubsystem;
     public IntakeSubsystem intakeSubsystem;
-    public VisionSubsystem visionSubsystem;
+//    public VisionSubsystem visionSubsystem;
 
     //system
     private LynxModule controlHub;
@@ -190,7 +190,7 @@ public abstract class Robot extends CommandOpMode {
 
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, endStop, armEncoder, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideRight, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
 
         //intake
@@ -202,8 +202,8 @@ public abstract class Robot extends CommandOpMode {
         register(intakeSubsystem);
 
         //vision
-        visionSubsystem = new VisionSubsystem(hardwareMap.get(WebcamName.class, "Webcam 1"), telemetry);
-        register(visionSubsystem);
+//        visionSubsystem = new VisionSubsystem(hardwareMap.get(WebcamName.class, "Webcam 1"), telemetry);
+//        register(visionSubsystem);
 
         m_driver = new GamepadEx(gamepad1);
         m_driverOp = new GamepadEx(gamepad2);

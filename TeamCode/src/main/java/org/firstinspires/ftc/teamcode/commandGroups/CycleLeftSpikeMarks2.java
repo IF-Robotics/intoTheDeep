@@ -96,7 +96,7 @@ public class CycleLeftSpikeMarks2 extends SequentialCommandGroup {
 
                 //drive to third sample on the spikemark
                 intakeLastLeftAutoCommand,
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-59.3, -35.5, Rotation2d.fromDegrees(35)),2, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-59.3, -35.5, Rotation2d.fromDegrees(35)),2, 5).withTimeout(1000),
                 armWhenCloseIntakeCommand,
                 new WaitCommand(500),
                 //grab and retract

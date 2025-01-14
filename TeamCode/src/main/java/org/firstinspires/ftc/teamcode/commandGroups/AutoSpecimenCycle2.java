@@ -36,6 +36,7 @@ public class AutoSpecimenCycle2 extends SequentialCommandGroup {
 
 
                 // drive to specimen on wall
+                new DriveToPointCommand(driveSubsystem, new Pose2d(34, -45, Rotation2d.fromDegrees(180)), 20, 5),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(37, -46, Rotation2d.fromDegrees(180)), 20, 5),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(37, -50, Rotation2d.fromDegrees(180)), 20, 5),
 
@@ -57,22 +58,17 @@ public class AutoSpecimenCycle2 extends SequentialCommandGroup {
 
 
 
-                // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(500),
-                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5),
+                // Drive to high chamber'
+                new DriveToPointCommand(driveSubsystem, new Pose2d(7, -36, Rotation2d.fromDegrees(180)),3, 5).withTimeout(500),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -30, Rotation2d.fromDegrees(180)),3, 5).withTimeout(500),
+                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5).withTimeout(500),
                 //wait
                 new WaitCommand(200),
                 // Score specimen
 
 
                 //score the specimen
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
-                //retract slides slightly
-                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -2 ),
-                //wait
-                new WaitCommand(100),
-                //open the claw
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber)
+                new ScoreHighChamberCommand(armSubsystem, intakeSubsystem)
 
         );
 

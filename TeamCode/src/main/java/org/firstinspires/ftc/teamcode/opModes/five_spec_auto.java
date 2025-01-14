@@ -57,7 +57,7 @@ public class five_spec_auto extends Robot {
                 //extend slides
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
                 //wait
-                new WaitCommand(500),
+                new WaitCommand(800),
 
 
                 // Drive to high chamber
@@ -77,7 +77,7 @@ public class five_spec_auto extends Robot {
 
 
                 //first sample
-                new ParallelDeadlineGroup(new DriveToPointCommand(driveSubsystem, new Pose2d(29, -37, Rotation2d.fromDegrees(-37)), 5, 5),
+                new ParallelDeadlineGroup(new DriveToPointCommand(driveSubsystem, rightSideLeftSpike, 5, 5),
                         new SequentialCommandGroup(
                                 new WaitCommand(200),
                                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
@@ -86,7 +86,7 @@ public class five_spec_auto extends Robot {
                 ),
                 // intake down
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
-                new WaitCommand(200),
+                new WaitCommand(400),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(34, -47, Rotation2d.fromDegrees(-120)), 5, 10),
                 //arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
@@ -102,7 +102,7 @@ public class five_spec_auto extends Robot {
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
                 // wait?
                 new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-140)), 5, 5),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-130)), 5, 5),
                 // Third sample
                 // arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),

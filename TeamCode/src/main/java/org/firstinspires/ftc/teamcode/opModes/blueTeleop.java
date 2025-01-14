@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 public class blueTeleop extends TeleopOpMode {
     public void initialize(){
         super.initialize();
-        visionSubsystem.setAlliance(VisionSubsystem.Alliance.RED); //They're opposites
-        alliance = VisionSubsystem.Alliance.RED;
+//        visionSubsystem.setAlliance(VisionSubsystem.Alliance.RED); //They're opposites
+//        alliance = VisionSubsystem.Alliance.RED;
 
     }
 
