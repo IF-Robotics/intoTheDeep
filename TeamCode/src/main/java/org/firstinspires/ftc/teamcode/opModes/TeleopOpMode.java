@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
 import org.firstinspires.ftc.teamcode.commands.VisionClawCommand;
+import org.firstinspires.ftc.teamcode.commands.VisionToSample;
 import org.firstinspires.ftc.teamcode.other.Robot;
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
@@ -158,8 +159,8 @@ public class TeleopOpMode extends Robot {
         bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //auto scoring
-        tLeft1.whenActive(new scoreHighBasket(driveSubsystem, armSubsystem, intakeSubsystem));
-
+//        tLeft1.whenActive(new scoreHighBasket(driveSubsystem, armSubsystem, intakeSubsystem));
+        tLeft1.whileActiveContinuous(new VisionToSample(driveSubsystem,visionSubsystem,armSubsystem,m_driver,m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX));
         //testing
         start1.whenPressed(setIntakeCommand);
         start2.whenPressed(intakeWhenHighBasketCommand);

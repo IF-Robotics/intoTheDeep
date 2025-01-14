@@ -24,7 +24,7 @@ public class VisionClawCommand extends CommandBase {
 
     @Override
     public void execute() {
-        angleToSet = visionSubsystem.getSampleSkew();
+        angleToSet = visionSubsystem.getTotalSkew();
         if (angleToSet.isPresent()){
             intakeSubsystem.setDiffy(angleToSet.get()*kPitchConversion);
         }

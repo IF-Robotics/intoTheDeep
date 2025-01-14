@@ -99,6 +99,7 @@ public class Globals {
 
     //manual arm boolean
     public static boolean manualArm = false;
+    public static boolean manualSlides = false;
     //arm auto park
     public static double armParkLeftAutoX = 13;
     public static double armParkLeftAutoY = 23;

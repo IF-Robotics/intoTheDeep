@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
+
+import android.util.Log;
 import android.util.Size;
 
 import androidx.core.math.MathUtils;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.util.SortOrder;
 
@@ -12,6 +17,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.WhiteBalanceControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
@@ -23,7 +30,9 @@ import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+@Config
 public class VisionSubsystem extends SubsystemBase {
 
     public enum Alliance {
@@ -31,17 +40,32 @@ public class VisionSubsystem extends SubsystemBase {
         BLUE
     }
 
-    public static Alliance alliance;
+    //0,0 is the upper left corner I believe
+    public final static double kCameraWidth=320;
+    public final static double kDesiredX = kCameraWidth*0.5;
 
+    public final static double kCameraHeight=240;
+    public final static double kDesiredY = kCameraHeight*0.5;
+
+    public static int lowAreaFilter = 1300;
+    public static int highAreaFilter = 15000;
+    public static double lowRatioFilter = 1.8;
+    public static double highRatioFilter = 2.5;
+    public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-//    ColorRange blue = new ColorRange(
+    public static int exposureMillis = 40;//24
+
+    //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
-//            new Scalar( 100, 80, 80),
+//            new Scalar(100, 125, 80),
 //            new Scalar(140, 255, 255)
 //    );
-
-    ColorRange blue = ColorRange.BLUE;
+    ColorRange blue = new ColorRange(
+            ColorSpace.YCrCb,
+            new Scalar( 16,   0, 160),
+            new Scalar(255, 127, 255)
+    );
 
     ColorRange red = new ColorRange(
             ColorSpace.YCrCb,
@@ -51,16 +75,17 @@ public class VisionSubsystem extends SubsystemBase {
 
     ColorRange yellow = new ColorRange(
             ColorSpace.HSV,
-            new Scalar( 20, 125, 80),
-            new Scalar(40, 255, 255)
+            new Scalar(13, 100, 80),
+            new Scalar(50, 255, 255)
     );
 
 
     ColorBlobLocatorProcessor.Builder allianceLocatorProcessBuilder = new ColorBlobLocatorProcessor.Builder()
+            .setDrawContours(true)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
             .setRoi(ImageRegion.entireFrame())
             .setBlurSize(5)
-            .setDrawContours(true);
+            .setErodeSize(4);
 
     ColorBlobLocatorProcessor allianceLocatorProcess;
     ColorBlobLocatorProcessor yellowLocatorProcess = new ColorBlobLocatorProcessor.Builder()
@@ -86,9 +111,9 @@ public class VisionSubsystem extends SubsystemBase {
         allianceLocatorProcess = allianceLocatorProcessBuilder.build();
 
         ColorBlobLocatorProcessor.BlobFilter areaFilter =
-                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 10000, 60000);
+                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, lowAreaFilter, highAreaFilter);
         ColorBlobLocatorProcessor.BlobFilter ratioFilter =
-                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1, 3);
+                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, lowRatioFilter, highRatioFilter);
         ColorBlobLocatorProcessor.BlobSort largestSort =
                 new ColorBlobLocatorProcessor.BlobSort(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, SortOrder.DESCENDING);
 
@@ -100,71 +125,119 @@ public class VisionSubsystem extends SubsystemBase {
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
-                .setCameraResolution(new Size(640, 480))
+                .setCameraResolution(new Size(320, 240))
                 .addProcessor(yellowLocatorProcess)
                 .addProcessor(allianceLocatorProcess)
                 .build();
+
+        waitForSetCameraSettings(10000, 50000);
     }
+
 
     @Override
     public void periodic(){
-        telemetry.addData("Sample Skew", getSampleSkew().orElse(-99999.0));
+        telemetry.addData("Sample Skew", getTotalSkew().orElse(-99999.0));
         telemetry.addData("Alliance Skew", getAllianceSkew().orElse(-99999.0));
         telemetry.addData("Yellow Skew", getYellowSkew().orElse(-99999.0));
 
+        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
+        if(allianceOffsets.isPresent()) {
+            telemetry.addData("offset x", allianceOffsets.get().get(0));
+            telemetry.addData("offset y", allianceOffsets.get().get(1));
+        }
+
+        Optional<RotatedRect> allianceRect = getAllianceBoxFit();
+        if(allianceRect.isPresent()){
+            telemetry.addData("alliance x", allianceRect.get().center.x);
+            telemetry.addData("alliance y", allianceRect.get().center.y);
+        }
+
+        ColorBlobLocatorProcessor.BlobFilter areaFilter =
+                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, lowAreaFilter, highAreaFilter);
+        ColorBlobLocatorProcessor.BlobFilter ratioFilter =
+                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, lowRatioFilter, highRatioFilter);
+        for(ColorBlobLocatorProcessor process : new ColorBlobLocatorProcessor[]{allianceLocatorProcess, yellowLocatorProcess}){
+            process.removeAllFilters();
+            process.addFilter(areaFilter);
+            process.addFilter(ratioFilter);
+        }
+
+        setExposure();
+    }
+
+    public Optional<RotatedRect> getAllianceBoxFit(){
+        List<ColorBlobLocatorProcessor.Blob> blobs = allianceLocatorProcess.getBlobs();
+        if(blobs.isEmpty()){return Optional.empty();}
+        return getClosestBoxFit(blobs);
     }
 
     /**
-     * Gets Sample Skew in Degrees
-     * @return Optional Double, can return Optional.empty to account for when vision doesn't see anything
+     *
+     * (0,0) is at the upper left corner, so postiive x and y values mean growinig south east
+     * @return a list of size 2. index 0 is the pixel count tx and index 1 is the pixel count ty
      */
-    public Optional<Double> getSampleSkew(){
+    public Optional<List<Double>> getAllianceOffsets(){
+        Optional<RotatedRect> desiredBoxFit = getAllianceBoxFit();
+        if(!desiredBoxFit.isPresent()){
+            return Optional.empty();
+        }
+
+        double tx = desiredBoxFit.get().center.x-kDesiredX;
+        double ty = desiredBoxFit.get().center.y-kDesiredY;
+
+        return Optional.of(Arrays.asList(tx,ty));
+
+
+    }
+
+    public Optional<RotatedRect> getYellowBoxFit(){
         List<ColorBlobLocatorProcessor.Blob> blobs = yellowLocatorProcess.getBlobs();
+        if(blobs.isEmpty()){return Optional.empty();}
+        return getClosestBoxFit(blobs);
+    }
+
+    /**
+     * Gets the closest box fit of both alliances
+     */
+    public Optional<RotatedRect> getTotalBoxFit(){
+        List<ColorBlobLocatorProcessor.Blob> yellowBlobs = yellowLocatorProcess.getBlobs();
         List<ColorBlobLocatorProcessor.Blob> allianceBlobs = allianceLocatorProcess.getBlobs();
 
-        if(blobs.isEmpty() && allianceBlobs.isEmpty()){return Optional.empty();}
+        //Warning -- DO NOT DO THIS, this will make yellow blobs also account for alliance specific since java references
+//        yellowBlobs.addAll(allianceBlobs);
 
-        RotatedRect boxFitBlob;
-        //I know all of this is dookie but this is the fastest most reliable way to get results as of now with my current knowledge
-        if (blobs.isEmpty()){
-            boxFitBlob = allianceBlobs.get(0).getBoxFit();
-        }
-        else if (allianceBlobs.isEmpty()){
-            boxFitBlob = blobs.get(0).getBoxFit();
-        }
-        else{
-            RotatedRect boxFitYellow = blobs.get(0).getBoxFit();
-            RotatedRect boxFitAlliance = allianceBlobs.get(0).getBoxFit();
-            double yellowArea = boxFitYellow.size.height * boxFitYellow.size.width;
-            double allianceArea = boxFitAlliance.size.height * boxFitAlliance.size.width;
-            if (yellowArea > allianceArea){
-                boxFitBlob = boxFitYellow;
-            }
-            else {
-                boxFitBlob = boxFitAlliance;
-            }
-        }
+        List<ColorBlobLocatorProcessor.Blob> totalBlobs = new ArrayList<>();
+        totalBlobs.addAll(yellowBlobs);
+        totalBlobs.addAll(allianceBlobs);
 
+        if(totalBlobs.isEmpty()){return Optional.empty();}
 
-//        boxFitBlob = blobs.get(0).getBoxFit();
-        return Optional.of(getAngleFromRotatedRect(boxFitBlob));
+        return getClosestBoxFit(totalBlobs);
+    }
+
+    /**
+     * Gets Total Skew in Degrees. This means alliance specific and yellow samples
+     * @return Optional Double, can return Optional.empty to account for when vision doesn't see anything
+     */
+    public Optional<Double> getTotalSkew(){
+        Optional<RotatedRect> desiredBoxFit = getTotalBoxFit();
+        if (!desiredBoxFit.isPresent()){return Optional.empty();}
+
+        return Optional.of(getAngleFromRotatedRect(desiredBoxFit.get()));
     }
 
     public Optional<Double> getYellowSkew(){
-        List<ColorBlobLocatorProcessor.Blob> blobs = yellowLocatorProcess.getBlobs();
-        if(blobs.isEmpty()){return Optional.empty();}
+        Optional<RotatedRect> desiredBoxFit = getYellowBoxFit();
+        if (!desiredBoxFit.isPresent()){return Optional.empty();}
 
-        return Optional.of(getAngleFromRotatedRect(blobs.get(0).getBoxFit()));
+        return Optional.of(getAngleFromRotatedRect(desiredBoxFit.get()));
     }
 
     public Optional<Double> getAllianceSkew(){
-        List<ColorBlobLocatorProcessor.Blob> blobs = allianceLocatorProcess.getBlobs();
-        if(blobs.isEmpty()){return Optional.empty();}
+        Optional<RotatedRect> desiredBoxFit = getAllianceBoxFit();
+        if (!desiredBoxFit.isPresent()){return Optional.empty();}
 
-        return Optional.of(getAngleFromRotatedRect(blobs.get(0).getBoxFit()));
-    }
-    public void setAlliance(Alliance alliance){
-        VisionSubsystem.alliance = alliance;
+        return Optional.of(getAngleFromRotatedRect(desiredBoxFit.get()));
     }
 
     private double getAngleFromRotatedRect(RotatedRect boxFitBlob){
@@ -240,7 +313,6 @@ public class VisionSubsystem extends SubsystemBase {
 //            telemetry.addData("Vertex"+i+"X after change", vertices[i].x);
 //            telemetry.addData("Vertex"+i+"Y after change", vertices[i].y);
 //        }
-
         //Find distances to find longer side of rectangle
         double side1 = Math.hypot(
                 (vertices[0].x - vertices[1].x),
@@ -261,7 +333,68 @@ public class VisionSubsystem extends SubsystemBase {
 //        telemetry.addData("side1longer", side1>side2);
         return Math.toDegrees(angle);
     }
-    
 
+    public Optional<RotatedRect> getClosestBoxFit(List<ColorBlobLocatorProcessor.Blob> blobs) {
+        if(blobs.isEmpty()){return Optional.empty();}
 
+        double lowestDistance = Math.hypot(blobs.get(0).getBoxFit().center.x-kDesiredX, blobs.get(0).getBoxFit().center.y-kDesiredY);
+        int lowestIndex = 0;
+        for (int i=1; i<blobs.size(); i++){
+            double distance = Math.hypot(blobs.get(i).getBoxFit().center.x-kDesiredX, blobs.get(i).getBoxFit().center.y-kDesiredY);
+            if(distance<lowestDistance){
+                lowestDistance=distance;
+                lowestIndex=i;
+            }
+        }
+
+        return Optional.of(blobs.get(lowestIndex).getBoxFit());
+    }
+
+    public boolean setExposure() {
+        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            return false;
+        }
+
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        exposureControl.setMode(ExposureControl.Mode.Manual);
+//        Log.i("camera", "exposure: " + exposureControl.getExposure(TimeUnit.MILLISECONDS));
+        return exposureControl.setExposure(exposureMillis, TimeUnit.MILLISECONDS);
+    }
+
+    public boolean setWhiteBalance() {
+        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            return false;
+        }
+
+        WhiteBalanceControl whiteBalanceControl = visionPortal.getCameraControl(WhiteBalanceControl.class);
+        return whiteBalanceControl.setMode(WhiteBalanceControl.Mode.AUTO);
+//        Log.i("camera", "white balance: " + whiteBalanceControl.getWhiteBalanceTemperature());
+//        return whiteBalanceControl.setWhiteBalanceTemperature(8000);
+    }
+
+    public boolean waitForSetCameraSettings(long timeoutMs, int maxAttempts) {
+        long startMs = System.currentTimeMillis();
+        int attempts = 0;
+        long msAfterStart = 0;
+        boolean haveSetExposure = false;
+        boolean haveSetWhiteBalance = false;
+        while (msAfterStart < timeoutMs && attempts++ < maxAttempts) {
+            Log.i("camera", String.format("Attempting to set camera exposure, attempt %d, %d ms after start", attempts, msAfterStart));
+            if (!haveSetExposure && setExposure()) {
+                Log.i("camera", "Set exposure succeeded");
+                haveSetExposure=true;
+            }
+            if(!haveSetWhiteBalance && setWhiteBalance()) {
+                Log.i("camera", "Set white balance succeeded");
+                haveSetWhiteBalance=true;
+            }
+            if(haveSetExposure&&haveSetWhiteBalance){
+                return true;
+            }
+            msAfterStart = System.currentTimeMillis() - startMs;
+        }
+
+        Log.e("camera", "Set exposure failed");
+        return false;
+    }
 }

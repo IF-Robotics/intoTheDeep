@@ -264,10 +264,15 @@ public class ArmSubsystem extends SubsystemBase {
         //arm manual
         if(manualArm){
             arm.set(armManualPower);
-            slide.set(slideManualPower);
         } else {
             //pid power
             arm.set(armPower);
+        }
+
+        if(manualSlides){
+            slide.set(slideManualPower);
+        }
+        else{
             slide.set(slidePower);
         }
 
