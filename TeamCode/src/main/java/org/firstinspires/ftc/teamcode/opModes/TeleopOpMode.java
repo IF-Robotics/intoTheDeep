@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.highBasketCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.teleopSpecScore;
 
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
@@ -119,6 +120,7 @@ public class TeleopOpMode extends Robot {
 
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake
+        tRight1.toggleWhenActive(new teleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem));
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
                 retractAfterWallIntake,

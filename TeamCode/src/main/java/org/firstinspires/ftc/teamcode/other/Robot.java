@@ -15,6 +15,7 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -25,7 +26,6 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
@@ -80,6 +80,7 @@ public abstract class Robot extends CommandOpMode {
     public static IntakeCommand intakeAutoRightGrabCommand;
 
 
+
     //commmand groups
     public static RetractAfterIntake retractAfterIntake;
     public static RetractFromBasket retractFromBasket;
@@ -101,6 +102,7 @@ public abstract class Robot extends CommandOpMode {
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive mecanumDrive;
     public IMU gyro;
+    public RevColorSensorV3 sensor;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -191,6 +193,8 @@ public abstract class Robot extends CommandOpMode {
         register(armSubsystem);
 
         //intake
+
+        sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
         claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);
         diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
         diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);
