@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -23,11 +24,13 @@ import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.highBasketCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
+import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
 @TeleOp(name="teleOpFunnyTest")
@@ -93,7 +96,11 @@ public class TeleopOpMode extends Robot {
 
 
         //sub intake
-        dUp1.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
+        dUp1.whenPressed(new ConditionalCommand(
+                new IntakeSub(armSubsystem, intakeSubsystem),
+                new RetractFromBasket(armSubsystem, intakeSubsystem),
+                () -> armSubsystem.getCurrentY() < 20
+                ));
         dUp2.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
         dUp2.whenReleased(armInSubCommand);
         //rotate intake
@@ -106,8 +113,7 @@ public class TeleopOpMode extends Robot {
         //retract after intaking
         dDown1.whenPressed(new SequentialCommandGroup(
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)
+                new highBasketCommand(armSubsystem, intakeSubsystem)
                 )
         );
 
@@ -130,7 +136,13 @@ public class TeleopOpMode extends Robot {
 
         //dropping sample (into observation zone)
         circle2.whenPressed(dropCommand);
-        circle2.whenReleased(new InstantCommand(() -> intakeSubsystem.openClaw()));
+        circle2.whenReleased(new SequentialCommandGroup(
+                new InstantCommand(() -> intakeSubsystem.openClaw()),
+                new WaitCommand(50),
+                new InstantCommand(() -> armSubsystem.setSlide(8))
+                )
+        );
+
 
         //baskets
         triangle1.whenPressed(new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY)/*armHighBasketCommand*/);
@@ -166,4 +178,16 @@ public class TeleopOpMode extends Robot {
         //Default Commands
         driveSubsystem.setDefaultCommand(teleDriveCommand);
     }
+
+    /*@Override
+    public void run(){
+
+        //retract
+        if(gamepad1.right_stick_button || gamepad2.right_stick_button){
+            schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 0));
+            schedule(new WaitForSlideCommand(armSubsystem, 8, 10));
+        }
+    }
+    */
+
 }

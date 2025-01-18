@@ -26,7 +26,7 @@ public class RetractFromBasket extends SequentialCommandGroup {
                 //retract slides
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 //wait
-                new WaitCommand(500),
+                new WaitCommand(200),
                 //move arm down
                 new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenArmHome)
