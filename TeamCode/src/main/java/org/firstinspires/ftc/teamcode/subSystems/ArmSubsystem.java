@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import com.acmerobotics.dashboard.FtcDashboard;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
@@ -12,16 +14,20 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import java.util.LinkedList;
 
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
+    private DcMotorEx slideAmp;
     private MotorEx arm, slideL;
     private MotorGroup slide;
     private Servo endStop;
@@ -78,10 +84,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     //constructor
-    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
+    public ArmSubsystem(MotorEx arm, MotorEx slideL, DcMotorEx slideAmp, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
         this.slide = slide;
         this.slideL = slideL;
+        this.slideAmp = slideAmp;
         this.endStop = endStop;
         this.armEncoder = armEncoder;
         this.telemetry = telemetry;
@@ -102,6 +109,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmCoordinates(double x, double y){
+
         targetX = x;
         targetY = y;
 
@@ -236,12 +244,108 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
+
+//    public class protectedMotor{
+//        private MotorEx motor; // Assuming DcMotorEx is being wrapped
+//        private double stallVelocityThreshold; // Threshold for stall velocity
+//        private long stallTimeThreshold; // Time threshold in milliseconds
+//        private long stallStartTime = -1; // Start time of detected stall
+//        private long lastPowerSetTime = -1; // Last time power was set
+//        private Telemetry telemetry; // To report status
+//
+//        public protectedMotor(MotorEx motor, double stallVelocityThreshold, long stallTimeThreshold, Telemetry telemetry) {
+//            this.motor = motor;
+//            this.stallVelocityThreshold = stallVelocityThreshold;
+//            this.stallTimeThreshold = stallTimeThreshold;
+//            this.telemetry = telemetry;
+//        }
+//
+//        public void setPower(double power) {
+//            motor.set(power);
+//            lastPowerSetTime = System.currentTimeMillis(); // Track when power was last set
+//        }
+//
+//        public double getVelocity() {
+//            return motor.getVelocity();
+//        }
+//
+//        public void motorUpdate() {
+//            double velocity = getVelocity();
+//
+//            // Check if motor is likely active based on recent power commands
+//            boolean motorActive = System.currentTimeMillis() - lastPowerSetTime < 500; // Adjust timeout as needed
+//
+//            if (motorActive && Math.abs(velocity) < stallVelocityThreshold) {
+//                if (stallStartTime == -1) {
+//                    stallStartTime = System.currentTimeMillis();
+//                } else if (System.currentTimeMillis() - stallStartTime > stallTimeThreshold) {
+//                    // Stall detected
+//                    motor.set(0); // Stop the motor
+//                    telemetry.addData("Motor Status", "Stalled! Power set to 0.");
+//                    telemetry.update();
+//                    stallStartTime = -1; // Reset stall timer after action
+//                }
+//            } else {
+//                stallStartTime = -1; // Reset stall timer if velocity is normal or motor isn't active
+//            }
+//        }
+//    }
+
+    // Detect if a battery goes under a certain voltage and then determine if that voltage is a stall, if true shut motor down to prevent from dc
+    // on the robot. The solution above is using velocity.
+
+
+
+//    public class SafeMotor extends Motor {
+//        private DcMotorEx motorEx;
+//        private double maxCurrent;
+//
+//        public SafeMotor(HardwareMap hardwareMap, String deviceName, double maxCurrent) {
+//            super(hardwareMap, deviceName);
+//            this.motorEx = (DcMotorEx) hardwareMap.get(DcMotorEx.class, deviceName);
+//            this.maxCurrent = maxCurrent;
+//        }
+//
+//        @Override
+//        public void set(double power) {
+//            double current = motorEx.getCurrent(CurrentUnit.AMPS); // Get current
+//            if (current > maxCurrent) {
+//                power = power * (maxCurrent / current); // Scale power down
+//
+//            }
+//            super.set(power); // Use FTCLib's set method
+//        }
+//
+//        public void setMaxCurrent(double maxCurrent) {
+//            this.maxCurrent = maxCurrent;
+//        }
+//
+//        public DcMotorEx getMotorEx() {
+//            return motorEx;
+//        }
+//    }
+
+//    @Override
+//    public void limit(MotorEx motorEx) {
+//        motorEx.set(0.5);
+//
+//    }
+
+
+
     @Override
     public void periodic() {
         //read
         slideTicks = slideL.getCurrentPosition();
         rawAngle = armEncoder.getVoltage()/3.3 * 360;
         correctedAngle = rawAngle + armAngleOffset;
+
+        if(slideAmp.isMotorEnabled()) {
+            if (slideAmp.isOverCurrent()) {
+                telemetry.addData("Warning", "Slide motor overcurrent!");
+                slide.set(0);
+            }
+        }
 
         //arm pid
         //lowering the kp when the arm is up
@@ -266,6 +370,9 @@ public class ArmSubsystem extends SubsystemBase {
         slideError = setSlideTarget - slideExtention;
         telemetry.addData("slideError", slideError);
 
+
+
+
         //arm manual
         if(manualArm){
             arm.set(armManualPower);
@@ -275,6 +382,7 @@ public class ArmSubsystem extends SubsystemBase {
             arm.set(armPower);
             slide.set(slidePower);
         }
+
 
         //calculate slide extension
         slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
