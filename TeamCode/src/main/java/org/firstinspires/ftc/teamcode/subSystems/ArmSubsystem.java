@@ -9,6 +9,11 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Servo;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -17,6 +22,7 @@ import java.util.LinkedList;
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
+    private DcMotorEx slideAmp;
     private MotorEx arm, slideL;
     private MotorGroup slide;
     private Servo endStop;
@@ -73,9 +79,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     //constructor
-    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
+    public ArmSubsystem(MotorEx arm, MotorEx slideL, DcMotorEx slideAmp, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
         this.slide = slide;
+        this.slideAmp = slideAmp;
         this.slideL = slideL;
         this.endStop = endStop;
         this.armEncoder = armEncoder;
@@ -252,6 +259,12 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
         telemetry.addData("error", targetAngle - angle);*/
+        if(slideAmp.isMotorEnabled()) {
+            if (slideAmp.isOverCurrent()) {
+                telemetry.addData("Warning", "Slide motor overcurrent!");
+                slide.set(0);
+            }
+        }
 
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);

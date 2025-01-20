@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
+import static android.icu.util.MeasureUnit.AMPERE;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
@@ -40,8 +41,10 @@ import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.SlideCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 @Config
 public abstract class Robot extends CommandOpMode {
 
@@ -94,6 +97,7 @@ public abstract class Robot extends CommandOpMode {
     public static double pitch = 0, roll = 0;
 
     //hardware
+    public DcMotorEx slideAmp;
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
     public ServoEx diffyLeft, diffyRight, claw;
@@ -175,6 +179,7 @@ public abstract class Robot extends CommandOpMode {
         //arm
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
         slideLeft = new MotorEx(hardwareMap, "slideL");
+        slideAmp = hardwareMap.get(DcMotorEx.class, "slideAmp");
         slideRight = new MotorEx(hardwareMap, "slideR");
         armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
         endStop = hardwareMap.get(Servo.class, "backstop");
@@ -187,9 +192,10 @@ public abstract class Robot extends CommandOpMode {
         slideRight.setInverted(true);
         arm.setInverted(false);
 
+        slideAmp.setCurrentAlert(4.0, CurrentUnit.AMPS);
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideRight, slide, endStop, armEncoder, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideLeft, slideAmp, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
 
         //intake
@@ -216,7 +222,7 @@ public abstract class Robot extends CommandOpMode {
         telemetry.update();
 
         new ArmCoordinatesCommand(armSubsystem, armFoldX, armFoldY).schedule(true);
-        
+
         CommandScheduler.getInstance().schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 250));
         schedule(new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.UP)));
     }
@@ -332,7 +338,7 @@ public abstract class Robot extends CommandOpMode {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
 
-       pinpoint = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
 
         /*
         Set the odometry pod positions relative to the point that the odometry computer tracks around.
@@ -343,7 +349,7 @@ public abstract class Robot extends CommandOpMode {
         backwards is a negative number.
          */
 
-       pinpoint.setOffsets(0, -83.95); //these are tuned for 3110-0002-0001 Product Insight #1
+        pinpoint.setOffsets(0, -83.95); //these are tuned for 3110-0002-0001 Product Insight #1
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
@@ -351,7 +357,7 @@ public abstract class Robot extends CommandOpMode {
         If you're using another kind of odometry pod, uncomment setEncoderResolution and input the
         number of ticks per mm of your odometry pod.
          */
-       pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         //odo.setEncoderResolution(13.26291192);
 
 
@@ -360,10 +366,10 @@ public abstract class Robot extends CommandOpMode {
         increase when you move the robot forward. And the Y (strafe) pod should increase when
         you move the robot to the left.
          */
-       pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
 
-       //set yaw scalar
+        //set yaw scalar
 
         /*
         Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
@@ -373,8 +379,8 @@ public abstract class Robot extends CommandOpMode {
         This is recommended before you run your autonomous, as a bad initial calibration can cause
         an incorrect starting value for x, y, and heading.
          */
-       pinpoint.recalibrateIMU();
-       //pinpoint.resetPosAndIMU();
+        pinpoint.recalibrateIMU();
+        //pinpoint.resetPosAndIMU();
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("X offset",pinpoint.getXOffset());
