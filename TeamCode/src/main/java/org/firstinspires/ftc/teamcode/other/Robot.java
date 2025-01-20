@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.other;
 
-import static android.icu.util.MeasureUnit.AMPERE;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -16,9 +15,9 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -28,7 +27,6 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
@@ -82,6 +80,7 @@ public abstract class Robot extends CommandOpMode {
     public static IntakeCommand intakeAutoRightGrabCommand;
 
 
+
     //commmand groups
     public static RetractAfterIntake retractAfterIntake;
     public static RetractFromBasket retractFromBasket;
@@ -95,7 +94,6 @@ public abstract class Robot extends CommandOpMode {
     public static double pitch = 0, roll = 0;
 
     //hardware
-    public DcMotorEx slideAmp;
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
     public ServoEx diffyLeft, diffyRight, claw;
@@ -104,6 +102,7 @@ public abstract class Robot extends CommandOpMode {
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive mecanumDrive;
     public IMU gyro;
+    public RevColorSensorV3 sensor;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -173,11 +172,9 @@ public abstract class Robot extends CommandOpMode {
         driveSubsystem = new DriveSubsystem(FR, FL, BR, BL, mecanumDrive, telemetry, pinpoint);
         register(driveSubsystem);
 
-
         //arm
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
         slideLeft = new MotorEx(hardwareMap, "slideL");
-        slideAmp = hardwareMap.get(DcMotorEx.class, "slideAmp");
         slideRight = new MotorEx(hardwareMap, "slideR");
         armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
         endStop = hardwareMap.get(Servo.class, "backstop");
@@ -188,16 +185,16 @@ public abstract class Robot extends CommandOpMode {
         slideRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         slideLeft.setInverted(false);
         slideRight.setInverted(true);
-        arm.setInverted(true);
-
-        slideAmp.setCurrentAlert(4.0, CurrentUnit.AMPS);
+        arm.setInverted(false);
 
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, slideAmp, slide, endStop, armEncoder, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideRight, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
 
         //intake
+
+        sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
         claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);
         diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
         diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);

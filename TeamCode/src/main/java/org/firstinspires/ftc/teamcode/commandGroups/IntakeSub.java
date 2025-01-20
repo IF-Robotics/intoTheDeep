@@ -22,7 +22,7 @@ public class IntakeSub extends SequentialCommandGroup {
             //move intake down
             new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake),
             //wait for arm to be horizontal
-            new WaitForArmCommand(armSubsystem, 5.75, 2),
+            new WaitForArmCommand(armSubsystem, 5, 5),
             //arm & intake to correct pos
             new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY)
         );

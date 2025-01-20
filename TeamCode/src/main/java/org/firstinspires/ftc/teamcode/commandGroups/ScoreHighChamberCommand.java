@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.pitchTeleopHighChambe
 import static org.firstinspires.ftc.teamcode.other.Globals.rollPlaceFrontHighRightChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollTeleopHighChamber;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -23,11 +24,11 @@ public class ScoreHighChamberCommand extends SequentialCommandGroup {
                 //score the specimen
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber),
                 //retract slides slightly
-                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -2 ),
+                new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -5),
                 //wait
-                new WaitCommand(300),
+                new WaitCommand(200),
                 //open the claw
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber)
+                new InstantCommand(() -> intakeSubsystem.openClaw())
         );
 
         addRequirements(armSubsystem, intakeSubsystem);

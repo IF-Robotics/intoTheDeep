@@ -70,9 +70,10 @@ public class five_spec_oneSample_auto extends Robot {
                 new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
                 //open
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
+                new WaitCommand(100),
                 //arm to home pos
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
-                new InstantCommand(() -> armSubsystem.setArm(45)),
+                new InstantCommand(() -> armSubsystem.setArm(60)),
 
 
                 // Drive to middle
@@ -81,7 +82,7 @@ public class five_spec_oneSample_auto extends Robot {
 
 
                 //first sample
-                new ParallelDeadlineGroup(new DriveToPointCommand(driveSubsystem, new Pose2d(29, -37, Rotation2d.fromDegrees(-37)), 5, 5),
+                new ParallelDeadlineGroup(new DriveToPointCommand(driveSubsystem, rightSideLeftSpike, 5, 5),
                         new SequentialCommandGroup(
                                 new WaitCommand(200),
                                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
@@ -99,20 +100,21 @@ public class five_spec_oneSample_auto extends Robot {
 
 
                 //second sample
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(40, -37, Rotation2d.fromDegrees(-37)), 5, 5),
+                new DriveToPointCommand(driveSubsystem,  rightSideMiddleSpike, 5, 5),
                 //wait
 //                new WaitCommand(1000),
                 // intake sample
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
                 // wait?
                 new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-140)), 5, 5),
+                new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-130)), 5, 5),
                 // Third sample
                 // arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(50, -37, Rotation2d.fromDegrees(-37)), 2, 5),
+                new DriveToPointCommand(driveSubsystem,  rightSideRightSpike, 2, 5),
                 // intake sample
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
+                new WaitCommand(300),
                 // wait?
                 new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 10, 10),
 
@@ -172,7 +174,8 @@ public class five_spec_oneSample_auto extends Robot {
 
 
                 //park
-                new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-90)), 10, 5)
+                new DriveToPointCommand(driveSubsystem, new Pose2d(30, -56, Rotation2d.fromDegrees(-90)), 1, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(40, -56, Rotation2d.fromDegrees(-90)), 10, 5)
         ));
 
 
