@@ -26,6 +26,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.runner.Drawing;
 
+import java.util.function.BooleanSupplier;
+
 public class DriveSubsystem extends SubsystemBase {
 
     private MotorEx FR, FL, BR, BL;
@@ -117,6 +119,35 @@ public class DriveSubsystem extends SubsystemBase {
 
                 } else if (Math.toDegrees(Math.atan(y / x)) > 0 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 0 + arcTanAngleRange / 2
             || Math.toDegrees(Math.atan(y / x)) > 180 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 180 + arcTanAngleRange / 2) {
+                y = 0;
+            }
+        }
+
+        //actually moving
+        mecanumDrive.driveFieldCentric(strafeSpeed * power, forwardSpeed * power, -turnSpeed * power, currentPos.getRotation().getDegrees());
+
+        //read pinpoint
+        readPinpoint();
+    }
+
+    //For compatibility with other methods, I dont want the driver to be input to the tele drive anymore so i overloaded
+    public void teleDrive(BooleanSupplier slowMode, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
+        //slow mode
+        if (slowMode.getAsBoolean()) {
+            power = .3;
+        } else {
+            power = 1;
+        }
+
+
+        //arc tan dead zones
+        if (arcTanZones) {
+            if (Math.toDegrees(Math.atan(y / x)) > 90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 90 + arcTanAngleRange / 2
+                    || Math.toDegrees(Math.atan(y / x)) < -90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) > -90 + arcTanAngleRange / 2) {
+                x = 0;
+
+            } else if (Math.toDegrees(Math.atan(y / x)) > 0 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 0 + arcTanAngleRange / 2
+                    || Math.toDegrees(Math.atan(y / x)) > 180 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 180 + arcTanAngleRange / 2) {
                 y = 0;
             }
         }

@@ -160,7 +160,7 @@ public class TeleopOpMode extends Robot {
 
         //auto scoring
 //        tLeft1.whenActive(new scoreHighBasket(driveSubsystem, armSubsystem, intakeSubsystem));
-        tLeft1.whileActiveContinuous(new VisionToSample(driveSubsystem,visionSubsystem,armSubsystem,m_driver,m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX));
+        tLeft1.whileActiveContinuous(new VisionToSample(driveSubsystem,visionSubsystem,armSubsystem,intakeSubsystem,()->m_driver.getButton(GamepadKeys.Button.RIGHT_BUMPER),m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX));
         //testing
         start1.whenPressed(setIntakeCommand);
         start2.whenPressed(intakeWhenHighBasketCommand);
