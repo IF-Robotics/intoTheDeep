@@ -37,9 +37,9 @@ public class ArmSubsystem extends SubsystemBase {
     private double correctedAngle = 0;
 
     //slide pidf
-    public static double slideKP = .4, slideKI = 0.0, slideKD = 0.0, slideKF = 0;
+    public static double slideKP = .4, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
     private PIDController slideController;
-    private final double ticksPerIn = 2786/32.75;
+    private final double ticksPerIn = (2786/32.75)*(31.967/52.1537);
     private int slideTicks = 1;
     private double slidePower = 0;
     private double slideExtention = 0;
@@ -252,14 +252,14 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
         telemetry.addData("error", targetAngle - angle);*/
+        slideError = setSlideTarget - slideExtention;
+        telemetry.addData("slideError", slideError);
 
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);
-        slidePower = slideController.calculate(slideExtention, setSlideTarget) + slideKF;
+        slidePower = slideController.calculate(slideExtention, setSlideTarget) + Math.sin(Math.toRadians(correctedAngle))*slideKF;
         //telemetry.addData("targetIN", targetInches);
         //telemetry.addData("slideTicks", slideTicks);
-        slideError = setSlideTarget - slideExtention;
-        telemetry.addData("slideError", slideError);
 
         //arm manual
         if(manualArm){

@@ -83,8 +83,8 @@ public class Globals {
     public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 27;
     public static double armSubIntakeY = 2.5;
-    public static double armReadySubIntakeY = 7;
-    public static double armInSubIntakeY = 4.5;
+    public static double armReadySubIntakeY = 6;
+    public static double armInSubIntakeY = 5;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
     public static double armCloseIntakeY = 6;
