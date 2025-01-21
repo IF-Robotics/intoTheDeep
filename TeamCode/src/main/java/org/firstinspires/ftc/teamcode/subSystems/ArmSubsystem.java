@@ -37,7 +37,7 @@ public class ArmSubsystem extends SubsystemBase {
     private double correctedAngle = 0;
 
     //slide pidf
-    public static double slideKP = .4, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
+    public static double slideKP = .3, slideKI = 0.0, slideKD = 0.0, slideKF = 0.00;
     private PIDController slideController;
     private final double ticksPerIn = (2786/32.75)*(31.967/52.1537);
     private int slideTicks = 1;
@@ -300,6 +300,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setSlidePower(double power){
         slide.set(power);
+        telemetry.addData("bruhSlidepower", power);
     }
 
     public void resetSlideEncoder(){
