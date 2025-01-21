@@ -136,6 +136,13 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
+        if (visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING) {
+            WhiteBalanceControl whiteBalanceControl = visionPortal.getCameraControl(WhiteBalanceControl.class);
+            telemetry.addData("Current White Balance Mode", whiteBalanceControl.getMode());
+            telemetry.addData("White Balance Temp", whiteBalanceControl.getWhiteBalanceTemperature());
+            telemetry.addData("Max temp", whiteBalanceControl.getMaxWhiteBalanceTemperature());
+            telemetry.addData("Min temp", whiteBalanceControl.getMinWhiteBalanceTemperature());
+        }
         telemetry.addData("Sample Skew", getTotalSkew().orElse(-99999.0));
         telemetry.addData("Alliance Skew", getAllianceSkew().orElse(-99999.0));
         telemetry.addData("Yellow Skew", getYellowSkew().orElse(-99999.0));

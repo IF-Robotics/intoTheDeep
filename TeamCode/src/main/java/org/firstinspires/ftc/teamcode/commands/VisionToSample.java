@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import static org.firstinspires.ftc.teamcode.other.Globals.armReadySubIntakeX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armReadySubIntakeY;
+
 import androidx.core.math.MathUtils;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
@@ -70,6 +73,7 @@ public class VisionToSample extends CommandBase {
 //            prevSlidePosition = MathUtils.clamp(prevSlidePosition + slideCompensation,15,30);
 //            armSubsystem.setSlide(prevSlidePosition);
 
+            armSubsystem.setArmCoordinates(armReadySubIntakeX, armReadySubIntakeY);
             armSubsystem.setSlidePower(MathUtils.clamp(-slidePid.calculate(allianceOffsets.get().get(1),0),-0.5,0.5));
 
             double omega = turnpid.calculate(allianceOffsets.get().get(0),0);
@@ -83,6 +87,10 @@ public class VisionToSample extends CommandBase {
 
     public void end(boolean e){
         Globals.manualSlides=false;
-        armSubsystem.setSlide(armSubsystem.getSlideExtention());
+        double slideSetpoint = armSubsystem.getSlideExtention()-2.5;
+        if (slideSetpoint<8){
+            slideSetpoint=8;
+        }
+        armSubsystem.setSlide(slideSetpoint);
     }
 }
