@@ -94,7 +94,7 @@ public abstract class Robot extends CommandOpMode {
     public static double pitch = 0, roll = 0;
 
     //hardware
-    public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
+    public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight, slideNew;
     public MotorGroup slide;
     public ServoEx diffyLeft, diffyRight, claw;
     public Servo endStop;
@@ -176,6 +176,7 @@ public abstract class Robot extends CommandOpMode {
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
         slideLeft = new MotorEx(hardwareMap, "slideL");
         slideRight = new MotorEx(hardwareMap, "slideR");
+        slideNew = new MotorEx(hardwareMap, "slideNew");
         armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
         endStop = hardwareMap.get(Servo.class, "backstop");
         arm.setRunMode(Motor.RunMode.RawPower);
@@ -183,11 +184,12 @@ public abstract class Robot extends CommandOpMode {
         slideRight.setRunMode(Motor.RunMode.RawPower);
         slideLeft.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        slideLeft.setInverted(false);
+        slideLeft.setInverted(true);
         slideRight.setInverted(true);
+        slideNew.setInverted(true);
         arm.setInverted(false);
 
-        slide = new MotorGroup(slideLeft, slideRight);
+        slide = new MotorGroup(slideLeft, slideRight, slideNew);
 
         armSubsystem = new ArmSubsystem(arm, slideRight, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
