@@ -257,7 +257,7 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
         telemetry.addData("error", targetAngle - angle);*/
-
+    
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);
         slidePower = slideController.calculate(slideExtention, setSlideTarget) + slideKF;
