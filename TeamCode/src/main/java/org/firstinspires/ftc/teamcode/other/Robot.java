@@ -17,6 +17,7 @@ import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -92,6 +93,7 @@ public abstract class Robot extends CommandOpMode {
     public static double pitch = 0, roll = 0;
 
     //hardware
+    public DcMotorEx slideAmp;
     public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
     public MotorGroup slide;
     public ServoEx diffyLeft, diffyRight, claw;
@@ -172,6 +174,7 @@ public abstract class Robot extends CommandOpMode {
         //arm
         arm = new MotorEx(hardwareMap, "arm", Motor.GoBILDA.RPM_30);
         slideLeft = new MotorEx(hardwareMap, "slideL");
+        slideAmp = hardwareMap.get(DcMotorEx.class, "slideL");
         slideRight = new MotorEx(hardwareMap, "slideR");
         armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
         endStop = hardwareMap.get(Servo.class, "backstop");
@@ -186,8 +189,11 @@ public abstract class Robot extends CommandOpMode {
 
         slide = new MotorGroup(slideLeft, slideRight);
 
-        armSubsystem = new ArmSubsystem(arm, slideLeft, slide, endStop, armEncoder, telemetry);
+        armSubsystem = new ArmSubsystem(arm, slideLeft, slideAmp, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
+
+
+
 
         //intake
         claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);

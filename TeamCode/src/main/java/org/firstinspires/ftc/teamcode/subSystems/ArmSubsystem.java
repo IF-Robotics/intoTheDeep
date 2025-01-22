@@ -12,16 +12,19 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import java.util.LinkedList;
 
 @Config
 public class ArmSubsystem extends SubsystemBase {
 
+    private DcMotorEx slideAmp;
     private MotorEx arm, slideL;
     private MotorGroup slide;
     private Servo endStop;
@@ -78,10 +81,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     //constructor
-    public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
+    public ArmSubsystem(MotorEx arm, MotorEx slideL, DcMotorEx slideAmp, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
         this.slide = slide;
         this.slideL = slideL;
+        this.slideAmp = slideAmp;
         this.endStop = endStop;
         this.armEncoder = armEncoder;
         this.telemetry = telemetry;
@@ -235,6 +239,9 @@ public class ArmSubsystem extends SubsystemBase {
                     '}';
         }
     }
+    public void setCurrentAlert(){
+        slideAmp.setCurrentAlert(4.0, CurrentUnit.AMPS);
+    }
 
     @Override
     public void periodic() {
@@ -257,7 +264,15 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
         telemetry.addData("error", targetAngle - angle);*/
-    
+
+        if(slideAmp.isMotorEnabled()) {
+            if (slideAmp.isOverCurrent()) {
+                telemetry.addData("Warning", "Slide motor overcurrent!");
+                slide.set(0); // Stop the motor
+            }
+        }
+            
+
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);
         slidePower = slideController.calculate(slideExtention, setSlideTarget) + slideKF;
