@@ -67,7 +67,7 @@ public class Globals {
     public static double armBackX = -1;
     public static double armBackY = 17;
     //arm high basket
-    public static double armHighBasketX = -3;
+    public static double armHighBasketX = -2;
     public static double  armHighBasketY = 45;
     //arm when front high chamber
     public static double armFrontHighChamberX = 20;
@@ -144,5 +144,8 @@ public class Globals {
     public static double testX = 0.0;
     public static double testY = 0.0;
     public static double testHeading = 0;
+
+    //teleop mode
+    public static boolean teleopSpec = true;
 
 }

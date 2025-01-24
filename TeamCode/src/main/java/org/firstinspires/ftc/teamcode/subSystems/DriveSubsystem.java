@@ -71,6 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
 
+
     //constructor for auto
     public DriveSubsystem(MotorEx FR, MotorEx FL, MotorEx BR, MotorEx BL, MecanumDrive mecanumDrive, Telemetry telemetry, GoBildaPinpointDriver pinpoint) {
         this.FR = FR;
@@ -203,7 +204,9 @@ public class DriveSubsystem extends SubsystemBase {
     public void readPinpoint() {
         pinpoint.update();
         Pose2D tempPos = pinpoint.getPosition();
-        currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
+        if(!(Double.isNaN(tempPos.getX(DistanceUnit.INCH)) || Double.isNaN(tempPos.getY(DistanceUnit.INCH)) || Double.isNaN(tempPos.getHeading(AngleUnit.DEGREES)))){
+            currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
+        }
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());

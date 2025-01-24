@@ -19,7 +19,7 @@ public class ArmCoordinatesCommand extends CommandBase {
 
 
     @Override
-    public void execute(){
+    public void initialize(){
         armSubsystem.setArmCoordinates(x, y);
     }
 

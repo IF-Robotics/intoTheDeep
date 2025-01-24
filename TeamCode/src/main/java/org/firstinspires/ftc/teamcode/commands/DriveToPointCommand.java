@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -21,6 +24,8 @@ public class DriveToPointCommand extends CommandBase {
         this.targetPos = targetPos;
         this.translationalTolerance = translationalTolerance;
         this.headingTolerance = headingTolerance;
+
+        addRequirements();
     }
 
 
@@ -28,11 +33,11 @@ public class DriveToPointCommand extends CommandBase {
     public void initialize() {
         timer.reset();
         loopCount = 0;
+        driveSubsystem.driveToPoint(targetPos);
     }
 
     @Override
     public void execute() {
-        driveSubsystem.driveToPoint(targetPos);
         loopCount++;
     }
 

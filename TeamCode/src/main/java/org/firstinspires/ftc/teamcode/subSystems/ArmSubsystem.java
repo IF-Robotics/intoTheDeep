@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -31,20 +33,20 @@ public class ArmSubsystem extends SubsystemBase {
     public static double armSuperWeakKP = .005;
     private double ff;
     private PIDController armController;
-    private double setArmTargetAngle = 0;
+    public static double setArmTargetAngle = 0;
     private double armPower;
     private double rawAngle;
     private double correctedAngle = 0;
 
     //slide pidf
-    public static double slideKP = .4, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
+    public static double slideKP = .2, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
     private PIDController slideController;
     private final double ticksPerIn = (2786/32.75)*(31.967/52.1537);
     private int slideTicks = 1;
     private double slidePower = 0;
     private double slideExtention = 0;
     public static double slideWristOffset = 7.75;
-    private double setSlideTarget = 7.75;
+    public static double setSlideTarget = 7.75;
     private double slideError = 0;
 
     //arm coordinates
@@ -71,6 +73,10 @@ public class ArmSubsystem extends SubsystemBase {
         UP,
         DOWN
     }
+
+    //last command store
+    Command currentCommand;
+    Command lastCommand;
 
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
@@ -231,6 +237,10 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
+    public Command getLastCommand(){
+        return lastCommand;
+    }
+
     @Override
     public void periodic() {
         //read
@@ -240,11 +250,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //arm pid
         //lowering the kp when the arm is up
-        if(correctedAngle > 80){
-            armController = new PIDController(armWeakKP, kIarm, kDarm);
-        } else {
             armController = new PIDController(kParm, kIarm, kDarm);
-        }
         //feed forward
         ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
         armPower = armController.calculate(correctedAngle, setArmTargetAngle) + ff;
@@ -275,17 +281,30 @@ public class ArmSubsystem extends SubsystemBase {
         slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
 
         telemetry.addData("armAngle", correctedAngle);
+        telemetry.addData("armTarget", armTargetAngle);
         telemetry.addData("armPower", armPower);
         telemetry.addData("armKP", armController.getP());
         telemetry.addData("armError", setArmTargetAngle - correctedAngle);
-        telemetry.addData("armAngleError", setArmTargetAngle - correctedAngle);
 
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);
 
+        telemetry.addData("targetArmX", targetX);
+        telemetry.addData("targetArmY", targetY);
         telemetry.addData("xArmPos", getCurrentX());
         telemetry.addData("yArmPos", getCurrentY());
         telemetry.addData("slideVelocity", getSlideVelocity());
+
+
+
+        //last command
+        currentCommand = CommandScheduler.getInstance().requiring(this);
+
+        if (currentCommand != null && currentCommand != lastCommand) {
+            lastCommand = currentCommand;
+        }
+        telemetry.addData("armSubsystemLastCommand", lastCommand != null ? lastCommand.getName() : "None");
+
 
     }
 
