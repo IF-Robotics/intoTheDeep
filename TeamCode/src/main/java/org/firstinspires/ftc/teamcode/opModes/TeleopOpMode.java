@@ -32,6 +32,7 @@ import org.firstinspires.ftc.teamcode.commands.VisionToSample;
 import org.firstinspires.ftc.teamcode.commandGroups.teleopSpecScore;
 
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
+import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
@@ -145,7 +146,7 @@ public class TeleopOpMode extends Robot {
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake
 //        tRight1.toggleWhenActive(new teleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem));
-        tRight1.whenActive(new VisionToSample(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, ()->{return false;},m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX));
+        tRight1.whenActive(new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, ()->{return false;},m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX));
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
                 retractAfterWallIntake,
@@ -169,17 +170,17 @@ public class TeleopOpMode extends Robot {
         //dropping sample (into observation zone)
         circle2.whenPressed(dropCommand);
         circle2.whenReleased(new DropOffCommand(armSubsystem, intakeSubsystem));
-        tRight1.whenActive(
-                new ConditionalCommand(
-                        dropCommand,
-                        new SequentialCommandGroup(
-                                new WaitForSlideCommand(armSubsystem, 8, 20),
-                                new WaitForArmCommand(armSubsystem, 0, 5)
-                        ),
-                        () -> armSubsystem.getArmAngle() < 45
-                )
-        );
-        tRight1.whenInactive(new DropOffCommand(armSubsystem, intakeSubsystem));
+//        tRight1.whenActive(
+//                new ConditionalCommand(
+//                        dropCommand,
+//                        new SequentialCommandGroup(
+//                                new WaitForSlideCommand(armSubsystem, 8, 20),
+//                                new WaitForArmCommand(armSubsystem, 0, 5)
+//                        ),
+//                        () -> armSubsystem.getArmAngle() < 45
+//                )
+//        );
+//        tRight1.whenInactive(new DropOffCommand(armSubsystem, intakeSubsystem));
 
 
         //baskets

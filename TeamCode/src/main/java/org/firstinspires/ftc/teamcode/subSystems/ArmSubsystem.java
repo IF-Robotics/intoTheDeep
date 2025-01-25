@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm PIDF
     public static double kParm = 0.05, kIarm = 0, kDarm = 0.01;
     public static double armWeakKP = 0.03;
-    public static double armAngleOffset = -178.5/*-39*/;
+    public static double armAngleOffset = -181.5/*-39*/;
     public static double armSuperWeakKP = .005;
     private double ff;
     private PIDController armController;
@@ -92,9 +92,13 @@ public class ArmSubsystem extends SubsystemBase {
 
 
         //Adding each val with a key
+        slideKgLut.add(-999, 0.135);
+
         slideKgLut.add(7, 0.135);
         slideKgLut.add(23.9, .2);
         slideKgLut.add(41, .25);
+        slideKgLut.add(999, .25);
+
         //generating final equation
         slideKgLut.createLUT();
     }

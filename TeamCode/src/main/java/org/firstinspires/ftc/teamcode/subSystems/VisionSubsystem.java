@@ -85,7 +85,7 @@ public class VisionSubsystem extends SubsystemBase {
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
             .setRoi(ImageRegion.entireFrame())
             .setBlurSize(5)
-            .setErodeSize(4);
+            .setErodeSize(2);
 
     ColorBlobLocatorProcessor allianceLocatorProcess;
     ColorBlobLocatorProcessor yellowLocatorProcess = new ColorBlobLocatorProcessor.Builder()
