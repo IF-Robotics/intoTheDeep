@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
+import com.arcrobotics.ftclib.util.InterpLUT;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -25,26 +28,27 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     //arm PIDF
-    public static double kParm = 0.05, kIarm = 0, kDarm = 0.01, kFarm = .3;
+    public static double kParm = 0.05, kIarm = 0, kDarm = 0.01;
     public static double armWeakKP = 0.03;
     public static double armAngleOffset = -178.5/*-39*/;
     public static double armSuperWeakKP = .005;
     private double ff;
     private PIDController armController;
-    private double setArmTargetAngle = 0;
+    public static double setArmTargetAngle = 0;
     private double armPower;
     private double rawAngle;
     private double correctedAngle = 0;
+    private InterpLUT slideKgLut = new InterpLUT();
 
     //slide pidf
-    public static double slideKP = .3, slideKI = 0.0, slideKD = 0.0, slideKF = 0.00;
+    public static double slideKP = .2, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
     private PIDController slideController;
     private final double ticksPerIn = (2786/32.75)*(31.967/52.1537);
     private int slideTicks = 1;
     private double slidePower = 0;
-    private double slideExtention = 0;
+    private double slideExtention = 7.75;
     public static double slideWristOffset = 7.75;
-    private double setSlideTarget = 7.75;
+    public static double setSlideTarget = 7.75;
     private double slideError = 0;
 
     //arm coordinates
@@ -72,6 +76,10 @@ public class ArmSubsystem extends SubsystemBase {
         DOWN
     }
 
+    //last command store
+    Command currentCommand;
+    Command lastCommand;
+
     //constructor
     public ArmSubsystem(MotorEx arm, MotorEx slideL, MotorGroup slide, Servo endStop, AnalogInput armEncoder, Telemetry telemetry) {
         this.arm = arm;
@@ -81,6 +89,14 @@ public class ArmSubsystem extends SubsystemBase {
         this.armEncoder = armEncoder;
         this.telemetry = telemetry;
         wallActive = false;
+
+
+        //Adding each val with a key
+        slideKgLut.add(7, 0.135);
+        slideKgLut.add(23.9, .2);
+        slideKgLut.add(41, .25);
+        //generating final equation
+        slideKgLut.createLUT();
     }
 
     public void manualArm(double armPower, double slidePower){
@@ -231,6 +247,10 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
+    public Command getLastCommand(){
+        return lastCommand;
+    }
+
     @Override
     public void periodic() {
         //read
@@ -240,13 +260,9 @@ public class ArmSubsystem extends SubsystemBase {
 
         //arm pid
         //lowering the kp when the arm is up
-        if(correctedAngle > 80){
-            armController = new PIDController(armWeakKP, kIarm, kDarm);
-        } else {
             armController = new PIDController(kParm, kIarm, kDarm);
-        }
         //feed forward
-        ff = kFarm * Math.cos(Math.toRadians(correctedAngle));
+        ff = Math.cos(Math.toRadians(correctedAngle)) * slideKgLut.get(slideExtention);
         armPower = armController.calculate(correctedAngle, setArmTargetAngle) + ff;
         /*telemetry.addData("ff", ff);
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
@@ -257,7 +273,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);
-        slidePower = slideController.calculate(slideExtention, setSlideTarget) + Math.sin(Math.toRadians(correctedAngle))*slideKF;
+        slidePower = slideController.calculate(slideExtention, setSlideTarget) + Math.cos(Math.toRadians(correctedAngle))*slideKF;
         //telemetry.addData("targetIN", targetInches);
         //telemetry.addData("slideTicks", slideTicks);
 
@@ -280,17 +296,30 @@ public class ArmSubsystem extends SubsystemBase {
         slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
 
         telemetry.addData("armAngle", correctedAngle);
+        telemetry.addData("armTarget", setArmTargetAngle);
         telemetry.addData("armPower", armPower);
         telemetry.addData("armKP", armController.getP());
         telemetry.addData("armError", setArmTargetAngle - correctedAngle);
-        telemetry.addData("armAngleError", setArmTargetAngle - correctedAngle);
 
         telemetry.addData("slidePower", slidePower);
         telemetry.addData("slideExtention", slideExtention);
 
+        telemetry.addData("targetArmX", targetX);
+        telemetry.addData("targetArmY", targetY);
         telemetry.addData("xArmPos", getCurrentX());
         telemetry.addData("yArmPos", getCurrentY());
         telemetry.addData("slideVelocity", getSlideVelocity());
+
+
+
+        //last command
+        currentCommand = CommandScheduler.getInstance().requiring(this);
+
+        if (currentCommand != null && currentCommand != lastCommand) {
+            lastCommand = currentCommand;
+        }
+        telemetry.addData("armSubsystemLastCommand", lastCommand != null ? lastCommand.getName() : "None");
+
 
     }
 

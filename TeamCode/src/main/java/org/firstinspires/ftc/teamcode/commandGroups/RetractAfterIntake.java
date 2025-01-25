@@ -26,9 +26,9 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 new WaitCommand(80),
                 //retract slides & flip up intake
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 0),
-                new WaitForSlideCommand(armSubsystem, 8, 10),
+                new WaitForSlideCommand(armSubsystem, 8, 15),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, rollWhenArmBack)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, rollWhenBasket)
         );
 
         addRequirements(armSubsystem, intakeSubsystem);

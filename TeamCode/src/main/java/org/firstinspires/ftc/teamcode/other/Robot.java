@@ -28,6 +28,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.commandGroups.HighBasketCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
@@ -91,6 +92,7 @@ public abstract class Robot extends CommandOpMode {
     public static HighChamberCommand highChamberCommand;
     public static ScoreHighChamberCommand scoreHighChamberCommand;
     public static RetractAfterWallIntake retractAfterWallIntake;
+    public static HighBasketCommand highBasketCommand;
 
     //test statics
     public static double x = 0, y = 0;
@@ -331,6 +333,7 @@ public abstract class Robot extends CommandOpMode {
         highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
         scoreHighChamberCommand = new ScoreHighChamberCommand(armSubsystem, intakeSubsystem);
         retractAfterWallIntake = new RetractAfterWallIntake(armSubsystem, intakeSubsystem);
+        highBasketCommand = new HighBasketCommand(armSubsystem, intakeSubsystem);
 
     }
 
