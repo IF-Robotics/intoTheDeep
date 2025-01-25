@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -26,7 +25,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighBasketCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commandGroups.teleopSpecScore;
+import org.firstinspires.ftc.teamcode.commandGroups.TeleopSpecScore;
 
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
@@ -138,6 +137,7 @@ public class TeleopOpMode extends Robot {
         );
 
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
+        dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
@@ -152,7 +152,12 @@ public class TeleopOpMode extends Robot {
         square2.whenPressed(new HighChamberCommand(armSubsystem, intakeSubsystem));
         square2.whenReleased(new ScoreHighChamberCommand(armSubsystem, intakeSubsystem));
         //auto spec scoring
-        square1.toggleWhenPressed(new teleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem));
+        square1.toggleWhenPressed(new ConditionalCommand(
+                new TeleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem),
+                new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
+                () -> !(armSubsystem.getTargetX() == armIntakeWallX && armSubsystem.getTargetY() == armIntakeWallY)
+                )
+        );
 
         //dropping sample (into observation zone)
         circle2.whenPressed(dropCommand);

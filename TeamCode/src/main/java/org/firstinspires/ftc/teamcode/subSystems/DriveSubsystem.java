@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.Robot.voltageCompensation;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
@@ -179,8 +180,8 @@ public class DriveSubsystem extends SubsystemBase {
         vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
-        headingCalculation = -headingController.calculate(-correctedErrorHeading);
-        correctedVectorMagnitude = -Math.pow((Math.abs(translationController.calculate(rawVectorMagnitude,0))) * Math.signum(rawVectorMagnitude), translationKR);
+        headingCalculation = voltageCompensation * headingController.calculate(correctedErrorHeading);
+        correctedVectorMagnitude = voltageCompensation * -Math.pow((Math.abs(translationController.calculate(rawVectorMagnitude,0))) * Math.signum(rawVectorMagnitude), translationKR);
 
         //testing
         telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);

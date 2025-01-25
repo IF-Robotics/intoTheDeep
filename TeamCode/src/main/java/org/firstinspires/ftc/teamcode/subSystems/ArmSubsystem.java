@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.Robot.voltageCompensation;
+
+import android.util.Log;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
@@ -28,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     //arm PIDF
-    public static double kParm = 0.05, kIarm = 0, kDarm = 0.01;
+    public static double kParm = 0.05, kIarm = 0, kDarm = 0.01, kFarm = 1.5, kGarm = 2;
     public static double armWeakKP = 0.03;
     public static double armAngleOffset = -178.5/*-39*/;
     public static double armSuperWeakKP = .005;
@@ -54,7 +57,7 @@ public class ArmSubsystem extends SubsystemBase {
     //arm coordinates
     private double slideTargetIn;
     private double armTargetAngle;
-    private double armHeight = (24.5 + 24 + 6*24) / 25.4;
+    private double armHeight = (24.5 + 24 + 6*24) / 25.4; //7.578
     private double targetX = armFoldX;
     private double targetY = armFoldY;
 
@@ -92,9 +95,11 @@ public class ArmSubsystem extends SubsystemBase {
 
 
         //Adding each val with a key
+        slideKgLut.add(-999999, 0.135);
         slideKgLut.add(7, 0.135);
         slideKgLut.add(23.9, .2);
         slideKgLut.add(41, .25);
+        slideKgLut.add(99999999, .25);
         //generating final equation
         slideKgLut.createLUT();
     }
@@ -123,6 +128,10 @@ public class ArmSubsystem extends SubsystemBase {
         //write
         setArm(armTargetAngle);
         setSlide(slideTargetIn);
+        for(int i=0; i<1000; i++){
+            Log.i("stupidBruh", "stupid breuh");
+            Log.i("stupidBruhArm",String.valueOf(armTargetAngle));
+        }
     }
 
     public void setArmY(double y){
@@ -173,6 +182,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double getSlideTarget(){
         return setSlideTarget;
+    }
+
+    public double getTargetX(){
+        return targetX;
+    }
+
+    public double getTargetY(){
+        return targetY;
     }
 
     //return intakeWall state
@@ -253,17 +270,18 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Log.i("stupidBruhturetargetangle", String.valueOf(setArmTargetAngle));
         //read
         slideTicks = slideL.getCurrentPosition();
         rawAngle = armEncoder.getVoltage()/3.3 * 360;
         correctedAngle = rawAngle + armAngleOffset;
+        Log.i("ArmAngleCorrected", String.valueOf(correctedAngle));
 
         //arm pid
-        //lowering the kp when the arm is up
-            armController = new PIDController(kParm, kIarm, kDarm);
+        armController = new PIDController(kParm * (kFarm * slideKgLut.get(slideExtention)), kIarm, kDarm);
         //feed forward
-        ff = Math.cos(Math.toRadians(correctedAngle)) * slideKgLut.get(slideExtention);
-        armPower = armController.calculate(correctedAngle, setArmTargetAngle) + ff;
+        ff = kGarm * (Math.cos(Math.toRadians(correctedAngle)) * slideKgLut.get(slideExtention));
+        armPower = (voltageCompensation * (Math.sqrt(Math.abs(armController.calculate(correctedAngle, setArmTargetAngle))) * Math.signum(setArmTargetAngle - correctedAngle))) + ff;
         /*telemetry.addData("ff", ff);
         telemetry.addData("cos", Math.cos(Math.toRadians(angle)));;
         telemetry.addData("targetAngle", targetAngle);
@@ -273,7 +291,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //slide pid
         slideController = new PIDController(slideKP, slideKI, slideKD);
-        slidePower = slideController.calculate(slideExtention, setSlideTarget) + Math.cos(Math.toRadians(correctedAngle))*slideKF;
+        slidePower = (voltageCompensation * slideController.calculate(slideExtention, setSlideTarget)) + (Math.sin(Math.toRadians(correctedAngle)) * slideKF);
         //telemetry.addData("targetIN", targetInches);
         //telemetry.addData("slideTicks", slideTicks);
 

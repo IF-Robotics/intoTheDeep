@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -24,6 +26,7 @@ public class WaitForArmCommand extends CommandBase {
     @Override
     public void initialize(){
         armSubsystem.setArm(targetAngle);
+        Log.i("stupidbruhtargetAngle", String.valueOf(targetAngle));
         timer.reset();
         loopCount = 0;
     }
@@ -31,12 +34,13 @@ public class WaitForArmCommand extends CommandBase {
     @Override
     public void execute(){
         armSubsystem.setArm(targetAngle);
+        Log.i("stupidbruhtargetAngle", String.valueOf(targetAngle));
         loopCount++;
     }
 
     @Override
     public boolean isFinished(){
-        if((armSubsystem.getArmAngle() > targetAngle - tolerance && armSubsystem.getArmAngle() < targetAngle + tolerance) && loopCount >= 2){
+        if(((armSubsystem.getArmAngle() > targetAngle - tolerance) && (armSubsystem.getArmAngle() < targetAngle + tolerance)) && loopCount >= 2){
             return true;
         } else {
             return false;

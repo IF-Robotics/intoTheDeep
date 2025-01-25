@@ -67,7 +67,7 @@ public class five_spec_auto extends Robot {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new WaitCommand(100),
                 //arm to home pos
-                new InstantCommand(() -> armSubsystem.setSlide(8)),
+                new InstantCommand(() -> armSubsystem.setSlide(12)),
                 new InstantCommand(() -> armSubsystem.setArm(60)),
 
 

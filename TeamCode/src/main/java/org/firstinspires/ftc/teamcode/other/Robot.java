@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
@@ -113,6 +114,14 @@ public abstract class Robot extends CommandOpMode {
 
     //system
     private LynxModule controlHub;
+
+    //voltage
+    private VoltageSensor voltageSensor;
+    public static double batteryVoltage = 12;
+    final double nominalVoltage = 12;
+    public static double voltageCompensation = 1;
+    private ElapsedTime voltageReadInterval = new ElapsedTime();
+
     //gamePads
     public GamepadEx m_driver;
     public GamepadEx m_driverOp;
@@ -137,6 +146,8 @@ public abstract class Robot extends CommandOpMode {
         //general system
         controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         manual = false;
@@ -229,19 +240,25 @@ public abstract class Robot extends CommandOpMode {
     public void run(){
         if (!flag) {
             super.run(); //whatever you need to run once
+            voltageReadInterval.reset();
             flag = true;
         }
 
         super.run();
 
 
-        //random
-        //telemetry.addData("currentArmCommand", driveSubsystem.currentArmCommand);
+        //voltage
+        if(voltageReadInterval.seconds() >= 1){
+            voltageReadInterval.reset();
+            batteryVoltage = voltageSensor.getVoltage();
+            voltageCompensation = batteryVoltage/nominalVoltage;
+        }
 
 
         if (gamepad1.start){
             schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
         }
+
 
         //other telemetry
         telemetry.addData("manual", manualArm);
