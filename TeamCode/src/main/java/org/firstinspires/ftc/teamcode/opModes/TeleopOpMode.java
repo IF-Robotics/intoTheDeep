@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -34,6 +35,7 @@ import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
+@Disabled
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
 
@@ -156,7 +158,7 @@ public class TeleopOpMode extends Robot {
         square1.toggleWhenPressed(new ConditionalCommand(
                 new TeleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem),
                 new ParallelCommandGroup(new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY), new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall)),
-                () -> !(armSubsystem.getTargetX() == armIntakeWallX && armSubsystem.getTargetY() == armIntakeWallY)
+                () -> (armSubsystem.getTargetX() == armIntakeWallX && armSubsystem.getTargetY() == armIntakeWallY)
                 )
         );
 

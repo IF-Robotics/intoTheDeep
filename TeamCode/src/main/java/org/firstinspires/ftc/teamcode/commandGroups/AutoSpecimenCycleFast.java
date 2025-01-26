@@ -2,21 +2,19 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
-import static org.firstinspires.ftc.teamcode.other.Robot.*;
 
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
-public class AutoSpecimenCycle extends SequentialCommandGroup {
-    public AutoSpecimenCycle(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
+public class AutoSpecimenCycleFast extends SequentialCommandGroup {
+    public AutoSpecimenCycleFast(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
         addCommands(
 
                 new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY),

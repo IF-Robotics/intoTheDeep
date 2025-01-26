@@ -10,40 +10,22 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Transform2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
+import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleFast;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
-import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
-import org.firstinspires.ftc.teamcode.commandGroups.scoreHighBasket;
+import org.firstinspires.ftc.teamcode.commandGroups.rightPreloadSpecScore;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
-import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
-import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.other.AutoBase;
 
 @Autonomous(name="5+1")
-public class five_spec_oneSample_auto extends Robot {
+public class five_spec_oneSample_auto extends AutoBase {
 
     @Override
     public void initialize(){
         super.initialize();
-        slideLeft.resetEncoder();
-
-        //schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber));
-        manualArm = false;
-
-        new InstantCommand(() -> armSubsystem.setArm(90)).schedule(true);
-        claw.setPosition(clawClose);
-
-
-        //turn on auto drive
-        driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
-
-
 
 
         schedule(new SequentialCommandGroup(
@@ -54,26 +36,8 @@ public class five_spec_oneSample_auto extends Robot {
                 //hold pos
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
 
-                //raise intake and arm
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(18)),
-                //wait
-                new WaitCommand(200),
-                //extend slides
-                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
-                //wait
-                new WaitCommand(500),
-
-
-                // Drive to high chamber
-                // Score specimen
-                new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
-                //open
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new WaitCommand(100),
-                //arm to home pos
-                new InstantCommand(() -> armSubsystem.setSlide(12)),
-                new InstantCommand(() -> armSubsystem.setArm(60)),
+                //score preload
+                new rightPreloadSpecScore(driveSubsystem, intakeSubsystem, armSubsystem),
 
 
                 // Drive to middle
@@ -125,10 +89,10 @@ public class five_spec_oneSample_auto extends Robot {
                 //drive close to pickup point
                 new DriveToPointCommand(driveSubsystem, new Pose2d(37, -50, Rotation2d.fromDegrees(180)), 2, 5),
 
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
 
 
 

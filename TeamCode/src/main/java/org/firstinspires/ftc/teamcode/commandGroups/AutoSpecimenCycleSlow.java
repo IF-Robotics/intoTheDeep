@@ -1,17 +1,13 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
 import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeWallX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeWallY;
 import static org.firstinspires.ftc.teamcode.other.Globals.armRightHighChamberX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armRightHighChamberY;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchFrontRightHighChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchPlaceFrontHighRightChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollFrontRightHighChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollPlaceFrontHighRightChamber;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.highChamberRight;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.wallPickUp;
 
@@ -27,8 +23,8 @@ import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
-public class AutoSpecimenCycle2 extends SequentialCommandGroup {
-    public AutoSpecimenCycle2(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
+public class AutoSpecimenCycleSlow extends SequentialCommandGroup {
+    public AutoSpecimenCycleSlow(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
         addCommands(
 
                 new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY),

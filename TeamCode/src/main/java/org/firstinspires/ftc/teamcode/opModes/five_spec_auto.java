@@ -12,11 +12,10 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
-import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle2;
+import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleSlow;
+import org.firstinspires.ftc.teamcode.commandGroups.rightPreloadSpecScore;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
-import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 
@@ -49,26 +48,8 @@ public class five_spec_auto extends Robot {
                 //hold pos
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
 
-                //raise intake and arm
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new InstantCommand(() -> armSubsystem.setArm(22)),
-                //wait
-                new WaitCommand(200),
-                //extend slides
-                new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
-                //wait
-                new WaitCommand(800),
-
-
-                // Drive to high chamber
-                // Score specimen
-                new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
-                //open
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
-                new WaitCommand(100),
-                //arm to home pos
-                new InstantCommand(() -> armSubsystem.setSlide(12)),
-                new InstantCommand(() -> armSubsystem.setArm(60)),
+                //score preload
+                new rightPreloadSpecScore(driveSubsystem, intakeSubsystem, armSubsystem),
 
 
                 // Drive to middle
@@ -120,10 +101,10 @@ public class five_spec_auto extends Robot {
                 //drive close to pickup point
                 new DriveToPointCommand(driveSubsystem, new Pose2d(37, -50, Rotation2d.fromDegrees(180)), 2, 5),
 
-                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle2(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleSlow(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleSlow(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleSlow(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleSlow(armSubsystem, intakeSubsystem, driveSubsystem),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(-180)), 1, 5)
         ));
 

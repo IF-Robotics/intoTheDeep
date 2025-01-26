@@ -11,7 +11,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycle;
+import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleFast;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
@@ -98,9 +98,9 @@ public class four_spec_auto extends Robot {
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
                 intakeWallCommand,
 
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
-                new AutoSpecimenCycle(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleFast(armSubsystem, intakeSubsystem, driveSubsystem),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(50, -56, Rotation2d.fromDegrees(0)), 1, 5)
 
 
