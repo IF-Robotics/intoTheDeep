@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
+import static com.arcrobotics.ftclib.command.CommandGroupBase.clearGroupedCommand;
+import static com.arcrobotics.ftclib.command.CommandGroupBase.clearGroupedCommands;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.arcrobotics.ftclib.command.ConditionalCommand;
@@ -137,7 +139,6 @@ public class TeleopOpMode extends Robot {
         );
 
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
-        dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
@@ -154,7 +155,7 @@ public class TeleopOpMode extends Robot {
         //auto spec scoring
         square1.toggleWhenPressed(new ConditionalCommand(
                 new TeleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem),
-                new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
+                new ParallelCommandGroup(new ArmCoordinatesCommand(armSubsystem, armIntakeWallX, armIntakeWallY), new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall)),
                 () -> !(armSubsystem.getTargetX() == armIntakeWallX && armSubsystem.getTargetY() == armIntakeWallY)
                 )
         );
