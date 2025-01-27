@@ -172,12 +172,6 @@ public class VisionSubsystem extends SubsystemBase {
         setExposure();
     }
 
-    public Optional<RotatedRect> getAllianceBoxFit(){
-        List<ColorBlobLocatorProcessor.Blob> blobs = allianceLocatorProcess.getBlobs();
-        if(blobs.isEmpty()){return Optional.empty();}
-        return getClosestBoxFit(blobs);
-    }
-
     /**
      *
      * (0,0) is at the upper left corner, so postiive x and y values mean growinig south east
@@ -189,14 +183,24 @@ public class VisionSubsystem extends SubsystemBase {
             return Optional.empty();
         }
 
-        double tx = desiredBoxFit.get().center.x-kDesiredX;
-        double ty = desiredBoxFit.get().center.y-kDesiredY;
-
-        return Optional.of(Arrays.asList(tx,ty));
+        return Optional.of(getOffsetFromBoxFit(desiredBoxFit.get()));
 
 
     }
 
+    public List<Double> getOffsetFromBoxFit(RotatedRect boxfit){
+
+        double tx = boxfit.center.x-kDesiredX;
+        double ty = boxfit.center.y-kDesiredY;
+
+        return Arrays.asList(tx,ty);
+    }
+
+    public Optional<RotatedRect> getAllianceBoxFit(){
+        List<ColorBlobLocatorProcessor.Blob> blobs = allianceLocatorProcess.getBlobs();
+        if(blobs.isEmpty()){return Optional.empty();}
+        return getClosestBoxFit(blobs);
+    }
     public Optional<RotatedRect> getYellowBoxFit(){
         List<ColorBlobLocatorProcessor.Blob> blobs = yellowLocatorProcess.getBlobs();
         if(blobs.isEmpty()){return Optional.empty();}
@@ -247,7 +251,7 @@ public class VisionSubsystem extends SubsystemBase {
         return Optional.of(getAngleFromRotatedRect(desiredBoxFit.get()));
     }
 
-    private double getAngleFromRotatedRect(RotatedRect boxFitBlob){
+    public double getAngleFromRotatedRect(RotatedRect boxFitBlob){
         //This math is essentially to find the angle considering that the long side is vertical would be 0 degrees
         //This math is likely unecessary but just to be safe added
         Point[] vertices = new Point[4];

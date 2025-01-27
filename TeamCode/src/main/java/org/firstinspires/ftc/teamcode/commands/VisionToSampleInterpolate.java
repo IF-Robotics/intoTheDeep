@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
+
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.math.MathUtils;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.acmerobotics.dashboard.canvas.Rotation;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -20,6 +24,7 @@ import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
+import org.opencv.core.RotatedRect;
 
 import java.util.List;
 import java.util.Optional;
@@ -143,24 +148,34 @@ public class VisionToSampleInterpolate extends CommandBase {
         turnpid = new BasicPID(new PIDCoefficients(kPTurn,0,0));
 
         driveSubsystem.readPinpoint();
-        Optional<List<Double>> allianceOffsets = visionSubsystem.getAllianceOffsets();
+        Optional<RotatedRect> allianceBoxFit = visionSubsystem.getAllianceBoxFit();
 
-        if(allianceOffsets.isPresent()&&!hasFoundBlock){
+        if(allianceBoxFit.isPresent()&&!hasFoundBlock){
             hasFoundBlock=true;
             Log.i("huhh", "hguhh");
 
-            double xOffsetInches = lutXOffset.get(allianceOffsets.get().get(0));
-            double yOffsetInches = lutYOffset.get(allianceOffsets.get().get(1));
-            Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), new Rotation2d()); //Y and X purposefully flipped
+            List<Double> allianceOffsets = visionSubsystem.getOffsetFromBoxFit(allianceBoxFit.get());
+            double xOffsetInches = lutXOffset.get(allianceOffsets.get(0));
+            double yOffsetInches = lutYOffset.get(allianceOffsets.get(1));
+
+            double allianceSkew = visionSubsystem.getAngleFromRotatedRect(allianceBoxFit.get());
+
+            Rotation2d allianceSkewRotation2d = new Rotation2d(Math.toRadians(allianceSkew));
+
+            Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), allianceSkewRotation2d);
+            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-5), new Rotation2d());
+
+
             Log.i("poseYOffset", String.valueOf(xOffsetInches));
             Log.i("poseXOffset", String.valueOf(yOffsetInches));
-            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-5), new Rotation2d());
+
             samplePoseFieldOriented = driveSubsystem.getPos().plus(robotToCameraTransform).plus(cameraToSampleTransform);
             Log.i("poseSampleFieldX", String.valueOf(samplePoseFieldOriented.getTranslation().getX()));
             Log.i("poseSampleFieldY", String.valueOf(samplePoseFieldOriented.getTranslation().getY()));
             Log.i("poseRobotX", String.valueOf(driveSubsystem.getPos().getTranslation().getX()));
             Log.i("poseRobotY", String.valueOf(driveSubsystem.getPos().getTranslation().getY()));
 
+            intakeSubsystem.setDiffy(allianceSkew, rollWhenIntake);
         }
 
         if (hasFoundBlock){
@@ -196,20 +211,30 @@ public class VisionToSampleInterpolate extends CommandBase {
 //
             armSubsystem.setSlide(slideExtension);
 
-            Optional<Double> angleToSet = visionSubsystem.getAllianceSkew();
-            if (angleToSet.isPresent()){
-            intakeSubsystem.setDiffy(angleToSet.get()*kPitchConversion);
-                wristAngleOnTarget=true;
+            double wristAngle = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getRotation().getDegrees();
+
+
+            //Technically could remove the ifs put i think its makes it more understandable
+            if(wristAngle>=105){
+                while(wristAngle>=105){
+                    wristAngle-=180;
+                }
             }
-            else{
-                wristAngleOnTarget=false;
+            else if (wristAngle<=-105){
+                while(wristAngle<=-105){
+                    wristAngle+=180;
+                }
             }
+
+            intakeSubsystem.setDiffy(wristAngle*kPitchConversion);
+        }
+        else{
+            driveSubsystem.teleDrive(slowMode, true, 10, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
         }
     }
 
     @Override
     public void end(boolean e){
-        intakeSubsystem.setDiffy(Globals.rollWhenIntake);
     }
 
     @Override
