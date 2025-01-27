@@ -119,7 +119,8 @@ public class TeleopOpMode extends Robot {
                         () -> armSubsystem.getArmAngle() < 10
                 ),
                 new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem),
-                () -> armSubsystem.getCurrentY() < 20
+                () -> armSubsystem.getCurrentY() < 15
+
                 ));
         dUp2.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
 
