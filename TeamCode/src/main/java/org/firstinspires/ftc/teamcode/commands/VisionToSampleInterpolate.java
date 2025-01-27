@@ -102,7 +102,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         lutXOffset.add(77.5,3.0);
         lutXOffset.add(93,3.5);
         lutXOffset.add(103.5,3.875);
-        lutXOffset.add(99999999,-3.875);
+        lutXOffset.add(99999999,3.875);
 
         lutYOffset.add(-999999999,2.75);
         lutYOffset.add(-75.0,2.75);
@@ -135,6 +135,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         intakeSubsystem.setDiffy(0,0);
         armSubsystem.setArm(5);
         driveSubsystem.setStartingPos(new Pose2d());
+        hasFoundBlock=false;
     }
 
     @Override
@@ -146,13 +147,14 @@ public class VisionToSampleInterpolate extends CommandBase {
 
         if(allianceOffsets.isPresent()&&!hasFoundBlock){
             hasFoundBlock=true;
+            Log.i("huhh", "hguhh");
 
             double xOffsetInches = lutXOffset.get(allianceOffsets.get().get(0));
             double yOffsetInches = lutYOffset.get(allianceOffsets.get().get(1));
             Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), new Rotation2d()); //Y and X purposefully flipped
             Log.i("poseYOffset", String.valueOf(xOffsetInches));
             Log.i("poseXOffset", String.valueOf(yOffsetInches));
-            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-2), new Rotation2d());
+            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-5), new Rotation2d());
             samplePoseFieldOriented = driveSubsystem.getPos().plus(robotToCameraTransform).plus(cameraToSampleTransform);
             Log.i("poseSampleFieldX", String.valueOf(samplePoseFieldOriented.getTranslation().getX()));
             Log.i("poseSampleFieldY", String.valueOf(samplePoseFieldOriented.getTranslation().getY()));
