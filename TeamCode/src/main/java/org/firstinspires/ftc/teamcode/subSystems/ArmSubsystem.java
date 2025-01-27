@@ -293,7 +293,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //calculate slide extension
         slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
-        telemetry.addData("armAmp", slideAmp.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("slideAmp", slideAmp.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armPower", armPower);
         telemetry.addData("armKP", armController.getP());
