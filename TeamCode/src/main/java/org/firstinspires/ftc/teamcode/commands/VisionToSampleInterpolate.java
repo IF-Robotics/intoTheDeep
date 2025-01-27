@@ -59,6 +59,8 @@ public class VisionToSampleInterpolate extends CommandBase {
 
     private Pose2d samplePoseFieldOriented;
 
+    double bruh = 0;
+
     public VisionToSampleInterpolate(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, BooleanSupplier slowMode, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn){
         this.driveSubsystem = driveSubsystem;
         this.visionSubsystem = visionSubsystem;
@@ -72,35 +74,34 @@ public class VisionToSampleInterpolate extends CommandBase {
 
         addRequirements(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem);
 
-        lutXOffset.add(-99999999,3.875);
+        lutXOffset.add(-99999999,-3.875);
 
-        lutXOffset.add(-103.5,3.875);
+        lutXOffset.add(-103.5,-3.875);
 //        lutXOffset.add(-99.8,3.75);
-        lutXOffset.add(-93,3.5);
+        lutXOffset.add(-93,-3.5);
 //        lutXOffset.add(-85.2,3.25);
-        lutXOffset.add(-77.5,3.0);
+        lutXOffset.add(-77.5,-3.0);
 //        lutXOffset.add(-71.6,2.75);
-        lutXOffset.add(-62.7,2.5);
+        lutXOffset.add(-62.7,-2.5);
 //        lutXOffset.add(-55.9,2.25);
-        lutXOffset.add(-50.2,2);
+        lutXOffset.add(-50.2,-2);
 //        lutXOffset.add(-42.4,1.75);
-        lutXOffset.add(-35.9,1.5);
+        lutXOffset.add(-35.9,-1.5);
 //        lutXOffset.add(-28,1.25);
-        lutXOffset.add(-19.1,1);
+        lutXOffset.add(-19.1,-1);
 //        lutXOffset.add(-11.8,0.75);
-        lutXOffset.add(-3.5,0.5);
+        lutXOffset.add(-3.5,-0.5);
 //        lutXOffset.add(-1,0.25);
         lutXOffset.add(0,0);
 
-        lutXOffset.add(3.5,-0.5);
-        lutXOffset.add(19.1,-1);
-        lutXOffset.add(35.9,-1.5);
-        lutXOffset.add(50.2,-2);
-        lutXOffset.add(62.7,-2.5);
-        lutXOffset.add(77.5,-3.0);
-        lutXOffset.add(93,-3.5);
-        lutXOffset.add(103.5,-3.875);
-
+        lutXOffset.add(3.5,0.5);
+        lutXOffset.add(19.1,1);
+        lutXOffset.add(35.9,1.5);
+        lutXOffset.add(50.2,2);
+        lutXOffset.add(62.7,2.5);
+        lutXOffset.add(77.5,3.0);
+        lutXOffset.add(93,3.5);
+        lutXOffset.add(103.5,3.875);
         lutXOffset.add(99999999,-3.875);
 
         lutYOffset.add(-999999999,2.75);
@@ -133,6 +134,7 @@ public class VisionToSampleInterpolate extends CommandBase {
     public void initialize(){
         intakeSubsystem.setDiffy(0,0);
         armSubsystem.setArm(5);
+        driveSubsystem.setStartingPos(new Pose2d());
     }
 
     @Override
@@ -147,18 +149,37 @@ public class VisionToSampleInterpolate extends CommandBase {
 
             double xOffsetInches = lutXOffset.get(allianceOffsets.get().get(0));
             double yOffsetInches = lutYOffset.get(allianceOffsets.get().get(1));
-            Transform2d clawToSampleTransform = new Transform2d(new Translation2d(yOffsetInches,xOffsetInches), new Rotation2d()); //Y and X purposefully flipped
-            Transform2d robotToSampleTransform = new Transform2d(new Translation2d(armSubsystem.getCurrentX(),0), new Rotation2d());
-            samplePoseFieldOriented = driveSubsystem.getPos().plus(robotToSampleTransform).plus(clawToSampleTransform);
+            Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), new Rotation2d()); //Y and X purposefully flipped
+            Log.i("poseYOffset", String.valueOf(xOffsetInches));
+            Log.i("poseXOffset", String.valueOf(yOffsetInches));
+            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-2), new Rotation2d());
+            samplePoseFieldOriented = driveSubsystem.getPos().plus(robotToCameraTransform).plus(cameraToSampleTransform);
+            Log.i("poseSampleFieldX", String.valueOf(samplePoseFieldOriented.getTranslation().getX()));
+            Log.i("poseSampleFieldY", String.valueOf(samplePoseFieldOriented.getTranslation().getY()));
+            Log.i("poseRobotX", String.valueOf(driveSubsystem.getPos().getTranslation().getX()));
+            Log.i("poseRobotY", String.valueOf(driveSubsystem.getPos().getTranslation().getY()));
+
         }
 
         if (hasFoundBlock){
-            Translation2d botToSample = samplePoseFieldOriented.minus(driveSubsystem.getPos()).getTranslation();
+            Translation2d botToSample = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getTranslation();
+
+
             //CCW is positive
-            double headingErrorRadians  = Math.atan2(botToSample.getY(), botToSample.getX());
+            double headingErrorRadians  = Math.atan2(-botToSample.getX(), botToSample.getY());
             double slideExtension = botToSample.getNorm();
-            Log.i("stupidSlide", String.valueOf(slideExtension));
-            Log.i("stupidturning", String.valueOf(headingErrorRadians/(2*Math.PI)));
+
+            bruh++;
+            if(bruh%100==10) {
+                Log.i("boseRelativeX", String.valueOf(botToSample.getX()));
+                Log.i("boseRelativeY", String.valueOf(botToSample.getY()));
+                Log.i("boseRobotX", String.valueOf(driveSubsystem.getPos().getTranslation().getX()));
+                Log.i("boseRobotY", String.valueOf(driveSubsystem.getPos().getTranslation().getY()));
+                Log.i("boseSampleX", String.valueOf(samplePoseFieldOriented.getX()));
+                Log.i("boseSampleY", String.valueOf(samplePoseFieldOriented.getY()));
+                Log.i("stupidSlide", String.valueOf(slideExtension));
+                Log.i("stupidturning", String.valueOf(180 * headingErrorRadians / (Math.PI)));
+            }
 
 //            Log.i("stupidX", String.valueOf(botToSample.getX()));
 //            Log.i("stupidY", String.valueOf(botToSample.getY()));
@@ -168,14 +189,14 @@ public class VisionToSampleInterpolate extends CommandBase {
 //            Log.i("stupidOmega", String.valueOf(omega));
             double headingCalculation = turnpid.calculate(0, headingErrorRadians);
             double turnVelocity = Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
-            Log.i("stupidOmega", String.valueOf(turnVelocity));
+//            Log.i("stupidOmega", String.valueOf(turnVelocity));
             driveSubsystem.teleDrive(slowMode, true, 10, strafe.getAsDouble(), forward.getAsDouble(), turnVelocity);
-
+//
             armSubsystem.setSlide(slideExtension);
 
             Optional<Double> angleToSet = visionSubsystem.getAllianceSkew();
             if (angleToSet.isPresent()){
-//            intakeSubsystem.setDiffy(angleToSet.get()*kPitchConversion);
+            intakeSubsystem.setDiffy(angleToSet.get()*kPitchConversion);
                 wristAngleOnTarget=true;
             }
             else{
