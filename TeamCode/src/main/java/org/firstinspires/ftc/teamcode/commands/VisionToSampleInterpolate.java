@@ -139,7 +139,6 @@ public class VisionToSampleInterpolate extends CommandBase {
     public void initialize(){
         intakeSubsystem.setDiffy(0,0);
         armSubsystem.setArm(5);
-        driveSubsystem.setStartingPos(new Pose2d());
         hasFoundBlock=false;
     }
 
@@ -163,7 +162,7 @@ public class VisionToSampleInterpolate extends CommandBase {
             Rotation2d allianceSkewRotation2d = new Rotation2d(Math.toRadians(allianceSkew));
 
             Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), allianceSkewRotation2d);
-            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-5), new Rotation2d());
+            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-4), new Rotation2d());
 
 
             Log.i("poseYOffset", String.valueOf(xOffsetInches));
@@ -209,7 +208,7 @@ public class VisionToSampleInterpolate extends CommandBase {
 //            Log.i("stupidOmega", String.valueOf(turnVelocity));
             driveSubsystem.teleDrive(slowMode, true, 10, strafe.getAsDouble(), forward.getAsDouble(), turnVelocity);
 //
-            armSubsystem.setSlide(slideExtension);
+            armSubsystem.setArmX(slideExtension);
 
             double wristAngle = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getRotation().getDegrees();
 
@@ -226,7 +225,7 @@ public class VisionToSampleInterpolate extends CommandBase {
                 }
             }
 
-            intakeSubsystem.setDiffy(wristAngle*kPitchConversion);
+            intakeSubsystem.setDiffy(-wristAngle*kPitchConversion);
         }
         else{
             driveSubsystem.teleDrive(slowMode, true, 10, strafe.getAsDouble(), forward.getAsDouble(), turn.getAsDouble());
