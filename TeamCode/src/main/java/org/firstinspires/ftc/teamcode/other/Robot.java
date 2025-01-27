@@ -338,7 +338,7 @@ public abstract class Robot extends CommandOpMode {
 
         //command groups
         retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem);
-        retractFromBasket = new RetractFromBasket(armSubsystem, intakeSubsystem);
+        retractFromBasket = new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem);
         highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
         scoreHighChamberCommand = new ScoreHighChamberCommand(armSubsystem, intakeSubsystem);
         retractAfterWallIntake = new RetractAfterWallIntake(armSubsystem, intakeSubsystem);

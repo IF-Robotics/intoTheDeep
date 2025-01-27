@@ -47,7 +47,7 @@ public class scoreHighBasket extends ParallelDeadlineGroup {
                                 //wait
                                 new WaitCommand(0),
                                 //drop sample & arm down
-                                new RetractFromBasket(armSubsystem, intakeSubsystem)
+                                new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem)
                         ),
                         new holdDTPosCommand(driveSubsystem)
                 );

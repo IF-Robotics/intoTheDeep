@@ -18,19 +18,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commandGroups.ClimbLevel3;
+import org.firstinspires.ftc.teamcode.commandGroups.DropCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.DropOffCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeCloseCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commandGroups.ScoreHighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighBasketCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
+import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.TeleopSpecScore;
 
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
+import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
@@ -112,9 +116,9 @@ public class TeleopOpMode extends Robot {
                                 new WaitForArmCommand(armSubsystem, 0, 5),
                                 new IntakeSub(armSubsystem, intakeSubsystem)
                         ),
-                        () -> armSubsystem.getArmAngle() < 20
+                        () -> armSubsystem.getArmAngle() < 10
                 ),
-                new RetractFromBasket(armSubsystem, intakeSubsystem),
+                new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem),
                 () -> armSubsystem.getCurrentY() < 20
                 ));
         dUp2.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
@@ -144,7 +148,7 @@ public class TeleopOpMode extends Robot {
         //wall intake
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
-                retractAfterWallIntake,
+                new RetractAfterWallIntake(armSubsystem, intakeSubsystem),
                 () -> {
                     armSubsystem.toggleWallState();
                     return armSubsystem.getWallState();
@@ -163,11 +167,11 @@ public class TeleopOpMode extends Robot {
         );
 
         //dropping sample (into observation zone)
-        circle2.whenPressed(dropCommand);
+        circle2.whenPressed(new DropCommand(armSubsystem, intakeSubsystem));
         circle2.whenReleased(new DropOffCommand(armSubsystem, intakeSubsystem));
         tRight1.whenActive(
                 new ConditionalCommand(
-                        dropCommand,
+                        new DropCommand(armSubsystem, intakeSubsystem),
                         new SequentialCommandGroup(
                                 new WaitForSlideCommand(armSubsystem, 8, 20),
                                 new WaitForArmCommand(armSubsystem, 0, 5)
@@ -179,7 +183,7 @@ public class TeleopOpMode extends Robot {
 
 
         //baskets
-        triangle2.whenPressed(highBasketCommand);
+        triangle2.whenPressed(new HighBasketCommand(armSubsystem, intakeSubsystem));
         triangle1.whenPressed(new ConditionalCommand(
                 new SequentialCommandGroup(
                     //move to high basket
@@ -201,20 +205,20 @@ public class TeleopOpMode extends Robot {
 
         //retract after scoring in the baskets
         cross1.whenPressed(new SequentialCommandGroup(
-                new RetractFromBasket(armSubsystem, intakeSubsystem),
-                new IntakeSub(armSubsystem, intakeSubsystem)
+                new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem),
+                new IntakeSub(armSubsystem, intakeSubsystem).alongWith(new TeleDriveCommand(driveSubsystem, m_driver, true, 10, m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX))
                 )
         );
-        cross2.whenPressed(new RetractFromBasket(armSubsystem, intakeSubsystem));
+        cross2.whenPressed(new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem));
 
         //climbing
         bRight2.whenPressed(new ParallelCommandGroup(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),armPositionToClimb));
         bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //testing
-        start1.whenPressed(setIntakeCommand);
-        start2.whenPressed(intakeWhenHighBasketCommand);
-        start2.whenPressed(armManualCommand);
+        start1.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
+        start2.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket));
+        start2.whenPressed(new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY));
 
         //reset pinpoint imu
         back1.whenPressed(new InstantCommand(() -> driveSubsystem.resetPinpointIMU()));

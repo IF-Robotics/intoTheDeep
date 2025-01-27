@@ -22,9 +22,9 @@ public class IntakeSub extends SequentialCommandGroup {
             //reset intake array
             new InstantCommand(() -> intakeSubsystem.resetRotateIntake()),
             //move intake down
-            new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake),
+            new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake),
             //wait for arm to be horizontal
-            new WaitForArmCommand(armSubsystem, 0, 8),
+            new WaitForArmCommand(armSubsystem, 0, 10),
             //arm & intake to correct pos
             new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY)
         );

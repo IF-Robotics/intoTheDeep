@@ -132,7 +132,7 @@ public class five_spec_oneSample_auto extends AutoBase {
                 //wait
                 new WaitCommand(500),
                 //drop sample & arm down
-                new RetractFromBasket(armSubsystem, intakeSubsystem),
+                new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem),
 
 
 

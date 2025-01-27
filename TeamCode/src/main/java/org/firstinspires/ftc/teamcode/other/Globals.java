@@ -104,8 +104,8 @@ public class Globals {
     public static double armParkLeftAutoY = 23;
 
     //endstop
-    public static double endstopUp = .43;
-    public static double endstopDown = 0;
+    public static double endstopUp = .463;
+    public static double endstopDown = 1;
 
     //arm when climbing
     //climbing to first rung

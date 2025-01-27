@@ -129,6 +129,10 @@ public class DriveSubsystem extends SubsystemBase {
         readPinpoint();
     }
 
+    public void driveRobotCentric(double strafeSpeed, double forwardSpeed, double turnSpeed) {
+        mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, turnSpeed);
+    }
+
     public void driveToPoint(Pose2d targetPos){
         this.targetPos = targetPos;
     }

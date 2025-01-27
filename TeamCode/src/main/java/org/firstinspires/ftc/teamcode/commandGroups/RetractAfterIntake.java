@@ -28,7 +28,7 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 0),
                 new WaitForSlideCommand(armSubsystem, 8, 15),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, rollWhenBasket)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, 0)
         );
 
         addRequirements(armSubsystem, intakeSubsystem);
