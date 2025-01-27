@@ -38,6 +38,7 @@ import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 
 @Disabled
 @TeleOp(name="teleOpFunnyTest")
@@ -213,13 +214,16 @@ public class TeleopOpMode extends Robot {
         cross2.whenPressed(new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem));
 
         //climbing
-        bRight2.whenPressed(new ParallelCommandGroup(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),armPositionToClimb));
+        bRight2.whenPressed(new ParallelCommandGroup(
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
+                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
+                armPositionToClimb));
         bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //testing
         start1.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
         start2.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket));
-        start2.whenPressed(new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY));
+        start2.whenPressed(new ArmManualCommand(armSubsystem, m_driverOp::getRightY, m_driverOp::getLeftY));
 
         //reset pinpoint imu
         back1.whenPressed(new InstantCommand(() -> driveSubsystem.resetPinpointIMU()));

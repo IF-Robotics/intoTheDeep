@@ -77,7 +77,6 @@ public abstract class Robot extends CommandOpMode {
     public static IntakeCommand intakeFrontHighChamberCommand;
     public static IntakeCommand intakeLastLeftAutoCommand;
     public static IntakeCommand intakeRightFrontHighChamberCommand;
-    //public static IntakeCommand intakeRightScoreFrontHighChamberCommand;
     public static IntakeCommand intakeAutoRightCommand;
     public static IntakeCommand intakeAutoRightGrabCommand;
 
@@ -305,7 +304,7 @@ public abstract class Robot extends CommandOpMode {
 
 
         //climbing
-        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY);
+        armManualCommand = new ArmManualCommand(armSubsystem, m_driverOp::getRightY, m_driverOp::getLeftY);
         armPositionToClimb = new ArmCoordinatesCommand(armSubsystem, armPositionToClimbX, armPositionToClimbY);
 
         //INTAKE
