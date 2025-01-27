@@ -5,6 +5,8 @@ import static org.firstinspires.ftc.teamcode.other.Globals.armReadySubIntakeY;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenIntake;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
@@ -20,9 +22,9 @@ public class IntakeSub extends SequentialCommandGroup {
             //reset intake array
             new InstantCommand(() -> intakeSubsystem.resetRotateIntake()),
             //move intake down
-            new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake),
+            new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake),
             //wait for arm to be horizontal
-            new WaitForArmCommand(armSubsystem, 5.75, 2),
+            new WaitForArmCommand(armSubsystem, 0, 8),
             //arm & intake to correct pos
             new ArmCoordinatesCommand(armSubsystem, armReadySubIntakeX, armReadySubIntakeY)
         );

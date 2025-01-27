@@ -13,7 +13,7 @@ public class SetStartingPosCommand extends CommandBase {
     public SetStartingPosCommand(DriveSubsystem driveSubsystem, Pose2d pos) {
         this.pos = pos;
         this.driveSubsystem = driveSubsystem;
-        addRequirements(driveSubsystem);
+//        addRequirements(driveSubsystem);
 
 
     }

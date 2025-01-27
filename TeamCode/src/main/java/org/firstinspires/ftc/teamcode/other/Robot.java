@@ -15,18 +15,21 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.commandGroups.HighBasketCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterWallIntake;
@@ -80,6 +83,7 @@ public abstract class Robot extends CommandOpMode {
     public static IntakeCommand intakeAutoRightGrabCommand;
 
 
+
     //commmand groups
     public static RetractAfterIntake retractAfterIntake;
     public static RetractFromBasket retractFromBasket;
@@ -87,6 +91,7 @@ public abstract class Robot extends CommandOpMode {
     public static HighChamberCommand highChamberCommand;
     public static ScoreHighChamberCommand scoreHighChamberCommand;
     public static RetractAfterWallIntake retractAfterWallIntake;
+    public static HighBasketCommand highBasketCommand;
 
     //test statics
     public static double x = 0, y = 0;
@@ -94,7 +99,7 @@ public abstract class Robot extends CommandOpMode {
 
     //hardware
     public DcMotorEx slideAmp;
-    public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight;
+    public MotorEx BL, BR, FL, FR, arm, slideLeft, slideRight, slideNew;
     public MotorGroup slide;
     public ServoEx diffyLeft, diffyRight, claw;
     public Servo endStop;
@@ -102,6 +107,7 @@ public abstract class Robot extends CommandOpMode {
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive mecanumDrive;
     public IMU gyro;
+    public RevColorSensorV3 sensor;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
@@ -110,6 +116,14 @@ public abstract class Robot extends CommandOpMode {
 
     //system
     private LynxModule controlHub;
+
+    //voltage
+    private VoltageSensor voltageSensor;
+    public static double batteryVoltage = 12;
+    final double nominalVoltage = 12;
+    public static double voltageCompensation = 1;
+    private ElapsedTime voltageReadInterval = new ElapsedTime();
+
     //gamePads
     public GamepadEx m_driver;
     public GamepadEx m_driverOp;
@@ -134,6 +148,8 @@ public abstract class Robot extends CommandOpMode {
         //general system
         controlHub = hardwareMap.get(LynxModule.class, "Control Hub");
         controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         manual = false;
@@ -176,6 +192,7 @@ public abstract class Robot extends CommandOpMode {
         slideLeft = new MotorEx(hardwareMap, "slideL");
         slideAmp = hardwareMap.get(DcMotorEx.class, "slideL");
         slideRight = new MotorEx(hardwareMap, "slideR");
+        slideNew = new MotorEx(hardwareMap, "slideNew");
         armEncoder = hardwareMap.get(AnalogInput.class, "armEncoder");
         endStop = hardwareMap.get(Servo.class, "backstop");
         arm.setRunMode(Motor.RunMode.RawPower);
@@ -183,11 +200,12 @@ public abstract class Robot extends CommandOpMode {
         slideRight.setRunMode(Motor.RunMode.RawPower);
         slideLeft.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        slideLeft.setInverted(false);
+        slideLeft.setInverted(true);
         slideRight.setInverted(true);
+        slideNew.setInverted(true);
         arm.setInverted(false);
 
-        slide = new MotorGroup(slideLeft, slideRight);
+        slide = new MotorGroup(slideLeft, slideRight, slideNew);
 
         armSubsystem = new ArmSubsystem(arm, slideLeft, slideAmp, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
@@ -196,6 +214,8 @@ public abstract class Robot extends CommandOpMode {
 
 
         //intake
+
+        sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
         claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);
         diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
         diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);
@@ -226,19 +246,25 @@ public abstract class Robot extends CommandOpMode {
     public void run(){
         if (!flag) {
             super.run(); //whatever you need to run once
+            voltageReadInterval.reset();
             flag = true;
         }
 
         super.run();
 
 
-        //random
-        //telemetry.addData("currentArmCommand", driveSubsystem.currentArmCommand);
+        //voltage
+        if(voltageReadInterval.seconds() >= 1){
+            voltageReadInterval.reset();
+            batteryVoltage = voltageSensor.getVoltage();
+            voltageCompensation = batteryVoltage/nominalVoltage;
+        }
 
 
         if (gamepad1.start){
             schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
         }
+
 
         //other telemetry
         telemetry.addData("manual", manualArm);
@@ -322,6 +348,7 @@ public abstract class Robot extends CommandOpMode {
         highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
         scoreHighChamberCommand = new ScoreHighChamberCommand(armSubsystem, intakeSubsystem);
         retractAfterWallIntake = new RetractAfterWallIntake(armSubsystem, intakeSubsystem);
+        highBasketCommand = new HighBasketCommand(armSubsystem, intakeSubsystem);
 
     }
 

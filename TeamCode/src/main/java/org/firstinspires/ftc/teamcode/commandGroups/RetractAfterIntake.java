@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
@@ -18,20 +19,16 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 //tilts slides down a tad
                 new InstantCommand(() -> armSubsystem.setArmY(armSubIntakeY)),
                 //wait
-                new WaitCommand(400),
+                new WaitCommand(300),
                 //grab the sample
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenIntake),
+                new InstantCommand(() -> intakeSubsystem.closeClaw()),
                 //wait
-                new WaitCommand(100),
+                new WaitCommand(80),
                 //retract slides & flip up intake
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 0),
-                new WaitForSlideCommand(armSubsystem, 8, .5),
-                //move arm back
-                new ArmCoordinatesCommand(armSubsystem, armBackX,  armBackY),
+                new WaitForSlideCommand(armSubsystem, 8, 15),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, rollWhenArmBack),
-                //wait
-                new WaitCommand(500)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE,  pitchWhenBasket, rollWhenBasket)
         );
 
         addRequirements(armSubsystem, intakeSubsystem);

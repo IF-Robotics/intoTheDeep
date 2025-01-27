@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.other;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import java.util.function.DoubleSupplier;
+
 @Config
 public class Globals {
 //intake subsystem
@@ -12,28 +14,28 @@ public class Globals {
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
     //intake from the wall
-    public static int pitchIntakeWall = 390;
+    public static int pitchIntakeWall = 400;
     public static int rollIntakeWall = 0;
     // Right left specimens
-    public static int pitchRightAutoSpecimen = 340;
+    public static int pitchRightAutoSpecimen = pitchIntakeWall;
     public static int rollRightAutoSpecimen = -190;
 
     //claw poses
-    public static double clawOpen = .72;
-    public static double clawExtraOpen = .8;
+    public static double clawOpen = 0.7;
+    public static double clawExtraOpen = .75;
     public static double clawClose = .38;
 
     //scoring
     //basket
-    public static int pitchWhenBasket = 0;
-    public static int rollWhenBasket = 150;
+    public static int pitchWhenBasket = pitchIntakeWall;
+    public static int rollWhenBasket = 130;
 
     public static double pitchWhenHighChamber = 0;
     public static double rollWhenHighChamber = -20;
 
     //autoLeft
     public static double autoPitchFrontHighChamber = 0;
-    public static double rollFrontHighChamber = 120;
+    public static double rollFrontHighChamber = 100;
 
     public static double pitchFrontHighChamber = 300;
 
@@ -47,7 +49,7 @@ public class Globals {
     public static double pitchFrontRightHighChamber = 0;
     public static double rollFrontRightHighChamber = rollTeleopHighChamber;
     public static double pitchPlaceFrontHighRightChamber = 0;
-    public static double rollPlaceFrontHighRightChamber = 280;
+    public static double rollPlaceFrontHighRightChamber = 200;
 
 
     //home
@@ -62,33 +64,33 @@ public class Globals {
     public static double armFoldX = 6.5;
     public static double armFoldY = 4.0;
     //arm back
-    public static double armBackX = -3;
-    public static double armBackY = 16;
+    public static double armBackX = -1;
+    public static double armBackY = 17;
     //arm high basket
-    public static double armHighBasketX = -5;
-    public static double  armHighBasketY = 45.5;
+    public static double armHighBasketX = -2;
+    public static double  armHighBasketY = 45;
     //arm when front high chamber
-    public static double armFrontHighChamberX = 17.5;
+    public static double armFrontHighChamberX = 20;
     public static double armFrontHighChamberY = 17.6;
-    public static double autoArmFrontHighChamberY = 17.5;
+    public static double autoArmFrontHighChamberY = 17.75;
     //arm when high chamber
     public static double armHighChamberX = -1;
-    public static double armHighChamberY = 23.2;
+    public static double armHighChamberY = 24;
     public static double armRightHighChamberX = -1;
-    public static double armRightHighChamberY = 23.5;
+    public static double armRightHighChamberY = 24.5;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 27;
-    public static double armSubIntakeY = 6.25;
-    public static double armReadySubIntakeY = 9.5;
-    public static double armInSubIntakeY = 8;
+    public static double armSubIntakeY = 2.5;
+    public static double armReadySubIntakeY = 7.5;
+    public static double armInSubIntakeY = 5;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;
-    public static double armCloseIntakeY = 7.5;
+    public static double armCloseIntakeY = 6;
     //arm when intaking form the wall
     public static double armIntakeWallX = 7.7;
-    public static double armIntakeWallY = 9.2  ;
+    public static double armIntakeWallY = 8  ;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;
@@ -102,11 +104,12 @@ public class Globals {
     public static double armParkLeftAutoY = 23;
 
     //endstop
-    public static double endstopUp = .445    ;
+    public static double endstopUp = .43;
     public static double endstopDown = 0;
 
     //arm when climbing
     //climbing to first rung
+    public static double armAngleReady = 36.08;
     public static double armPositionToClimbX = 16.9;
     public static double armPositionToClimbY = 24.8;
     //climbing to second rung
@@ -119,8 +122,8 @@ public class Globals {
     public static double armPositionRobotToEdgeOfFirstRungX = -8;
     public static double armPositionRobotToEdgeOfFirstRungY = 18;
     //completely retracting when climbing
-    public static double armCompleteRetractX = 7.0;
-    public static double armCompleteRetractY = 4.0;
+    public static double armCompleteRetractX = 8;
+    public static double armCompleteRetractY = 3.5;
 
 //drive to point
     public static double translationKP = 0.02;
@@ -141,5 +144,8 @@ public class Globals {
     public static double testX = 0.0;
     public static double testY = 0.0;
     public static double testHeading = 0;
+
+    //teleop mode
+    public static boolean teleopSpec = true;
 
 }

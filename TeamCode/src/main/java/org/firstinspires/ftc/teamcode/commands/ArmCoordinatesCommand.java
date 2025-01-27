@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
@@ -19,7 +21,7 @@ public class ArmCoordinatesCommand extends CommandBase {
 
 
     @Override
-    public void execute(){
+    public void initialize(){
         armSubsystem.setArmCoordinates(x, y);
     }
 

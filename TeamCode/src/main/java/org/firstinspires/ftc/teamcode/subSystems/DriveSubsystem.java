@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.Robot.voltageCompensation;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
@@ -69,6 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
         FAST,
         SLOW
     }
+
 
 
     //constructor for auto
@@ -178,8 +180,8 @@ public class DriveSubsystem extends SubsystemBase {
         vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
-        headingCalculation = -headingController.calculate(-correctedErrorHeading);
-        correctedVectorMagnitude = -Math.pow((Math.abs(translationController.calculate(rawVectorMagnitude,0))) * Math.signum(rawVectorMagnitude), translationKR);
+        headingCalculation = voltageCompensation * headingController.calculate(correctedErrorHeading);
+        correctedVectorMagnitude = voltageCompensation * -Math.pow((Math.abs(translationController.calculate(rawVectorMagnitude,0))) * Math.signum(rawVectorMagnitude), translationKR);
 
         //testing
         telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
@@ -203,7 +205,9 @@ public class DriveSubsystem extends SubsystemBase {
     public void readPinpoint() {
         pinpoint.update();
         Pose2D tempPos = pinpoint.getPosition();
-        currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
+        if(!(Double.isNaN(tempPos.getX(DistanceUnit.INCH)) || Double.isNaN(tempPos.getY(DistanceUnit.INCH)) || Double.isNaN(tempPos.getHeading(AngleUnit.DEGREES)))){
+            currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
+        }
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
