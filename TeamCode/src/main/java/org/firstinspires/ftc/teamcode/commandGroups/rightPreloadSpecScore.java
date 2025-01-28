@@ -38,7 +38,7 @@ public class rightPreloadSpecScore extends SequentialCommandGroup {
                 //extend slides
                 new ArmCoordinatesCommand(armSubsystem, armFrontHighChamberX, autoArmFrontHighChamberY),
                 //wait
-                new WaitCommand(800),
+                new WaitCommand(400),
 
 
                 // Drive to high chamber
@@ -48,8 +48,9 @@ public class rightPreloadSpecScore extends SequentialCommandGroup {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new WaitCommand(100),
                 //arm to home pos
-                new InstantCommand(() -> armSubsystem.setSlide(12)),
-                new InstantCommand(() -> armSubsystem.setArm(60))
+                new InstantCommand(() -> armSubsystem.setArm(45)),
+                new WaitCommand(100),
+                new InstantCommand(() -> armSubsystem.setSlide(18))
         );
 
         addRequirements(intakeSubsystem, armSubsystem);

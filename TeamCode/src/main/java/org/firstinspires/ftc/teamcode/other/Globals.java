@@ -126,7 +126,7 @@ public class Globals {
     public static double armCompleteRetractY = 3.5;
 
 //drive to point
-    public static double translationKP = 0.02;
+    public static double translationKP = 0.02*1.3;
     public static double translationKI = 0.0;
     public static double translationKD = 0.01;
 //    public static double translationKD = 0.001;

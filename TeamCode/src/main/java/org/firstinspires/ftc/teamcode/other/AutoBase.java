@@ -4,11 +4,14 @@ import static org.firstinspires.ftc.teamcode.other.Globals.clawClose;
 import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 
 public abstract class AutoBase extends Robot{
+
+    ElapsedTime autoTimer = new ElapsedTime();
 
     public void initialize() {
         super.initialize();
@@ -26,6 +29,12 @@ public abstract class AutoBase extends Robot{
 
         //turn on auto drive
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
+    }
+
+    @Override
+    public void run(){
+        super.run();
+
     }
 
 

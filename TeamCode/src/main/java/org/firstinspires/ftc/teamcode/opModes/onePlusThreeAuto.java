@@ -27,14 +27,6 @@ public class onePlusThreeAuto extends Robot {
     @Override
     public void initialize(){
         super.initialize();
-        slideLeft.resetEncoder();
-
-        //turn on auto drive
-        driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
-
-        manualArm = false;
-
-        claw.setPosition(clawClose);
 
 
         schedule(new SequentialCommandGroup(

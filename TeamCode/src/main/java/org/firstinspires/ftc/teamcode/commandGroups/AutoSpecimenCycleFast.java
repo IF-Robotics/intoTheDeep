@@ -27,7 +27,7 @@ public class AutoSpecimenCycleFast extends SequentialCommandGroup {
 
                 //wait
 //                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3),
+                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3).withTimeout(1000),
                 //wait
                 new WaitCommand(100),
 

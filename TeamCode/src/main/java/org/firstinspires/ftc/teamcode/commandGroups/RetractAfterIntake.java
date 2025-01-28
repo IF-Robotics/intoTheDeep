@@ -23,7 +23,7 @@ public class RetractAfterIntake extends SequentialCommandGroup{
                 //grab the sample
                 new InstantCommand(() -> intakeSubsystem.closeClaw()),
                 //wait
-                new WaitCommand(80),
+                new WaitCommand(100),
                 //retract slides & flip up intake
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 0),
                 new WaitForSlideCommand(armSubsystem, 8, 15),
