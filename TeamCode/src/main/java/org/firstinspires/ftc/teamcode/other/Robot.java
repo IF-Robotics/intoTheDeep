@@ -27,6 +27,7 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commandGroups.HighBasketCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
@@ -44,6 +45,8 @@ import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
+
 @Config
 public abstract class Robot extends CommandOpMode {
 
@@ -111,6 +114,7 @@ public abstract class Robot extends CommandOpMode {
     public DriveSubsystem driveSubsystem;
     public ArmSubsystem armSubsystem;
     public IntakeSubsystem intakeSubsystem;
+    public VisionSubsystem visionSubsystem;
 
     //system
     private LynxModule controlHub;
@@ -216,6 +220,10 @@ public abstract class Robot extends CommandOpMode {
 
         intakeSubsystem = new IntakeSubsystem(claw, diffyLeft, diffyRight, telemetry);
         register(intakeSubsystem);
+
+        //vision
+        visionSubsystem = new VisionSubsystem(hardwareMap.get(WebcamName.class, "Webcam 1"), telemetry);
+        register(visionSubsystem);
 
         m_driver = new GamepadEx(gamepad1);
         m_driverOp = new GamepadEx(gamepad2);

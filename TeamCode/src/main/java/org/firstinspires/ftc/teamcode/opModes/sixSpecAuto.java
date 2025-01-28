@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.StartSpecAuto;
 import org.firstinspires.ftc.teamcode.commandGroups.SweepSpikes;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.other.AutoBase;
 
@@ -39,7 +40,9 @@ public class sixSpecAuto extends AutoBase {
                 //extend slides into sub
                 new WaitForArmCommand(armSubsystem, 0, 5),
                 new IntakeSub(armSubsystem, intakeSubsystem),
-                new WaitCommand(3000),
+                new InstantCommand(() -> intakeSubsystem.setDiffy(0,0)),
+                new WaitCommand(1000),
+                new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(30000),
                 //vison code
                 //TODO: add vision code
                 //pickup sample and retract

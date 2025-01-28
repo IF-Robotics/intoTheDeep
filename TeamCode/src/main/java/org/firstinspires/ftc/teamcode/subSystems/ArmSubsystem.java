@@ -128,10 +128,6 @@ public class ArmSubsystem extends SubsystemBase {
         //write
         setArm(armTargetAngle);
         setSlide(slideTargetIn);
-        for(int i=0; i<1000; i++){
-            Log.i("stupidBruh", "stupid breuh");
-            Log.i("stupidBruhArm",String.valueOf(armTargetAngle));
-        }
     }
 
     public void setArmY(double y){
@@ -174,6 +170,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double getSlideError(){
         return slideError;
+    }
+
+    public void setSlideP(double p){
+        slideKP = p;
+    }
+
+    public double getSlideX(){
+        return slideExtention * Math.cos(Math.toRadians(correctedAngle));
     }
 
     public double getArmTarget(){
@@ -270,12 +274,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Log.i("stupidBruhturetargetangle", String.valueOf(setArmTargetAngle));
         //read
         slideTicks = slideL.getCurrentPosition();
         rawAngle = armEncoder.getVoltage()/3.3 * 360;
         correctedAngle = rawAngle + armAngleOffset;
-        Log.i("ArmAngleCorrected", String.valueOf(correctedAngle));
 
         //arm pid
         armController = new PIDController(kParm * (kFarm * slideKgLut.get(slideExtention)), kIarm, kDarm);
@@ -298,10 +300,15 @@ public class ArmSubsystem extends SubsystemBase {
         //arm manual
         if(manualArm){
             arm.set(armManualPower);
-            slide.set(slideManualPower);
         } else {
             //pid power
             arm.set(armPower);
+        }
+
+        if(manualSlides){
+            slide.set(slideManualPower);
+        }
+        else{
             slide.set(slidePower);
         }
 

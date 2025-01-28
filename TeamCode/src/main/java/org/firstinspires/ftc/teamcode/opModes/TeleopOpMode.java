@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -31,13 +32,18 @@ import org.firstinspires.ftc.teamcode.commandGroups.HighBasketCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.ResetSlides;
+import org.firstinspires.ftc.teamcode.commands.VisionClawCommand;
+import org.firstinspires.ftc.teamcode.commands.VisionToSample;
 import org.firstinspires.ftc.teamcode.commandGroups.TeleopSpecScore;
 
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
+import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
 @Disabled
 @TeleOp(name="teleOpFunnyTest")
@@ -98,7 +104,6 @@ public class TeleopOpMode extends Robot {
         tRight1 = new Trigger(() -> m_driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         tLeft2 = new Trigger(() -> m_driverOp.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > .1);
         tRight2 = new Trigger(() -> m_driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
-        tRight2 = new Trigger(() -> m_driverOp.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > .1);
         start1 = new GamepadButton(m_driver, GamepadKeys.Button.START);
         circle1 = new GamepadButton(m_driver, GamepadKeys.Button.B);
         circle2 = new GamepadButton(m_driverOp, GamepadKeys.Button.B);
@@ -147,6 +152,8 @@ public class TeleopOpMode extends Robot {
 
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake
+//        tRight1.toggleWhenActive(new teleopSpecScore(driveSubsystem,armSubsystem,intakeSubsystem));
+        tLeft1.whenActive(new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, false, ()->{return false;},m_driver::getLeftX, m_driver::getLeftY, m_driver::getRightX));
         tLeft2.whenActive(new ConditionalCommand(
                 new ParallelCommandGroup(armWhenIntakeWallCommand, intakeWallCommand),
                 new RetractAfterWallIntake(armSubsystem, intakeSubsystem),

@@ -18,13 +18,16 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
-import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
+import com.qualcomm.robotcore.util.ElapsedTime;;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.runner.Drawing;
+
+import java.util.function.BooleanSupplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -129,12 +132,50 @@ public class DriveSubsystem extends SubsystemBase {
         readPinpoint();
     }
 
+    /**
+     * Just for backwards compatibility
+     */
+    public void teleDrive(BooleanSupplier slowmode, boolean arcTanZones, int arcTanAngleRange, double strafeSpeed, double forwardSpeed, double turnSpeed) {
+        //slow mode
+        if (slowmode.getAsBoolean()) {
+            power = .3;
+        } else {
+            power = 1;
+        }
+
+
+        //arc tan dead zones
+        if (arcTanZones) {
+            if (Math.toDegrees(Math.atan(y / x)) > 90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 90 + arcTanAngleRange / 2
+                    || Math.toDegrees(Math.atan(y / x)) < -90 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) > -90 + arcTanAngleRange / 2) {
+                x = 0;
+
+            } else if (Math.toDegrees(Math.atan(y / x)) > 0 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 0 + arcTanAngleRange / 2
+                    || Math.toDegrees(Math.atan(y / x)) > 180 - arcTanAngleRange / 2 && Math.toDegrees(Math.atan(y / x)) < 180 + arcTanAngleRange / 2) {
+                y = 0;
+            }
+        }
+
+        //actually moving
+        mecanumDrive.driveFieldCentric(strafeSpeed * power, forwardSpeed * power, -turnSpeed * power, currentPos.getRotation().getDegrees());
+
+        //read pinpoint
+        readPinpoint();
+    }
+
     public void driveRobotCentric(double strafeSpeed, double forwardSpeed, double turnSpeed) {
         mecanumDrive.driveRobotCentric(strafeSpeed, forwardSpeed, turnSpeed);
     }
 
     public void driveToPoint(Pose2d targetPos){
         this.targetPos = targetPos;
+    }
+
+    public void pidToRotation2d(Rotation2d targetRotation){
+        driveToPoint(new Pose2d(
+                this.targetPos.getTranslation(),
+                targetRotation
+        ));
     }
 
     public void autoDrive(){
