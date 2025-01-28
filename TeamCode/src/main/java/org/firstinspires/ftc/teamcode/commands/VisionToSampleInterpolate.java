@@ -79,57 +79,73 @@ public class VisionToSampleInterpolate extends CommandBase {
 
         addRequirements(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem);
 
-        lutXOffset.add(-99999999,-3.875);
-
-        lutXOffset.add(-103.5,-3.875);
-//        lutXOffset.add(-99.8,3.75);
-        lutXOffset.add(-93,-3.5);
-//        lutXOffset.add(-85.2,3.25);
-        lutXOffset.add(-77.5,-3.0);
-//        lutXOffset.add(-71.6,2.75);
-        lutXOffset.add(-62.7,-2.5);
-//        lutXOffset.add(-55.9,2.25);
-        lutXOffset.add(-50.2,-2);
-//        lutXOffset.add(-42.4,1.75);
-        lutXOffset.add(-35.9,-1.5);
-//        lutXOffset.add(-28,1.25);
-        lutXOffset.add(-19.1,-1);
-//        lutXOffset.add(-11.8,0.75);
-        lutXOffset.add(-3.5,-0.5);
-//        lutXOffset.add(-1,0.25);
+        lutXOffset.add(-9999999, -8);
+        lutXOffset.add(-130,-7.75);
+        lutXOffset.add(-125,-7.5);
+        lutXOffset.add(-116,-7.0);
+        lutXOffset.add(-107,-6.5);
+        lutXOffset.add(-99.6,-6.0);
+        lutXOffset.add(-91,-5.5);
+        lutXOffset.add(-81,-5.0);
+        lutXOffset.add(-73,-4.5);
+        lutXOffset.add(-64,-4.0);
+        lutXOffset.add(-56.5,-3.5);
+        lutXOffset.add(-47,-3.0);
+        lutXOffset.add(-39.5,-2.5);
+        lutXOffset.add(-31.5,-2.0);
+        lutXOffset.add(-22.5,-1.5);
+        lutXOffset.add(-14.1,-1.0);
+        lutXOffset.add(-7.1,-0.5);
         lutXOffset.add(0,0);
+        lutXOffset.add(7.1,0.5);
+        lutXOffset.add(14.1,1.0);
+        lutXOffset.add(22.5,1.5);
+        lutXOffset.add(31.5,2.0);
+        lutXOffset.add(39.5,2.5);
+        lutXOffset.add(47,3.0);
+        lutXOffset.add(56.5,3.5);
+        lutXOffset.add(64,4.0);
+        lutXOffset.add(73,4.5);
+        lutXOffset.add(81,5.0);
+        lutXOffset.add(91,5.5);
+        lutXOffset.add(99.6,6.0);
+        lutXOffset.add(107,6.5);
+        lutXOffset.add(116,7.0);
+        lutXOffset.add(125,7.5);
+        lutXOffset.add(130,7.75);
+        lutXOffset.add(9999999, 8);
 
-        lutXOffset.add(3.5,0.5);
-        lutXOffset.add(19.1,1);
-        lutXOffset.add(35.9,1.5);
-        lutXOffset.add(50.2,2);
-        lutXOffset.add(62.7,2.5);
-        lutXOffset.add(77.5,3.0);
-        lutXOffset.add(93,3.5);
-        lutXOffset.add(103.5,3.875);
-        lutXOffset.add(99999999,3.875);
-
-        lutYOffset.add(-999999999,2.75);
-        lutYOffset.add(-75.0,2.75);
-        lutYOffset.add(-67.5,2.5);
-        lutYOffset.add(-61,2.25);
-        lutYOffset.add(-53.5,2.0);
-        lutYOffset.add(-39.5,1.75);
-        lutYOffset.add(-35.7,1.5);
-        lutYOffset.add(-31.5,1.25);
-        lutYOffset.add(-25.8,1.0);
-        lutYOffset.add(-20.3,0.75);
-        lutYOffset.add(-12,0.5);
-        lutYOffset.add(-8,0.25);
+        lutYOffset.add(-103,9.0);
+        lutYOffset.add(-98.5,8.5);
+        lutYOffset.add(-94,8.0);
+        lutYOffset.add(-89,7.5);
+        lutYOffset.add(-85.5,7.0);
+        lutYOffset.add(-80.5,6.5);
+        lutYOffset.add(-74.5,6.0);
+        lutYOffset.add(-69.5,5.5);
+        lutYOffset.add(-64.5,5.0);
+        lutYOffset.add(-59,4.5);
+        lutYOffset.add(-52,4.0);
+        lutYOffset.add(-47.5,3.5);
+        lutYOffset.add(-40.5,3);
+        lutYOffset.add(-35.5,2.5);
+        lutYOffset.add (-28,2.0);
+        lutYOffset.add(-21.5,1.5);
+        lutYOffset.add(-14,1.0);
+        lutYOffset.add(-7.5,0.5);
         lutYOffset.add(0,0);
-        lutYOffset.add(12.7,-0.5);
-        lutYOffset.add(26.7,-1.0);
-        lutYOffset.add(47.2,-1.5);
-        lutYOffset.add(62.3,-2.0);
-        lutYOffset.add(77.5,-2.5);
-        lutYOffset.add(91,-3.0);
-        lutYOffset.add(93.5,-3.5);
-        lutYOffset.add(99999999,3.5);
+        lutYOffset.add(8.5,-0.5);
+        lutYOffset.add(17.5,-1.0);
+        lutYOffset.add(24.5,-1.5);
+        lutYOffset.add(32,-2.0);
+        lutYOffset.add(41.5,-2.5);
+        lutYOffset.add(51,-3.0);
+        lutYOffset.add(60,-3.5);
+        lutYOffset.add(70,-4.0);
+        lutYOffset.add(79,-4.5);
+        lutYOffset.add(89.5,-5.0);
+        lutYOffset.add(101,-5.5);
+        lutYOffset.add(99999,-5.5);
 
         lutXOffset.createLUT();
         lutYOffset.createLUT();
@@ -157,12 +173,12 @@ public class VisionToSampleInterpolate extends CommandBase {
             double xOffsetInches = lutXOffset.get(allianceOffsets.get(0));
             double yOffsetInches = lutYOffset.get(allianceOffsets.get(1));
 
-            double allianceSkew = visionSubsystem.getAngleFromRotatedRect(allianceBoxFit.get());
+            double allianceSkew = -visionSubsystem.getAngleFromRotatedRect(allianceBoxFit.get());
 
             Rotation2d allianceSkewRotation2d = new Rotation2d(Math.toRadians(allianceSkew));
 
             Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), allianceSkewRotation2d);
-            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-4), new Rotation2d());
+            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()), new Rotation2d());
 
 
             Log.i("poseYOffset", String.valueOf(xOffsetInches));

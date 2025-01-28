@@ -47,14 +47,14 @@ public class VisionSubsystem extends SubsystemBase {
     public final static double kCameraHeight=240;
     public final static double kDesiredY = kCameraHeight*0.5;
 
-    public static int lowAreaFilter = 1300;
-    public static int highAreaFilter = 15000;
-    public static double lowRatioFilter = 1.8;
-    public static double highRatioFilter = 2.5;
+    public static int lowAreaFilter = 600;
+    public static int highAreaFilter = 2500;
+    public static double lowRatioFilter = 1.3;
+    public static double highRatioFilter = 2.8;
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-    public static int exposureMillis = 40;//24
+    public static int exposureMillis = 24;//40
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -75,7 +75,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     ColorRange yellow = new ColorRange(
             ColorSpace.HSV,
-            new Scalar(13, 100, 80),
+            new Scalar(13, 100, 140),
             new Scalar(50, 255, 255)
     );
 
@@ -83,9 +83,10 @@ public class VisionSubsystem extends SubsystemBase {
     ColorBlobLocatorProcessor.Builder allianceLocatorProcessBuilder = new ColorBlobLocatorProcessor.Builder()
             .setDrawContours(true)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
-            .setRoi(ImageRegion.entireFrame())
+//            .setRoi(ImageRegion.entireFrame())
+            .setRoi(ImageRegion.asUnityCenterCoordinates(-0.75, 1.0, 0.75, -1.0))
             .setBlurSize(5)
-            .setErodeSize(2);
+            .setErodeSize(4);
 
     ColorBlobLocatorProcessor allianceLocatorProcess;
     ColorBlobLocatorProcessor yellowLocatorProcess = new ColorBlobLocatorProcessor.Builder()
@@ -93,6 +94,7 @@ public class VisionSubsystem extends SubsystemBase {
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
             .setRoi(ImageRegion.entireFrame())
             .setBlurSize(5)
+            .setErodeSize(4)
             .setDrawContours(true)
             .build();
 
