@@ -115,6 +115,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         lutXOffset.add(130,7.75);
         lutXOffset.add(9999999, 8);
 
+        lutYOffset.add(-99999, 9.0);
         lutYOffset.add(-103,9.0);
         lutYOffset.add(-98.5,8.5);
         lutYOffset.add(-94,8.0);
@@ -156,6 +157,8 @@ public class VisionToSampleInterpolate extends CommandBase {
         intakeSubsystem.setDiffy(0,0);
         armSubsystem.setArm(5);
         hasFoundBlock=false;
+
+        armSubsystem.setSlideP(0.1);
     }
 
     @Override
@@ -250,6 +253,7 @@ public class VisionToSampleInterpolate extends CommandBase {
 
     @Override
     public void end(boolean e){
+        armSubsystem.setSlideP(0.2);
     }
 
     @Override

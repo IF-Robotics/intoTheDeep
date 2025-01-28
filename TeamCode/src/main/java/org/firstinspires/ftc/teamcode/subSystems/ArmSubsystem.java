@@ -171,6 +171,10 @@ public class ArmSubsystem extends SubsystemBase {
         return slideError;
     }
 
+    public void setSlideP(double p){
+        slideKP = p;
+    }
+
     public double getArmTarget(){
         return setArmTargetAngle;
     }
