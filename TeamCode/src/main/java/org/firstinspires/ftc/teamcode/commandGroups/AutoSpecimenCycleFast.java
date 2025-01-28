@@ -44,8 +44,8 @@ public class AutoSpecimenCycleFast extends SequentialCommandGroup {
 
 
                 // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32, Rotation2d.fromDegrees(180)),3, 5).withTimeout(500),
-                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32+0.5, Rotation2d.fromDegrees(180)),3, 5).withTimeout(1500),
+                new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5).withTimeout(500),
                 //wait
 //                new WaitCommand(200),
                 // Score specimen

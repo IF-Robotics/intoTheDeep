@@ -42,14 +42,14 @@ public class Globals {
 
     //teleop high chamber
     public static double pitchTeleopHighChamber = 0;
-    public static double rollTeleopHighChamber = 160;
+    public static double rollTeleopHighChamber = 260;
 
 
     //autoright
     public static double pitchFrontRightHighChamber = 0;
     public static double rollFrontRightHighChamber = rollTeleopHighChamber;
     public static double pitchPlaceFrontHighRightChamber = 0;
-    public static double rollPlaceFrontHighRightChamber = 200;
+    public static double rollPlaceFrontHighRightChamber = 260;
 
 
     //home
@@ -77,7 +77,7 @@ public class Globals {
     public static double armHighChamberX = -1;
     public static double armHighChamberY = 24;
     public static double armRightHighChamberX = -1;
-    public static double armRightHighChamberY = 24.5;
+    public static double armRightHighChamberY = 24.5+4.25 ;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
@@ -90,7 +90,7 @@ public class Globals {
     public static double armCloseIntakeY = 6;
     //arm when intaking form the wall
     public static double armIntakeWallX = 7.7;
-    public static double armIntakeWallY = 8  ;
+    public static double armIntakeWallY = 8 +0.5;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;

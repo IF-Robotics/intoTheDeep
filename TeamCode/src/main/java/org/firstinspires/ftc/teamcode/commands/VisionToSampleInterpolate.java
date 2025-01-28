@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import static org.firstinspires.ftc.teamcode.other.Globals.armReadySubIntakeY;
+import static org.firstinspires.ftc.teamcode.other.Globals.armSubIntakeY;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
 
 import android.provider.Settings;
@@ -173,7 +175,7 @@ public class VisionToSampleInterpolate extends CommandBase {
     @Override
     public void initialize(){
         intakeSubsystem.setDiffy(0,0);
-        armSubsystem.setArm(5);
+        armSubsystem.setArmY(armReadySubIntakeY);
         hasFoundBlock=false;
 
         armSubsystem.setSlideP(0.1);
