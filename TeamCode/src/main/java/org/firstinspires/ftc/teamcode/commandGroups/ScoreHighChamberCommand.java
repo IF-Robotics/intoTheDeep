@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHighChamberY;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchPlaceFrontHighRightChamber;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchTeleopHighChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollPlaceFrontHighRightChamber;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollTeleopHighChamber;
 

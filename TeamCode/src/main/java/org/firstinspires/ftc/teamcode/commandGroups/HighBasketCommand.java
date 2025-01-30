@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketY;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -22,7 +23,7 @@ public class HighBasketCommand extends SequentialCommandGroup{
 
                 //move to high basket
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket)
 
         );
 

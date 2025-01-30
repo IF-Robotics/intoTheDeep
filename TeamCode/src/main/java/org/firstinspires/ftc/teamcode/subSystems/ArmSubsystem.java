@@ -8,6 +8,7 @@ import android.util.Log;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -129,8 +130,6 @@ public class ArmSubsystem extends SubsystemBase {
         setArm(armTargetAngle);
         setSlide(slideTargetIn);
         for(int i=0; i<1000; i++){
-            Log.i("stupidBruh", "stupid breuh");
-            Log.i("stupidBruhArm",String.valueOf(armTargetAngle));
         }
     }
 
@@ -265,17 +264,22 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public Command getLastCommand(){
+        //redundant null checking
+        if(lastCommand==null){
+            return new InstantCommand();
+        }
         return lastCommand;
     }
 
     @Override
     public void periodic() {
-        Log.i("stupidBruhturetargetangle", String.valueOf(setArmTargetAngle));
         //read
         slideTicks = slideL.getCurrentPosition();
         rawAngle = armEncoder.getVoltage()/3.3 * 360;
         correctedAngle = rawAngle + armAngleOffset;
-        Log.i("ArmAngleCorrected", String.valueOf(correctedAngle));
+
+        //calculate slide extension
+        slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
 
         //arm pid
         armController = new PIDController(kParm * (kFarm * slideKgLut.get(slideExtention)), kIarm, kDarm);
@@ -305,9 +309,6 @@ public class ArmSubsystem extends SubsystemBase {
             slide.set(slidePower);
         }
 
-        //calculate slide extension
-        slideExtention = (slideTicks/ticksPerIn + slideWristOffset);
-
         telemetry.addData("armAngle", correctedAngle);
         telemetry.addData("armTarget", setArmTargetAngle);
         telemetry.addData("armPower", armPower);
@@ -330,6 +331,10 @@ public class ArmSubsystem extends SubsystemBase {
 
         if (currentCommand != null && currentCommand != lastCommand) {
             lastCommand = currentCommand;
+        }
+        //Redundent null checking
+        if(lastCommand==null){
+            lastCommand=new InstantCommand();
         }
         telemetry.addData("armSubsystemLastCommand", lastCommand != null ? lastCommand.getName() : "None");
 
