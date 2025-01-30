@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
-import static com.arcrobotics.ftclib.command.CommandGroupBase.clearGroupedCommand;
-import static com.arcrobotics.ftclib.command.CommandGroupBase.clearGroupedCommands;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -33,17 +30,15 @@ import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmManualCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.ResetSlides;
-import org.firstinspires.ftc.teamcode.commands.VisionClawCommand;
-import org.firstinspires.ftc.teamcode.commands.VisionToSample;
 import org.firstinspires.ftc.teamcode.commandGroups.TeleopSpecScore;
 
-import org.firstinspires.ftc.teamcode.commands.ResetSlides;
 import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
-import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
+
 
 @Disabled
 @TeleOp(name="teleOpFunnyTest")
@@ -220,13 +215,16 @@ public class TeleopOpMode extends Robot {
         cross2.whenPressed(new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem));
 
         //climbing
-        bRight2.whenPressed(new ParallelCommandGroup(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),armPositionToClimb));
+        bRight2.whenPressed(new ParallelCommandGroup(
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
+                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
+                armPositionToClimb));
         bRight2.whenReleased(new ClimbLevel3(armSubsystem, intakeSubsystem, gyro));
 
         //testing
         start1.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
         start2.whenPressed(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket));
-        start2.whenPressed(new ArmManualCommand(armSubsystem, m_driverOp, m_driverOp::getRightY, m_driverOp::getLeftY));
+        start2.whenPressed(new ArmManualCommand(armSubsystem, m_driverOp::getRightY, m_driverOp::getLeftY));
 
         //reset pinpoint imu
         back1.whenPressed(new InstantCommand(() -> driveSubsystem.resetPinpointIMU()));
