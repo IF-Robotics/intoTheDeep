@@ -54,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-    public static int exposureMillis = 24;//24
+    public static int exposureMillis = 35;//24
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -84,8 +84,8 @@ public class VisionSubsystem extends SubsystemBase {
             .setDrawContours(true)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
 //            .setRoi(ImageRegion.entireFrame())
-            .setRoi(ImageRegion.asUnityCenterCoordinates(-0.75, 1.0, 0.75, -1.0))
-            .setBlurSize(5)
+            .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
+            .setBlurSize(1)
             .setErodeSize(4);
 
     ColorBlobLocatorProcessor allianceLocatorProcess;
