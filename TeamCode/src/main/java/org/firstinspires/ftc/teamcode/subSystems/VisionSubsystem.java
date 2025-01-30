@@ -54,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-    public static int exposureMillis = 35;//24
+    public static int exposureMillis = 55;//24, 35
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -67,11 +67,13 @@ public class VisionSubsystem extends SubsystemBase {
             new Scalar(255, 127, 255)
     );
 
-    ColorRange red = new ColorRange(
-            ColorSpace.YCrCb,
-            new Scalar( 32, 176,  80),
-            new Scalar(255, 255, 120)
-    );
+//    ColorRange red = new ColorRange(
+//            ColorSpace.YCrCb,
+//            new Scalar( 32, 176,  80),
+//            new Scalar(255, 255, 120)
+//    );
+
+    ColorRange red = ColorRange.RED;
 
     ColorRange yellow = new ColorRange(
             ColorSpace.HSV,
@@ -392,13 +394,10 @@ public class VisionSubsystem extends SubsystemBase {
         boolean haveSetExposure = false;
         boolean haveSetWhiteBalance = false;
         while (msAfterStart < timeoutMs && attempts++ < maxAttempts) {
-            Log.i("camera", String.format("Attempting to set camera exposure, attempt %d, %d ms after start", attempts, msAfterStart));
             if (!haveSetExposure && setExposure()) {
-                Log.i("camera", "Set exposure succeeded");
                 haveSetExposure=true;
             }
             if(!haveSetWhiteBalance && setWhiteBalance()) {
-                Log.i("camera", "Set white balance succeeded");
                 haveSetWhiteBalance=true;
             }
             if(haveSetExposure&&haveSetWhiteBalance){

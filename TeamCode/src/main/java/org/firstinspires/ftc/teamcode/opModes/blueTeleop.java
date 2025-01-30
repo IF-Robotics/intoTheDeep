@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opModes;
 import static com.qualcomm.robotcore.hardware.Gamepad.LED_DURATION_CONTINUOUS;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //import org.firstinspires.ftc.teamcode.commands.VisionClawCommand;
@@ -11,13 +13,11 @@ import org.firstinspires.ftc.teamcode.opModes.TeleopOpMode;
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
 //import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
-@TeleOp
+@TeleOp(name="BlueTeleop\uD83D\uDC99\uD83D\uDC99\uD83D\uDC99")
 public class blueTeleop extends TeleopOpMode {
     public void initialize(){
+        VisionSubsystem.alliance = VisionSubsystem.Alliance.BLUE;
         super.initialize();
-//        visionSubsystem.setAlliance(VisionSubsystem.Alliance.RED); //They're opposites
-//        alliance = VisionSubsystem.Alliance.RED;
-        visionSubsystem.setAllianceLocatorProcess(VisionSubsystem.Alliance.RED);
     }
 
     @Override

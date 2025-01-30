@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleFast;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleSlow;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.other.AutoBase;
 
+@Disabled
 @Autonomous(name="6+0")
 
 public class sixSpecAuto extends AutoBase {
