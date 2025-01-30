@@ -145,33 +145,33 @@ public class VisionSubsystem extends SubsystemBase {
 //            telemetry.addData("Max temp", whiteBalanceControl.getMaxWhiteBalanceTemperature());
 //            telemetry.addData("Min temp", whiteBalanceControl.getMinWhiteBalanceTemperature());
 //        }
-        telemetry.addData("Sample Skew", getTotalSkew().orElse(-99999.0));
-        telemetry.addData("Alliance Skew", getAllianceSkew().orElse(-99999.0));
-        telemetry.addData("Yellow Skew", getYellowSkew().orElse(-99999.0));
+//        telemetry.addData("Sample Skew", getTotalSkew().orElse(-99999.0));
+//        telemetry.addData("Alliance Skew", getAllianceSkew().orElse(-99999.0));
+//        telemetry.addData("Yellow Skew", getYellowSkew().orElse(-99999.0));
+//
+//        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
+//        if(allianceOffsets.isPresent()) {
+//            telemetry.addData("offset x", allianceOffsets.get().get(0));
+//            telemetry.addData("offset y", allianceOffsets.get().get(1));
+//        }
+//
+//        Optional<RotatedRect> allianceRect = getAllianceBoxFit();
+//        if(allianceRect.isPresent()){
+//            telemetry.addData("alliance x", allianceRect.get().center.x);
+//            telemetry.addData("alliance y", allianceRect.get().center.y);
+//        }
+//
+//        ColorBlobLocatorProcessor.BlobFilter areaFilter =
+//                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, lowAreaFilter, highAreaFilter);
+//        ColorBlobLocatorProcessor.BlobFilter ratioFilter =
+//                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, lowRatioFilter, highRatioFilter);
+//        for(ColorBlobLocatorProcessor process : new ColorBlobLocatorProcessor[]{allianceLocatorProcess, yellowLocatorProcess}){
+//            process.removeAllFilters();
+//            process.addFilter(areaFilter);
+//            process.addFilter(ratioFilter);
+//        }
 
-        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
-        if(allianceOffsets.isPresent()) {
-            telemetry.addData("offset x", allianceOffsets.get().get(0));
-            telemetry.addData("offset y", allianceOffsets.get().get(1));
-        }
-
-        Optional<RotatedRect> allianceRect = getAllianceBoxFit();
-        if(allianceRect.isPresent()){
-            telemetry.addData("alliance x", allianceRect.get().center.x);
-            telemetry.addData("alliance y", allianceRect.get().center.y);
-        }
-
-        ColorBlobLocatorProcessor.BlobFilter areaFilter =
-                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, lowAreaFilter, highAreaFilter);
-        ColorBlobLocatorProcessor.BlobFilter ratioFilter =
-                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, lowRatioFilter, highRatioFilter);
-        for(ColorBlobLocatorProcessor process : new ColorBlobLocatorProcessor[]{allianceLocatorProcess, yellowLocatorProcess}){
-            process.removeAllFilters();
-            process.addFilter(areaFilter);
-            process.addFilter(ratioFilter);
-        }
-
-        setExposure();
+//        setExposure();
     }
 
     /**

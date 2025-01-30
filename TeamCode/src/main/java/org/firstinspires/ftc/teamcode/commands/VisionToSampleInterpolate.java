@@ -253,7 +253,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         driveSubsystem.readPinpoint();
         Optional<RotatedRect> allianceBoxFit = visionSubsystem.getAllianceBoxFit();
 
-        if(allianceBoxFit.isPresent()&&!hasFoundBlock&&timer.milliseconds()>250){
+        if(allianceBoxFit.isPresent()&&!hasFoundBlock&&timer.milliseconds()>50){
             hasFoundBlock=true;
             Log.i("huhh", "hguhh");
 
