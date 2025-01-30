@@ -254,9 +254,9 @@ public class TeleopOpMode extends Robot {
         }
 
         //extend after dropOff
-        if(armSubsystem.getLastCommand().getName().equals("DropOffCommand") && Math.abs(driveSubsystem.getPos().getRotation().getDegrees()) < 100){
+        /*if(armSubsystem.getLastCommand().getName().equals("DropOffCommand") && Math.abs(driveSubsystem.getPos().getRotation().getDegrees()) < 100){
             schedule(new IntakeSub(armSubsystem, intakeSubsystem));
-        }
+        }*/
 
         //switch teleop mode
         if(currentGamepad1.touchpad && !previousGamepad1.touchpad || currentGamepad2.touchpad && !previousGamepad2.touchpad){

@@ -75,12 +75,12 @@ public class sixSpecAuto extends AutoBase {
                 new IntakeSub(armSubsystem, intakeSubsystem),
                 new InstantCommand(() -> intakeSubsystem.setDiffy(0,0)),
                 new WaitCommand(800),
+                //vision
                 new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(1500),
-                //vison code
-                //TODO: add vision code
+                //wait
+                new WaitCommand(100),
                 //pickup sample and retract
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
-                new WaitCommand(100),
 
 
 
@@ -89,7 +89,7 @@ public class sixSpecAuto extends AutoBase {
                 new ParallelDeadlineGroup(
                     new DriveToPointCommand(driveSubsystem, new Pose2d(45, -50, new Rotation2d(0)), 10, 10),
                     new SequentialCommandGroup(
-                        new WaitCommand(200),
+                        new WaitCommand(400),
                         new InstantCommand(() -> armSubsystem.setArm(95)),
                         new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket)
                     )

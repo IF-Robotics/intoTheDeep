@@ -9,13 +9,14 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 
 public class TeleopSpecScore extends SequentialCommandGroup{
     public TeleopSpecScore(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem) {
         addCommands(
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
-                            new InstantCommand(() -> driveSubsystem.setStartingPos(new Pose2d(wallPickUp.getX(), wallPickUp.getY(), driveSubsystem.getPos().getRotation()))),
+                            new InstantCommand(() -> driveSubsystem.setStartingPos(new Pose2d(wallPickUp.getX(), wallPickUp.getY() + 1, Rotation2d.fromDegrees(180)))),
                             new AutoSpecimenCycleFast(armSubsystem,intakeSubsystem,driveSubsystem),
                             new AutoSpecimenCycleFast(armSubsystem,intakeSubsystem,driveSubsystem),
                             new AutoSpecimenCycleFast(armSubsystem,intakeSubsystem,driveSubsystem),

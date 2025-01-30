@@ -39,6 +39,7 @@ public class ArmManualCommand extends CommandBase {
     public boolean isFinished() {
         if(driverOp.getButton(GamepadKeys.Button.BACK)) {
             manualArm = false;
+            manualSlides = false;
             return true;
         } else {
             return false;

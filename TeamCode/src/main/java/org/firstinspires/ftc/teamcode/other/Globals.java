@@ -15,15 +15,15 @@ public class Globals {
     public static int rollLastLeftAuto = -190;
     //intake from the wall
     public static int pitchIntakeWall = 400;
-    public static int rollIntakeWall = 0;
+    public static int rollIntakeWall = -20;
     // Right left specimens
     public static int pitchRightAutoSpecimen = pitchIntakeWall;
     public static int rollRightAutoSpecimen = -190;
 
     //claw poses
     public static double clawOpen = 0.7;
-    public static double clawExtraOpen = .75;
-    public static double clawClose = .38;
+    public static double clawExtraOpen = .8;
+    public static double clawClose = .25;
 
     //scoring
     //basket
@@ -35,7 +35,7 @@ public class Globals {
 
     //autoLeft
     public static double autoPitchFrontHighChamber = 0;
-    public static double rollFrontHighChamber = 100;
+    public static double rollFrontHighChamber = 70;
 
     public static double pitchFrontHighChamber = 300;
 
@@ -74,16 +74,16 @@ public class Globals {
     public static double armFrontHighChamberY = 17.6;
     public static double autoArmFrontHighChamberY = 17.75;
     //arm when high chamber
-    public static double armHighChamberX = -1;
-    public static double armHighChamberY = 24;
     public static double armRightHighChamberX = -1;
-    public static double armRightHighChamberY = 24.5+4.25 ;
+    public static double armRightHighChamberY = 24.5+5;
+    public static double armHighChamberX = -1;
+    public static double armHighChamberY = armRightHighChamberY;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
     public static double armReadySubIntakeX = 27;
-    public static double armSubIntakeY = 2.5;
-    public static double armReadySubIntakeY = 7.5;
+    public static double armSubIntakeY = 3;
+    public static double armReadySubIntakeY = 8;
     public static double armInSubIntakeY = 5;
     //arm when close (distance) intake
     public static double armCloseIntakeX = 15;

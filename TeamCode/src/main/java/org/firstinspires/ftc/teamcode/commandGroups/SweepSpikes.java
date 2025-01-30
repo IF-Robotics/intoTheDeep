@@ -25,11 +25,12 @@ public class SweepSpikes extends SequentialCommandGroup {
     public SweepSpikes(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem){
         addCommands(
                 // Drive to middle
-                new ArmCoordinatesCommand(armSubsystem, 15, armAutoReadyPushY),
+                new InstantCommand(() -> armSubsystem.setArm(15)),
                 //first sample
-                new ParallelDeadlineGroup(new DriveToPointCommand(driveSubsystem, rightSideLeftSpike, 5, 5),
+                new ParallelDeadlineGroup(
+                        new DriveToPointCommand(driveSubsystem, rightSideLeftSpike, 5, 5),
                         new SequentialCommandGroup(
-                                new WaitCommand(200),
+                                new WaitCommand(500),
                                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
                                 intakeRightFrontHighChamberCommand
                         )

@@ -291,7 +291,7 @@ public class VisionToSampleInterpolate extends CommandBase {
 //        return false;
         boolean driveOnTarget=false;
         if(isAuto){
-            if(hasFoundBlock && Math.abs(driveSubsystem.getPos().getRotation().getRadians()-autoDesiredHeading)<5){
+            if(hasFoundBlock && Math.abs(driveSubsystem.getPos().getRotation().getRadians()-autoDesiredHeading)<Math.toRadians(5)){
                 driveOnTarget=true;
             }
         }

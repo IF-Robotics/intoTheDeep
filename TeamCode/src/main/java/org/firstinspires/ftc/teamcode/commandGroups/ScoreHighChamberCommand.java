@@ -26,7 +26,7 @@ public class ScoreHighChamberCommand extends SequentialCommandGroup {
                 //retract slides slightly
                 new ArmCoordinatesCommand(armSubsystem, armHighChamberX, armHighChamberY -5),
                 //wait
-                new WaitCommand(200),
+                new WaitCommand(150),
                 //open the claw
                 new InstantCommand(() -> intakeSubsystem.openClaw())
         );

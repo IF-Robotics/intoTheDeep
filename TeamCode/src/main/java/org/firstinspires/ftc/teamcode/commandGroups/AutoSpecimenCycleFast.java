@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -27,24 +29,32 @@ public class AutoSpecimenCycleFast extends SequentialCommandGroup {
 
                 //wait
 //                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3).withTimeout(1000),
+                new DriveToPointCommand(driveSubsystem, wallPickUp, 1, 3).withTimeout(1300),
                 //wait
-                new WaitCommand(100),
+                new WaitCommand(0),
 
 
                 // Intake specimen from wall
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
 //                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -56, Rotation2d.fromDegrees(180)), 1, 5).withTimeout(200),
                 //wait
-                new WaitCommand(100),
+                new WaitCommand(80),
                // set wrist to ready position for high chamber
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontRightHighChamber, rollFrontRightHighChamber),
-                new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY),
+                //raise arm up
+                new InstantCommand(() -> armSubsystem.setArm(90)),
 
 
 
                 // Drive to high chamber
-                new DriveToPointCommand(driveSubsystem, new Pose2d(9, -32+0.5, Rotation2d.fromDegrees(180)),3, 5).withTimeout(1500),
+                new ParallelCommandGroup(
+                        new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberRight.getX()+1, highChamberRight.getY(), Rotation2d.fromDegrees(180)),3, 5).withTimeout(1500),
+                        new SequentialCommandGroup(
+                                //wait then extend slides
+                                new WaitCommand(200),
+                                new ArmCoordinatesCommand(armSubsystem, armRightHighChamberX, armRightHighChamberY)
+                        )
+                ),
                 new DriveToPointCommand(driveSubsystem, highChamberRight ,1, 5).withTimeout(500),
                 //wait
 //                new WaitCommand(200),
