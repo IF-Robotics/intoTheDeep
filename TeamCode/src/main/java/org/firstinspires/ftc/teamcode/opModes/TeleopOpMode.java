@@ -116,10 +116,10 @@ public class TeleopOpMode extends Robot {
                                 new WaitForArmCommand(armSubsystem, 0, 5),
                                 new IntakeSub(armSubsystem, intakeSubsystem)
                         ),
-                        () -> armSubsystem.getArmAngle() < 10
+                        () -> (armSubsystem.getArmAngle() < 5 && armSubsystem.getCurrentY() < 20)
                 ),
                 new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem),
-                () -> armSubsystem.getCurrentY() < 15
+                () -> armSubsystem.getCurrentY() < 30
 
                 ));
         dUp2.whenPressed(new IntakeSub(armSubsystem, intakeSubsystem));
@@ -171,7 +171,7 @@ public class TeleopOpMode extends Robot {
 
         //dropping sample (into observation zone)
         circle2.whenPressed(new DropCommand(armSubsystem, intakeSubsystem));
-        circle2.whenReleased(new DropOffCommand(armSubsystem, intakeSubsystem));
+        circle2.whenReleased(dropOffCommandOp2);
         tRight1.whenActive(
                 new ConditionalCommand(
                         new DropCommand(armSubsystem, intakeSubsystem),
@@ -191,7 +191,7 @@ public class TeleopOpMode extends Robot {
                 new SequentialCommandGroup(
                     //move to high basket
                     new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
-                    new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)
+                    new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket)
                         ),
                 new SequentialCommandGroup(
                         new WaitForSlideCommand(armSubsystem, 8, 15),
@@ -200,7 +200,7 @@ public class TeleopOpMode extends Robot {
 
                         //move to high basket
                         new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
-                        new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollWhenBasket)
+                        new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket)
                 ),
                 () -> armSubsystem.getArmAngle() > 45
                 )

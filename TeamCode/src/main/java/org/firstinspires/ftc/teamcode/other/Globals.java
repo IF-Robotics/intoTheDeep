@@ -25,9 +25,10 @@ public class Globals {
     public static double clawExtraOpen = .8;
     public static double clawClose = .25;
 
+
     //scoring
     //basket
-    public static int pitchWhenBasket = pitchIntakeWall;
+    public static int pitchWhenBasket = pitchesWhenIntake[2];
     public static int rollWhenBasket = 130;
 
     public static double pitchWhenHighChamber = 0;
@@ -128,6 +129,7 @@ public class Globals {
 
 //drive to point
     public static double translationKP = 0.02*1.2;
+
     public static double translationKI = 0.0;
     public static double translationKD = 0.01;
 //    public static double translationKD = 0.001;
@@ -135,7 +137,7 @@ public class Globals {
     public static double translationKR = .5; //KR is the constant for the root of the pid
     public static double translationMaxVel = 1; //in inches per second
 
-    public static double headingKP = 0.005;
+    public static double headingKP = 0.005 * (11.5/9.0);
     public static double headingKI = 0.0;
     public static double headingKD = 0.0002;
     public static double headingKR = .5;
