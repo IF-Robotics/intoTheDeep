@@ -293,17 +293,17 @@ public class VisionToSampleInterpolate extends CommandBase {
             double headingErrorRadians  = Math.atan2(-botToSample.getX(), botToSample.getY());
             double slideExtension = botToSample.getNorm();
 
-            bruh++;
-            if(bruh%100==10) {
-                Log.i("boseRelativeX", String.valueOf(botToSample.getX()));
-                Log.i("boseRelativeY", String.valueOf(botToSample.getY()));
-                Log.i("boseRobotX", String.valueOf(driveSubsystem.getPos().getTranslation().getX()));
-                Log.i("boseRobotY", String.valueOf(driveSubsystem.getPos().getTranslation().getY()));
-                Log.i("boseSampleX", String.valueOf(samplePoseFieldOriented.getX()));
-                Log.i("boseSampleY", String.valueOf(samplePoseFieldOriented.getY()));
-                Log.i("stupidSlide", String.valueOf(slideExtension));
-                Log.i("stupidturning", String.valueOf(180 * headingErrorRadians / (Math.PI)));
-            }
+//            bruh++;
+//            if(bruh%100==10) {
+//                Log.i("boseRelativeX", String.valueOf(botToSample.getX()));
+//                Log.i("boseRelativeY", String.valueOf(botToSample.getY()));
+//                Log.i("boseRobotX", String.valueOf(driveSubsystem.getPos().getTranslation().getX()));
+//                Log.i("boseRobotY", String.valueOf(driveSubsystem.getPos().getTranslation().getY()));
+//                Log.i("boseSampleX", String.valueOf(samplePoseFieldOriented.getX()));
+//                Log.i("boseSampleY", String.valueOf(samplePoseFieldOriented.getY()));
+//                Log.i("stupidSlide", String.valueOf(slideExtension));
+//                Log.i("stupidturning", String.valueOf(180 * headingErrorRadians / (Math.PI)));
+//            }
 
 //            Log.i("stupidX", String.valueOf(botToSample.getX()));
 //            Log.i("stupidY", String.valueOf(botToSample.getY()));
@@ -320,6 +320,7 @@ public class VisionToSampleInterpolate extends CommandBase {
             else{
                 driveSubsystem.pidToRotation2d(new Rotation2d(autoDesiredHeading));
             }
+            slideExtension = MathUtils.clamp(slideExtension, 7.75, 41);
             armSubsystem.setArmX(slideExtension);
 
             double wristAngle = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getRotation().getDegrees();

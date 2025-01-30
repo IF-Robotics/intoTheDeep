@@ -60,7 +60,7 @@ public class sixSpecAuto extends AutoBase {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new WaitCommand(50),
                 //arm to home pos
-                new InstantCommand(() -> armSubsystem.setArm(45)),
+                new InstantCommand(() -> armSubsystem.setArm(40)),
                 new WaitCommand(100),
                 new InstantCommand(()->armSubsystem.setSlide(7.75)),
 
@@ -74,7 +74,7 @@ public class sixSpecAuto extends AutoBase {
                 ).withTimeout(500),
                 new IntakeSub(armSubsystem, intakeSubsystem),
                 new InstantCommand(() -> intakeSubsystem.setDiffy(0,0)),
-                new WaitCommand(800),
+                new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-1.5),
                 //vision
                 new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(1500),
                 //wait
@@ -87,7 +87,7 @@ public class sixSpecAuto extends AutoBase {
                 //dropoff sample at observation zone
                 //drive to observation zone
                 new ParallelDeadlineGroup(
-                    new DriveToPointCommand(driveSubsystem, new Pose2d(45, -50, new Rotation2d(0)), 10, 10),
+                    new DriveToPointCommand(driveSubsystem, new Pose2d(45, -50, new Rotation2d(Math.toRadians(15))), 10, 10),
                     new SequentialCommandGroup(
                         new WaitCommand(400),
                         new InstantCommand(() -> armSubsystem.setArm(95)),

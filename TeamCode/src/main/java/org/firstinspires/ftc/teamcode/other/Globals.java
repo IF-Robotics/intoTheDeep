@@ -35,14 +35,14 @@ public class Globals {
 
     //autoLeft
     public static double autoPitchFrontHighChamber = 0;
-    public static double rollFrontHighChamber = 70;
+    public static double rollFrontHighChamber = 70+20;
 
     public static double pitchFrontHighChamber = 300;
 
 
     //teleop high chamber
     public static double pitchTeleopHighChamber = 0;
-    public static double rollTeleopHighChamber = 260;
+    public static double rollTeleopHighChamber = 230;
 
 
     //autoright
@@ -75,7 +75,7 @@ public class Globals {
     public static double autoArmFrontHighChamberY = 17.75;
     //arm when high chamber
     public static double armRightHighChamberX = -1;
-    public static double armRightHighChamberY = 24.5+5;
+    public static double armRightHighChamberY = 27.75;
     public static double armHighChamberX = -1;
     public static double armHighChamberY = armRightHighChamberY;
 
@@ -127,7 +127,7 @@ public class Globals {
     public static double armCompleteRetractY = 3.5;
 
 //drive to point
-    public static double translationKP = 0.02*1.3;
+    public static double translationKP = 0.02*1.2;
     public static double translationKI = 0.0;
     public static double translationKD = 0.01;
 //    public static double translationKD = 0.001;

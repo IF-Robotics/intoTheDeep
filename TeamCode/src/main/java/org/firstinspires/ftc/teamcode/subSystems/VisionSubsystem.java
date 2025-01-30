@@ -410,4 +410,15 @@ public class VisionSubsystem extends SubsystemBase {
         Log.e("camera", "Set exposure failed");
         return false;
     }
+
+    public void setAllianceLocatorProcess(Alliance alliance){
+        if(alliance==Alliance.RED){
+            allianceLocatorProcessBuilder.setTargetColorRange(red);
+        }
+        else{
+            allianceLocatorProcessBuilder.setTargetColorRange(blue);
+        }
+
+        allianceLocatorProcess = allianceLocatorProcessBuilder.build();
+    }
 }
