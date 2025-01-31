@@ -47,15 +47,13 @@ public class sampleSubCycle extends AutoBase {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket),
-                new WaitForArmCommand(armSubsystem, 95, 10),
+                new WaitForArmCommand(armSubsystem, 95, 10000),
                 //extend slides
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
-                new WaitCommand(1000),
 
 
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
-                new WaitCommand(1000),
 
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem),

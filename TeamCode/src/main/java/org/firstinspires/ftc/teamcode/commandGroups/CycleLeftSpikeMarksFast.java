@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeX;
-import static org.firstinspires.ftc.teamcode.other.Globals.armCloseIntakeY;
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenIntake;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftBasketPose2;
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
 
 
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ScheduleCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -19,13 +15,25 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
+import org.firstinspires.ftc.teamcode.commands.WaitForSlideCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
 public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
 
+
     public CycleLeftSpikeMarksFast(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
+        Command customHighBasketCommand = new SequentialCommandGroup(
+                //move arm back
+                new WaitForArmCommand(armSubsystem, 100, 70),
+
+                //move to high basket
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket)
+        );
+
         addCommands(
 
                 //1st spike
@@ -34,18 +42,17 @@ public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY),
 
                 //drive to first sample on the spikemark
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-46, -38.5, Rotation2d.fromDegrees(0)),2, 5),
-                new WaitCommand(500),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(leftSideRightSpike.getX(), leftSideRightSpike.getY()-6, Rotation2d.fromDegrees(0)),2, 5),
+                new DriveToPointCommand(driveSubsystem, leftSideRightSpike,2, 5),
+                new WaitCommand(100),
 
                 //grab and retract
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
                 //arm basket
-                new HighBasketCommand(armSubsystem, intakeSubsystem),
-                new WaitCommand(500),
+                customHighBasketCommand,
 
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
-                new WaitCommand(300),
 
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem),
@@ -59,18 +66,17 @@ public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY),
 
                 //drive to 2nd spike
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-56, -38.5, Rotation2d.fromDegrees(0)),2, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(leftSideMidSpike.getX(), leftSideMidSpike.getY()-6, Rotation2d.fromDegrees(0)),3, 5),
+                new DriveToPointCommand(driveSubsystem, leftSideMidSpike,2, 5),
                 //wait
                 new WaitCommand(200),
                 //grab and retract
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
                 //arm basket
-                new HighBasketCommand(armSubsystem, intakeSubsystem),
-                new WaitCommand(500),
+                customHighBasketCommand,
 
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
-                new WaitCommand(500),
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem),
 
@@ -81,18 +87,16 @@ public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armCloseIntakeX, armCloseIntakeY),
 
                 //drive to 3rd spike
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-59.3, -35.5, Rotation2d.fromDegrees(35)),2, 5).withTimeout(1000),
+                new DriveToPointCommand(driveSubsystem, leftSideLeftSpike,2, 5).withTimeout(1000),
                 //wait
                 new WaitCommand(200),
                 //grab and retract
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
                 //arm basket
-                new HighBasketCommand(armSubsystem, intakeSubsystem),
-                new WaitCommand(500),
+                customHighBasketCommand,
 
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
-                new WaitCommand(500),
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem)
         );
