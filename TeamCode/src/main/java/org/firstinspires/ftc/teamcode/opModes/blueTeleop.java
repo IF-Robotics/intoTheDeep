@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.opModes.TeleopOpMode;
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
 //import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
-@TeleOp(name="BlueTeleop\uD83D\uDC99\uD83D\uDC99\uD83D\uDC99\uD83C\uDFAE")
+@TeleOp(name="BlueTeleop\uD83D\uDC99\uD83C\uDFAE\uD83D\uDC99\uD83C\uDFAE\uD83D\uDC99\uD83C\uDFAE")
 public class blueTeleop extends TeleopOpMode {
     public void initialize(){
         VisionSubsystem.alliance = VisionSubsystem.Alliance.BLUE;

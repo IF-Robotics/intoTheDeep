@@ -87,13 +87,14 @@ public class sixSpecAuto extends AutoBase {
                 new ParallelCommandGroup(
                     new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->firstHighChamberRight.getY() - 5, firstHighChamberRight.getRotation(), 5, 5),
                     //extend slides into sub
-                    new WaitForArmCommand(armSubsystem, -5, 5)
+                    new WaitForArmCommand(armSubsystem, -5, 5),
+                    new WaitCommand(300).andThen(new InstantCommand(() -> intakeSubsystem.setDiffy(0,-50)))
                 ).withTimeout(500),
+                new InstantCommand(() -> intakeSubsystem.setDiffy(0,-50)),
                 new ParallelCommandGroup(
                     new IntakeSub(armSubsystem, intakeSubsystem),
                     new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->-46.5 + subY, firstHighChamberRight.getRotation(), 5, 5)
                 ),
-                new InstantCommand(() -> intakeSubsystem.setDiffy(0,0)),
                 new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-0.75),
                 //vision
                 new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(20000),

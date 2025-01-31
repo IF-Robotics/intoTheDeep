@@ -45,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     private InterpLUT slideKgLut = new InterpLUT();
 
     //slide pidf
-    public static double slideKP = .2*1.2, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
+    public static double slideKP = .2*1.5, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
     private PIDController slideController;
     private final double ticksPerIn = (2786/32.75)*(31.967/52.1537);
     private int slideTicks = 1;
