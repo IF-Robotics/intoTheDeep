@@ -28,7 +28,7 @@ public class Globals {
 
     //scoring
     //basket
-    public static int pitchWhenBasket = pitchesWhenIntake[2];
+    public static int pitchWhenBasket = pitchIntakeWall;
     public static int rollWhenBasket = 130;
 
     public static double pitchWhenHighChamber = 0;
@@ -149,6 +149,6 @@ public class Globals {
     public static double testHeading = 0;
 
     //teleop mode
-    public static boolean teleopSpec = true;
+    public static boolean teleopSpec = false;
 
 }

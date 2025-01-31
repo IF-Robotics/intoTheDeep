@@ -2,14 +2,8 @@
 package org.firstinspires.ftc.teamcode.opModes;
 
 
-import static org.firstinspires.ftc.teamcode.other.Globals.armHighBasketX;
-import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
-import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollIntakeWall;
-import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftAutoPark;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftBasketPose2;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosLeft2;
+import static org.firstinspires.ftc.teamcode.other.Globals.*;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -20,15 +14,18 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandGroups.CycleLeftSpikeMarksFast;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
+import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasketAuto;
+import org.firstinspires.ftc.teamcode.commandGroups.SampleSubAuto;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
-import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.other.AutoBase;
 
-@Autonomous(name="0+4")
-public class zeroPlusFourAuto extends Robot {
+@Autonomous(name="0+5+")
+public class sampleSubCycle extends AutoBase {
 
     @Override
     public void initialize(){
@@ -47,22 +44,32 @@ public class zeroPlusFourAuto extends Robot {
                 new WaitCommand(6),
                 //stay at startpoint
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosLeft2)),
+
+
                 //raise intake and arm
-                new WaitForArmCommand(armSubsystem, 100, 10),
-                new WaitCommand(100),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchIntakeWall, rollIntakeWall),
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 43),
-                //drive to middle
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-15, -50, Rotation2d.fromDegrees(0)), 2, 5),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket),
+                new WaitForArmCommand(armSubsystem, 95, 10000),
+                //extend slides
+                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
+
+
+                //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
-                new ArmCoordinatesCommand(armSubsystem, armHighBasketX, 40),
-                new WaitCommand(300),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 390, rollWhenBasket),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 390, rollWhenBasket),
-                new WaitCommand(200),
+
+                //score in high basket
+                new RetractFromBasketAuto(armSubsystem, intakeSubsystem),
 
                 //cycle the spikemarks
                 new CycleLeftSpikeMarksFast(driveSubsystem, intakeSubsystem, armSubsystem),
+
+                //cyling from the sub
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-24, -7, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-24, -3, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-24, -3, Rotation2d.fromDegrees(-90))),
+
+
+
+
 
                 // park
                 //move arm up

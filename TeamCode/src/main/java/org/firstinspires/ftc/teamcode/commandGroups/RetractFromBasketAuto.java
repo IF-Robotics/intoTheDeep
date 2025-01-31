@@ -1,7 +1,12 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import static org.firstinspires.ftc.teamcode.other.Globals.*;
-import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
+import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmHome;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -13,9 +18,9 @@ import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
-public class RetractFromBasket extends SequentialCommandGroup {
+public class RetractFromBasketAuto extends SequentialCommandGroup {
 
-    public RetractFromBasket(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem) {
+    public RetractFromBasketAuto(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem) {
 
         addCommands(
                 //outtake
@@ -23,9 +28,7 @@ public class RetractFromBasket extends SequentialCommandGroup {
                 //wait
                 new WaitCommand(50),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenIntake),
-                //move dt
-                new InstantCommand(() -> driveSubsystem.driveRobotCentric(0, 1, 0)),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenIntake),
                 //wait
                 new WaitCommand(75),
                 //retract slides
@@ -33,10 +36,9 @@ public class RetractFromBasket extends SequentialCommandGroup {
                 new WaitCommand(150),
                 //move arm down
                 new ArmCoordinatesCommand(armSubsystem, armHomeX, armHomeY),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenArmHome),
-                new InstantCommand(() -> driveSubsystem.driveRobotCentric(0, 0, 0))
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenArmHome)
 
         );
-        addRequirements(driveSubsystem, armSubsystem, intakeSubsystem);
+        addRequirements(armSubsystem, intakeSubsystem);
     }
 }

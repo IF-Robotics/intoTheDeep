@@ -266,10 +266,6 @@ public abstract class Robot extends CommandOpMode {
             voltageCompensation = batteryVoltage/nominalVoltage;
         }
 
-        previousGamepad1.copy(currentGamepad1);
-        previousGamepad2.copy(currentGamepad2);
-        currentGamepad1.copy(gamepad1);
-        currentGamepad2.copy(gamepad2);
 
         if (gamepad1.start){
             schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));
@@ -339,7 +335,6 @@ public abstract class Robot extends CommandOpMode {
         //intakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         outakeReadyCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
 
-        intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenIntake, rollWhenIntake);
         intakeWallCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollIntakeWall);
 
         intakeCloseCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenIntake, rollWhenIntake);
