@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.ServoEx;
@@ -19,6 +20,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -27,6 +29,7 @@ import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriver;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.commandGroups.DropOffCommand;
@@ -46,6 +49,8 @@ import org.firstinspires.ftc.teamcode.commands.TeleDriveCommand;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.ColorSubsystem;
+
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
 @Config
@@ -107,13 +112,16 @@ public abstract class Robot extends CommandOpMode {
     public GoBildaPinpointDriver pinpoint;
     private MecanumDrive mecanumDrive;
     public IMU gyro;
-    public RevColorSensorV3 sensor;
+    public RevColorSensorV3 sensor, distance;
+
+    public AnalogInput analog0, analog1;
 
     //subsystems
     public DriveSubsystem driveSubsystem;
     public ArmSubsystem armSubsystem;
     public IntakeSubsystem intakeSubsystem;
     public VisionSubsystem visionSubsystem;
+    public ColorSubsystem colorSubsystem;
 
     //system
     private LynxModule controlHub;
@@ -215,9 +223,18 @@ public abstract class Robot extends CommandOpMode {
         armSubsystem = new ArmSubsystem(arm, slideRight, slide, endStop, armEncoder, telemetry);
         register(armSubsystem);
 
-        //intake
+        //sensor
 
         sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
+        distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
+        AnalogInput pin0 = hardwareMap.analogInput.get("analog0");
+        AnalogInput pin1 = hardwareMap.analogInput.get("analog1");
+
+        colorSubsystem = new ColorSubsystem(hardwareMap, telemetry);
+        register(colorSubsystem);
+
+
+        //intake
         claw = new SimpleServo(hardwareMap, "claw", 0, 180, AngleUnit.DEGREES);
         diffyLeft =  new SimpleServo(hardwareMap, "diffyLeft", 0, 360, AngleUnit.DEGREES);
         diffyRight =  new SimpleServo(hardwareMap, "diffyRight", 0, 360, AngleUnit.DEGREES);
