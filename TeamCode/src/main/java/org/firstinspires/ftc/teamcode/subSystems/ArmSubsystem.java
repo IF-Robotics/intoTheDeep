@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.Robot.voltageCompensation;
 
-import android.util.Log;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ProfiledPIDController;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.arcrobotics.ftclib.util.InterpLUT;
@@ -35,7 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static double kParm = 0.05, kIarm = 0, kDarm = 0.01, kFarm = 2, kGarm = 2;
     public static double armWeakKP = 0.01;
     public static double armAngleOffset = -178.5/*-39*/;
-    public static double armSuperWeakKP = .005;
+    public static double climbingArmP = .06;
     private double ff;
     private PIDController armController;
     public static double setArmTargetAngle = 0;
