@@ -54,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-    public static int exposureMillis = 24;//24, 35
+    public static int exposureMillis = 35;//24, 35
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -133,7 +133,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .addProcessor(allianceLocatorProcess)
                 .build();
 
-        waitForSetCameraSettings(50000, 500000);
+        waitForSetCameraSettings(10000, 5000000);
     }
 
 
@@ -405,19 +405,8 @@ public class VisionSubsystem extends SubsystemBase {
             msAfterStart = System.currentTimeMillis() - startMs;
         }
 
-        Log.e("camera", "Set exposure failed");
+        Log.e("camera", "Set exposure failed msAfterStart:" + String.valueOf(msAfterStart) + " attempts:" + String.valueOf(attempts));
         return false;
-    }
-
-    public void setAllianceLocatorProcess(Alliance alliance){
-        if(alliance==Alliance.RED){
-            allianceLocatorProcessBuilder.setTargetColorRange(red);
-        }
-        else{
-            allianceLocatorProcessBuilder.setTargetColorRange(blue);
-        }
-
-        allianceLocatorProcess = allianceLocatorProcessBuilder.build();
     }
 
     public void turnOnStreaming(boolean enabled){

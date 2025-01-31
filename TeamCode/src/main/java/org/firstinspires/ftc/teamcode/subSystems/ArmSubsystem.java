@@ -45,6 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     private InterpLUT slideKgLut = new InterpLUT();
 
     //slide pidf
+    //IMPORTANT, slideKP needs to be changed in VisionToSampleInterpolte as well
     public static double slideKP = .2*1.5, slideKI = 0.0, slideKD = 0.0, slideKF = 0.07;
     private PIDController slideController;
     private final double ticksPerIn = (2786/32.75)*(31.967/52.1537);
@@ -71,7 +72,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     //slide velocity
     private LinkedList<TimeStampedPosition> positionHistory = new LinkedList<>();
-    private static final long VELOCITY_TIME_FRAME_MS = 50; // Time frame in milliseconds
+    private static final long VELOCITY_TIME_FRAME_MS = 100; // Time frame in milliseconds
 
     //endstop
     private Endstop endstop;

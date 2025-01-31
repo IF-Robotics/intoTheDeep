@@ -46,7 +46,7 @@ public class VisionToSampleInterpolate extends CommandBase {
     private DoubleSupplier strafe, forward, turn;
 
 
-    public static double kPTurn = 0.005 * 180 / Math.PI;
+    public static double kPTurn = 0.005 * 180 / Math.PI *1.3;
 
     BasicPID turnpid = new BasicPID(new PIDCoefficients(kPTurn,0,0));
 
@@ -172,7 +172,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         armSubsystem.setArmY(armReadySubIntakeY);
         hasFoundBlock=false;
 
-        armSubsystem.setSlideP(0.1);
+        armSubsystem.setSlideP(0.15);
         visionSubsystem.turnOnStreaming(true);
         timer.reset();
     }
@@ -256,7 +256,7 @@ public class VisionToSampleInterpolate extends CommandBase {
 
     @Override
     public void end(boolean e){
-        armSubsystem.setSlideP(0.2);
+        armSubsystem.setSlideP(0.3);
         if(isAuto) {
             visionSubsystem.turnOnStreaming(false);
         }
@@ -274,7 +274,7 @@ public class VisionToSampleInterpolate extends CommandBase {
             }
         }
 
-        boolean slidesOnTarget = hasFoundBlock && Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())<0.75 && Math.abs(armSubsystem.getSlideVelocity())<0.5;
+        boolean slidesOnTarget = hasFoundBlock && Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())<0.5 && Math.abs(armSubsystem.getSlideVelocity())<0.5;
 
         return driveOnTarget && slidesOnTarget;
     }
