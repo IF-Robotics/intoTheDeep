@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHomeX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armHomeY;
 import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchWhenBasket;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenArmHome;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenBasket;
 import static org.firstinspires.ftc.teamcode.other.Globals.rollWhenIntake;
@@ -23,11 +24,11 @@ public class RetractFromBasketAuto extends SequentialCommandGroup {
 
         addCommands(
                 //outtake
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollWhenBasket),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenBasket),
                 //wait
                 new WaitCommand(50),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchIntakeWall, rollWhenIntake),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenIntake),
                 //wait
                 new WaitCommand(75),
                 //retract slides

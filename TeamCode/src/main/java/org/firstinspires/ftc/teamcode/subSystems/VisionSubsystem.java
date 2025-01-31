@@ -48,8 +48,10 @@ public class VisionSubsystem extends SubsystemBase {
     public final static double kDesiredY = kCameraHeight*0.5;
 
     public static int lowAreaFilter = 600;
+    public static int lowAreaFilterYellow = 1200;
     public static int highAreaFilter = 2500;
     public static double lowRatioFilter = 1.3;
+    public static double lowRatioFilterYellow = 1.5;
     public static double highRatioFilter = 2.8;
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
@@ -83,7 +85,6 @@ public class VisionSubsystem extends SubsystemBase {
 
 
     ColorBlobLocatorProcessor.Builder allianceLocatorProcessBuilder = new ColorBlobLocatorProcessor.Builder()
-            .setDrawContours(true)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
 //            .setRoi(ImageRegion.entireFrame())
             .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
@@ -94,9 +95,10 @@ public class VisionSubsystem extends SubsystemBase {
     ColorBlobLocatorProcessor yellowLocatorProcess = new ColorBlobLocatorProcessor.Builder()
             .setTargetColorRange(yellow)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
-            .setRoi(ImageRegion.entireFrame())
+            .setRoi(ImageRegion.asUnityCenterCoordinates(-0.8, 0.8, 0.8, -0.8))
             .setBlurSize(1)
-            .setErodeSize(4)
+            .setErodeSize(6)
+            .setDrawContours(true)
             .build();
 
     VisionPortal visionPortal;
@@ -120,11 +122,19 @@ public class VisionSubsystem extends SubsystemBase {
         ColorBlobLocatorProcessor.BlobSort largestSort =
                 new ColorBlobLocatorProcessor.BlobSort(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, SortOrder.DESCENDING);
 
-        for(ColorBlobLocatorProcessor process : new ColorBlobLocatorProcessor[]{allianceLocatorProcess, yellowLocatorProcess}){
-            process.addFilter(areaFilter);
-            process.addFilter(ratioFilter);
-            process.setSort(largestSort);
-        }
+        allianceLocatorProcess.addFilter(areaFilter);
+        allianceLocatorProcess.addFilter(ratioFilter);
+        allianceLocatorProcess.setSort(largestSort);
+
+        ColorBlobLocatorProcessor.BlobFilter areaFilterYellow =
+                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, lowAreaFilterYellow, highAreaFilter);
+        ColorBlobLocatorProcessor.BlobFilter ratioFilterYellow =
+                new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, lowRatioFilterYellow, highRatioFilter);
+
+        yellowLocatorProcess.addFilter(areaFilterYellow);
+        yellowLocatorProcess.addFilter(ratioFilterYellow);
+        yellowLocatorProcess.setSort(largestSort);
+
 
         visionPortal = new VisionPortal.Builder()
                 .setCamera(camera)
@@ -133,7 +143,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .addProcessor(allianceLocatorProcess)
                 .build();
 
-        waitForSetCameraSettings(10000, 5000000);
+        waitForSetCameraSettings(10000, 10000000);
     }
 
 

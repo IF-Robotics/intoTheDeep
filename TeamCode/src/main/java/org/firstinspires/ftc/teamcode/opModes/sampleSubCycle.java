@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commandGroups.CycleLeftSpikeMarksFast;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasket;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractFromBasketAuto;
+import org.firstinspires.ftc.teamcode.commandGroups.SampleSubAuto;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
@@ -58,11 +59,10 @@ public class sampleSubCycle extends AutoBase {
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem),
 
-
-
                 //cycle the spikemarks
                 new CycleLeftSpikeMarksFast(driveSubsystem, intakeSubsystem, armSubsystem),
-
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-26, -7, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-26, -3, Rotation2d.fromDegrees(-90))),
 
 
 

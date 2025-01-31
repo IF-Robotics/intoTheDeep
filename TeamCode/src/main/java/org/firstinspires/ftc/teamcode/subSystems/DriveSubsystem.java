@@ -78,6 +78,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     ElapsedTime timer = new ElapsedTime();
 
+    double translationalError = 0.0;
+
 
 
     //constructor for auto
@@ -226,6 +228,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         //vector calculation
         rawVectorMagnitude = Math.hypot(errorX, errorY);
+        //DO NOT USE THIS VARIABLE, this is just for a getERror method
+        translationalError = Math.abs(rawVectorMagnitude);
         vectorTheta = Math.toDegrees(Math.atan2(errorY, errorX));
 
         //pid calculation
@@ -307,6 +311,10 @@ public class DriveSubsystem extends SubsystemBase {
         packet.fieldOverlay().setStroke("#3F51B5");
         Drawing.drawRobot(packet.fieldOverlay(), new com.acmerobotics.roadrunner.Pose2d(pose.getX(), pose.getY(), pose.getRotation().getRadians() + Math.PI/2));
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
+    }
+
+    public double getAutoDriveError(){
+        return translationalError;
     }
 
     @Override
