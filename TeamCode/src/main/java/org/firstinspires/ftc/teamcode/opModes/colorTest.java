@@ -2,21 +2,21 @@ package org.firstinspires.ftc.teamcode.opModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.subSystems.colorSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.ColorSubsystem;
 
 @TeleOp(name = "Test Color Sensor")
 public class colorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        colorSubsystem colorSensorSubsystem = new colorSubsystem(hardwareMap, telemetry);
+        ColorSubsystem colorSubsystem = new ColorSubsystem(hardwareMap, telemetry);
 
         telemetry.update();
 
         waitForStart();
 
         while (opModeIsActive()) {
-            colorSensorSubsystem.updateTelemetry();
+            colorSubsystem.updateTelemetry();
             sleep(100);
         }
     }
