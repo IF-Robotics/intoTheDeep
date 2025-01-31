@@ -2,15 +2,21 @@ package org.firstinspires.ftc.teamcode.opModes;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
 
+import android.util.Log;
+
+import androidx.core.math.MathUtils;
+
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleFast;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleSlow;
@@ -21,6 +27,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.SweepSpikes;
 import org.firstinspires.ftc.teamcode.commandGroups.rightPreloadSpecScore;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.commands.DriveToPointDoubleSupplierCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
@@ -30,6 +37,15 @@ import org.firstinspires.ftc.teamcode.other.AutoBase;
 @Autonomous(name="6+0")
 
 public class sixSpecAuto extends AutoBase {
+
+    private double subX = 0;
+    private double subY = 7.5;
+
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
 
 @Override
     public void initialize() {
@@ -57,7 +73,7 @@ public class sixSpecAuto extends AutoBase {
 
                 // Drive to high chamber
                 // Score specimen
-                new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
+                new DriveToPointDoubleSupplierCommand(driveSubsystem, ()-> MathUtils.clamp(subX, -20, 6)+3, ()->firstHighChamberRight.getY(), firstHighChamberRight.getRotation(), 5, 10).withTimeout(1500),
                 //open
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new WaitCommand(50),
@@ -67,14 +83,16 @@ public class sixSpecAuto extends AutoBase {
                 new InstantCommand(()->armSubsystem.setSlide(7.75)),
 
 
-                //intake from sub
-                //drive translationally to spot indicated at by
+                //drive back
                 new ParallelCommandGroup(
-                    new DriveToPointCommand(driveSubsystem, new Pose2d(0, firstHighChamberRight.getY()-3, firstHighChamberRight.getRotation()), 5, 5),
+                    new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->firstHighChamberRight.getY() - 3, firstHighChamberRight.getRotation(), 5, 5),
                     //extend slides into sub
                     new WaitForArmCommand(armSubsystem, 0, 5)
                 ).withTimeout(500),
-                new IntakeSub(armSubsystem, intakeSubsystem),
+                new ParallelCommandGroup(
+                    new IntakeSub(armSubsystem, intakeSubsystem),
+                    new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->-46.5 + subY, firstHighChamberRight.getRotation(), 5, 5)
+                ),
                 new InstantCommand(() -> intakeSubsystem.setDiffy(0,0)),
                 new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-1.5),
                 //vision
@@ -125,8 +143,34 @@ public class sixSpecAuto extends AutoBase {
         ));
 
         //gamepad input
-        while(opModeInInit()){
+        while(!isStarted() && !isStopRequested()){
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
 
+            if(currentGamepad1.dpad_left && !previousGamepad1.dpad_left){
+                subX -= 1;
+                MathUtils.clamp(subX, -8, 8);
+            }
+
+            if(currentGamepad1.dpad_right && !previousGamepad1.dpad_right){
+                subX += 1;
+                subX = MathUtils.clamp(subX, -8, 8);
+            }
+
+            if(currentGamepad1.dpad_up && !previousGamepad1.dpad_up){
+                subY += 1;
+                subY = MathUtils.clamp(subY, 0, 15);
+            }
+
+            if(currentGamepad1.dpad_down && !previousGamepad1.dpad_down){
+                subY -= 1;
+            }
+
+            telemetry.addData("subX (-8,8)", subX);
+            telemetry.addData("subY(offesetFromBarrier)(0,15)", subY);
+            telemetry.update();
         }
     }
 }

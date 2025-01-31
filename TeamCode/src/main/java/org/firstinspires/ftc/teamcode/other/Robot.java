@@ -130,6 +130,11 @@ public abstract class Robot extends CommandOpMode {
     public GamepadEx m_driverOp;
     public Gamepad standardDriver1;
     public Gamepad standardDriver2;
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
 
     public CustomButton customButton;
     enum CustomButton {
@@ -261,6 +266,10 @@ public abstract class Robot extends CommandOpMode {
             voltageCompensation = batteryVoltage/nominalVoltage;
         }
 
+        previousGamepad1.copy(currentGamepad1);
+        previousGamepad2.copy(currentGamepad2);
+        currentGamepad1.copy(gamepad1);
+        currentGamepad2.copy(gamepad2);
 
         if (gamepad1.start){
             schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitch, roll));

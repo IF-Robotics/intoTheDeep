@@ -44,18 +44,18 @@ import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 @TeleOp(name="teleOpFunnyTest")
 public class TeleopOpMode extends Robot {
 
-    Gamepad currentGamepad1 = new Gamepad();
-    Gamepad currentGamepad2 = new Gamepad();
-
-    Gamepad previousGamepad1 = new Gamepad();
-    Gamepad previousGamepad2 = new Gamepad();
-
 
 
     //buttons
     private Button cross1, back2, start2, dUp1, dDown1, dLeft1, dRight1, bRight1, bLeft1, triangle1, triangle2, square1, touchpad1, touchpad2, start1, square2, dUp2, bRight2, bLeft2, dRight2, dDown2, cross2, circle1, circle2, dLeft2, back1;
     private Trigger tLeft1, tRight1, tLeft2, tRight2;
 
+
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
 
     @Override
     public void initialize(){
@@ -239,10 +239,6 @@ public class TeleopOpMode extends Robot {
     public void run(){
         super.run();
 
-        previousGamepad1.copy(currentGamepad1);
-        previousGamepad2.copy(currentGamepad2);
-        currentGamepad1.copy(gamepad1);
-        currentGamepad2.copy(gamepad2);
 
         //retract and move arm out of the way
         if(gamepad1.right_stick_button || gamepad2.right_stick_button){
