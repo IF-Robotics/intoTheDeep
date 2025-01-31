@@ -11,6 +11,7 @@ public class WaitForArmCommand extends CommandBase {
     private ArmSubsystem armSubsystem;
     private double targetAngle;
     private double tolerance;
+    private double powerCap = 0;
     private ElapsedTime timer = new ElapsedTime();
     private int loopCount = 0;
 
@@ -23,12 +24,24 @@ public class WaitForArmCommand extends CommandBase {
         addRequirements(armSubsystem);
     }
 
+    public WaitForArmCommand(ArmSubsystem armSubsystem, double targetAngle, double tolerance, double powerCap) {
+        this.armSubsystem = armSubsystem;
+        this.targetAngle = targetAngle;
+        this.tolerance = tolerance;
+        this.powerCap = powerCap;
+
+        addRequirements(armSubsystem);
+    }
+
     @Override
     public void initialize(){
         armSubsystem.setArm(targetAngle);
         Log.i("stupidbruhtargetAngle", String.valueOf(targetAngle));
         timer.reset();
         loopCount = 0;
+        if(powerCap != 0){
+            armSubsystem.setArmPowerCap(powerCap);
+        }
     }
 
     @Override
@@ -36,6 +49,11 @@ public class WaitForArmCommand extends CommandBase {
         armSubsystem.setArm(targetAngle);
         Log.i("stupidbruhtargetAngle", String.valueOf(targetAngle));
         loopCount++;
+    }
+
+    @Override
+    public void end(boolean interrupted){
+        armSubsystem.setArmPowerCap(1);
     }
 
     @Override

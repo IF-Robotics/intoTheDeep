@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.other.Globals;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 
 import java.util.function.BooleanSupplier;
@@ -25,6 +26,8 @@ public class ResetSlides extends CommandBase {
     @Override
     public void initialize(){
         timer.reset();
+        Globals.manualArm = true;
+        Globals.manualSlides = true;
     }
 
     @Override
