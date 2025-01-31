@@ -54,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-    public static int exposureMillis = 55;//24, 35
+    public static int exposureMillis = 24;//24, 35
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -95,9 +95,8 @@ public class VisionSubsystem extends SubsystemBase {
             .setTargetColorRange(yellow)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
             .setRoi(ImageRegion.entireFrame())
-            .setBlurSize(5)
+            .setBlurSize(1)
             .setErodeSize(4)
-            .setDrawContours(true)
             .build();
 
     VisionPortal visionPortal;
@@ -134,7 +133,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .addProcessor(allianceLocatorProcess)
                 .build();
 
-        waitForSetCameraSettings(10000, 50000);
+        waitForSetCameraSettings(50000, 500000);
     }
 
 
@@ -419,5 +418,14 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         allianceLocatorProcess = allianceLocatorProcessBuilder.build();
+    }
+
+    public void turnOnStreaming(boolean enabled){
+        if(enabled){
+            visionPortal.resumeStreaming();
+        }
+        else{
+            visionPortal.stopStreaming();
+        }
     }
 }

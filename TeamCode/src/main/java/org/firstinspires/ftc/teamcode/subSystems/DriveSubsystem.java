@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.subSystems;
 import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.Robot.voltageCompensation;
 
+import android.util.Log;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -73,6 +75,8 @@ public class DriveSubsystem extends SubsystemBase {
         FAST,
         SLOW
     }
+
+    ElapsedTime timer = new ElapsedTime();
 
 
 
@@ -248,16 +252,17 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void readPinpoint() {
+        timer.reset();
         pinpoint.update();
         Pose2D tempPos = pinpoint.getPosition();
         if(!(Double.isNaN(tempPos.getX(DistanceUnit.INCH)) || Double.isNaN(tempPos.getY(DistanceUnit.INCH)) || Double.isNaN(tempPos.getHeading(AngleUnit.DEGREES)))){
             currentPos = new Pose2d(-tempPos.getY(DistanceUnit.INCH), tempPos.getX(DistanceUnit.INCH), Rotation2d.fromDegrees(tempPos.getHeading(AngleUnit.DEGREES)));
         }
+        telemetry.addData("pinpointRefreshRate", timer.milliseconds());
+        Log.i("pinpointRefreshRate", String.valueOf(timer.milliseconds()));
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
-
-        drawBot(currentPos);
     }
 
     public Pose2d getPos(){

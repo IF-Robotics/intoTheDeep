@@ -73,7 +73,7 @@ public class sixSpecAuto extends AutoBase {
 
                 // Drive to high chamber
                 // Score specimen
-                new DriveToPointDoubleSupplierCommand(driveSubsystem, ()-> MathUtils.clamp(subX, -20, 6)+3, ()->firstHighChamberRight.getY(), firstHighChamberRight.getRotation(), 5, 10).withTimeout(1500),
+                new DriveToPointDoubleSupplierCommand(driveSubsystem, ()-> MathUtils.clamp(subX, -20, 4)+3, ()->firstHighChamberRight.getY(), firstHighChamberRight.getRotation(), 5, 10).withTimeout(1500),
                 //open
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new WaitCommand(50),
@@ -85,18 +85,18 @@ public class sixSpecAuto extends AutoBase {
 
                 //drive back
                 new ParallelCommandGroup(
-                    new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->firstHighChamberRight.getY() - 3, firstHighChamberRight.getRotation(), 5, 5),
+                    new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->firstHighChamberRight.getY() - 5, firstHighChamberRight.getRotation(), 5, 5),
                     //extend slides into sub
-                    new WaitForArmCommand(armSubsystem, 0, 5)
+                    new WaitForArmCommand(armSubsystem, -5, 5)
                 ).withTimeout(500),
                 new ParallelCommandGroup(
                     new IntakeSub(armSubsystem, intakeSubsystem),
                     new DriveToPointDoubleSupplierCommand(driveSubsystem, ()->subX+3, ()->-46.5 + subY, firstHighChamberRight.getRotation(), 5, 5)
                 ),
                 new InstantCommand(() -> intakeSubsystem.setDiffy(0,0)),
-                new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-1.5),
+                new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-0.75),
                 //vision
-                new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(1500),
+                new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(20000),
                 //wait
                 new WaitCommand(100),
                 //pickup sample and retract
@@ -151,12 +151,12 @@ public class sixSpecAuto extends AutoBase {
 
             if(currentGamepad1.dpad_left && !previousGamepad1.dpad_left){
                 subX -= 1;
-                MathUtils.clamp(subX, -8, 8);
+                MathUtils.clamp(subX, -8, 6);
             }
 
             if(currentGamepad1.dpad_right && !previousGamepad1.dpad_right){
                 subX += 1;
-                subX = MathUtils.clamp(subX, -8, 8);
+                subX = MathUtils.clamp(subX, -8, 6);
             }
 
             if(currentGamepad1.dpad_up && !previousGamepad1.dpad_up){
@@ -166,9 +166,10 @@ public class sixSpecAuto extends AutoBase {
 
             if(currentGamepad1.dpad_down && !previousGamepad1.dpad_down){
                 subY -= 1;
+                subY = MathUtils.clamp(subY, 0, 15);
             }
 
-            telemetry.addData("subX (-8,8)", subX);
+            telemetry.addData("subX (-8,6)", subX);
             telemetry.addData("subY(offesetFromBarrier)(0,15)", subY);
             telemetry.update();
         }

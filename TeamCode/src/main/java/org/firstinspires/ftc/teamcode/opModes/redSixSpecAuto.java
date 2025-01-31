@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
-@Autonomous(name="Red 6+0❤️❤️❤️")
+@Autonomous(name="Red 6+0❤️❤️❤️\uD83E\uDD16")
 public class redSixSpecAuto extends sixSpecAuto {
     @Override
     public void initialize() {

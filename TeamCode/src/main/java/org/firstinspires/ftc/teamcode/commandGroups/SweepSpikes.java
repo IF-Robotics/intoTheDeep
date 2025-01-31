@@ -31,13 +31,13 @@ public class SweepSpikes extends SequentialCommandGroup {
                         new DriveToPointCommand(driveSubsystem, rightSideLeftSpike, 5, 5),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),
-                                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
+                                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY+1),
                                 intakeRightFrontHighChamberCommand
                         )
                 ),
                 // intake down
                 new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
-                new WaitCommand(200),
+                new WaitCommand(300),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(34, -47, Rotation2d.fromDegrees(-120)), 5, 10),
                 //arm up
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),

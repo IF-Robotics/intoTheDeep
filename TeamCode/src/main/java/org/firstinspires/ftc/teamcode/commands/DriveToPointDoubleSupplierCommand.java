@@ -40,8 +40,6 @@ public class DriveToPointDoubleSupplierCommand extends CommandBase {
         timer.reset();
         loopCount = 0;
         Pose2d targetPos = new Pose2d(x.getAsDouble(), y.getAsDouble(), rotation);
-        Log.i("bruhx", String.valueOf(x.getAsDouble()-3));
-        Log.i("bruhy", String.valueOf(y.getAsDouble()+46.5));
         driveSubsystem.driveToPoint(targetPos);
     }
 

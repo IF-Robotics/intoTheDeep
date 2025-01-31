@@ -26,7 +26,6 @@ public class WaitForArmCommand extends CommandBase {
     @Override
     public void initialize(){
         armSubsystem.setArm(targetAngle);
-        Log.i("stupidbruhtargetAngle", String.valueOf(targetAngle));
         timer.reset();
         loopCount = 0;
     }
@@ -34,7 +33,6 @@ public class WaitForArmCommand extends CommandBase {
     @Override
     public void execute(){
         armSubsystem.setArm(targetAngle);
-        Log.i("stupidbruhtargetAngle", String.valueOf(targetAngle));
         loopCount++;
     }
 
