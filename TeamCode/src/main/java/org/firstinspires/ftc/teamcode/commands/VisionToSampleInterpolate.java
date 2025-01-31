@@ -222,9 +222,7 @@ public class VisionToSampleInterpolate extends CommandBase {
             Translation2d botToSample = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getTranslation();
 
             autoDesiredHeading = Math.atan2(-botToSample.getX(), botToSample.getY());
-            if(isSample){
-                autoDesiredHeading -= Math.toRadians(90);
-            }
+            autoDesiredHeading += driveSubsystem.getPos().getRotation().getRadians();
         }
 
         if (hasFoundBlock){

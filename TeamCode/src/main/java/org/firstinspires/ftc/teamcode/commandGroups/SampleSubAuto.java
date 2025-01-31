@@ -23,7 +23,7 @@ public class SampleSubAuto extends SequentialCommandGroup {
     public SampleSubAuto(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem, Pose2d intakePose) {
 
         addCommands(
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-45, 3, Rotation2d.fromDegrees(-90)),2, 10).withTimeout(1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-48, 3, Rotation2d.fromDegrees(-90)),2, 7).withTimeout(1000),
                 new ParallelCommandGroup(
                     new DriveToPointCommand(driveSubsystem, intakePose,2, 5).withTimeout(500),
                     new WaitCommand(800)
@@ -32,7 +32,12 @@ public class SampleSubAuto extends SequentialCommandGroup {
                         .andThen(new IntakeSub(armSubsystem, intakeSubsystem))
                 ),
                 new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-0.4),
-                new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true, ()->false,()->0, ()->0, ()->0, true).withTimeout(20000),
+                new ParallelCommandGroup(
+                    new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true, ()->false,()->0, ()->0, ()->0, true).withTimeout(20000),
+                    new WaitCommand(800).andThen(
+                        new DriveToPointCommand(driveSubsystem, new Pose2d(intakePose.getX(), intakePose.getY(), intakePose.getRotation().plus(new Rotation2d(Math.toRadians(30)))),2, 5).withTimeout(500)
+                    )
+                ),
                 new WaitCommand(100),
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
                 new ParallelCommandGroup(
