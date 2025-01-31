@@ -240,6 +240,11 @@ public class TeleopOpMode extends Robot {
         super.run();
 
 
+        previousGamepad1.copy(currentGamepad1);
+        previousGamepad2.copy(currentGamepad2);
+        currentGamepad1.copy(gamepad1);
+        currentGamepad2.copy(gamepad2);
+
         //retract and move arm out of the way
         if(gamepad1.right_stick_button || gamepad2.back){
             schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, rollWhenBasket));

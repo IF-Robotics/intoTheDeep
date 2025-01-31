@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.other.PosGlobals.leftSideLeftSpike;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -23,7 +24,7 @@ public class SampleSubAuto extends SequentialCommandGroup {
     public SampleSubAuto(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem, Pose2d intakePose) {
 
         addCommands(
-                new DriveToPointCommand(driveSubsystem, new Pose2d(-48, 3, Rotation2d.fromDegrees(-90)),2, 7).withTimeout(1000),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(-52, 3, Rotation2d.fromDegrees(-90)),2, 7).withTimeout(1000),
                 new ParallelCommandGroup(
                     new DriveToPointCommand(driveSubsystem, intakePose,2, 5).withTimeout(500),
                     new WaitCommand(800)
@@ -32,12 +33,12 @@ public class SampleSubAuto extends SequentialCommandGroup {
                         .andThen(new IntakeSub(armSubsystem, intakeSubsystem))
                 ),
                 new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-0.4),
-                new ParallelCommandGroup(
-                    new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true, ()->false,()->0, ()->0, ()->0, true).withTimeout(20000),
-                    new WaitCommand(800).andThen(
+                new ParallelDeadlineGroup(
+                    new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true, ()->false,()->0, ()->0, ()->0, true),
+                    new WaitCommand(400).andThen(new WaitCommand(100000000).interruptOn(()->!VisionToSampleInterpolate.hasFoundBlock)).andThen(
                         new DriveToPointCommand(driveSubsystem, new Pose2d(intakePose.getX(), intakePose.getY(), intakePose.getRotation().plus(new Rotation2d(Math.toRadians(30)))),2, 5).withTimeout(500)
                     )
-                ),
+                ).withTimeout(3500),
                 new WaitCommand(100),
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),
                 new ParallelCommandGroup(
@@ -45,7 +46,7 @@ public class SampleSubAuto extends SequentialCommandGroup {
                         .andThen(new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5)),
                     new HighBasketCommand(armSubsystem, intakeSubsystem)
                 ),
-                new WaitCommand(100),
+                new WaitCommand(200),
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem)
 
         );

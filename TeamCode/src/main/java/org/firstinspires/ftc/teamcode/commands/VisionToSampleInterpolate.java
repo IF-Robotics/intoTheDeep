@@ -46,7 +46,7 @@ public class VisionToSampleInterpolate extends CommandBase {
     private DoubleSupplier strafe, forward, turn;
 
 
-    public static double kPTurn = 0.005 * 180 / Math.PI *1.3;
+    public static double kPTurn = 0.005 * 180 / Math.PI;
 
     BasicPID turnpid = new BasicPID(new PIDCoefficients(kPTurn,0,0));
 
@@ -59,7 +59,7 @@ public class VisionToSampleInterpolate extends CommandBase {
 
     private final double offsetTolerance = 7;
 
-    private boolean hasFoundBlock = false;
+    public static boolean hasFoundBlock = false;
 
 
     private InterpLUT lutXOffset = new InterpLUT(); //negative values report positive y poses
@@ -76,6 +76,7 @@ public class VisionToSampleInterpolate extends CommandBase {
     ElapsedTime timer = new ElapsedTime();
 
     boolean isSample = false;
+
 
     public VisionToSampleInterpolate(DriveSubsystem driveSubsystem, VisionSubsystem visionSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, Boolean isAuto, BooleanSupplier slowMode, DoubleSupplier strafe, DoubleSupplier forward, DoubleSupplier turn, boolean isSample){
         this.driveSubsystem = driveSubsystem;
@@ -181,7 +182,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         armSubsystem.setArmY(armReadySubIntakeY);
         hasFoundBlock=false;
 
-        armSubsystem.setSlideP(0.15);
+        armSubsystem.setSlideP(0.15*1.2);
         visionSubsystem.turnOnStreaming(true);
         timer.reset();
     }
@@ -289,11 +290,10 @@ public class VisionToSampleInterpolate extends CommandBase {
             }
         }
 
+        Log.i("errorAutoHeadingOk", String.valueOf(driveOnTarget));
         boolean slidesOnTarget = hasFoundBlock && Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())<0.5 && Math.abs(armSubsystem.getSlideVelocity())<0.5;
+        Log.i("errorAutoSlidesOk", String.valueOf(slidesOnTarget));
 
-        if(isSample){
-            slidesOnTarget = hasFoundBlock && Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())<0.3 && Math.abs(armSubsystem.getSlideVelocity())<0.5;
-        }
 
         return driveOnTarget && slidesOnTarget;
     }

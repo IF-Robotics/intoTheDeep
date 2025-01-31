@@ -56,7 +56,7 @@ public class VisionSubsystem extends SubsystemBase {
     public static Alliance alliance = Alliance.BLUE;
     Telemetry telemetry;
 
-    public static int exposureMillis = 35;//24, 35
+    public static int exposureMillis = 24;//24, 35
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,

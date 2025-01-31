@@ -61,9 +61,11 @@ public class sampleSubCycle extends AutoBase {
 
                 //cycle the spikemarks
                 new CycleLeftSpikeMarksFast(driveSubsystem, intakeSubsystem, armSubsystem),
-                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-26, -7, Rotation2d.fromDegrees(-90))),
-                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-26, -3, Rotation2d.fromDegrees(-90))),
-                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-26, -3, Rotation2d.fromDegrees(-90))),
+
+                //cyling from the sub
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-24, -7, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-24, -3, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, new Pose2d(-24, -3, Rotation2d.fromDegrees(-90))),
 
 
 

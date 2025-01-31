@@ -264,6 +264,7 @@ public class DriveSubsystem extends SubsystemBase {
         }
         telemetry.addData("pinpointRefreshRate", timer.milliseconds());
         Log.i("pinpointRefreshRate", String.valueOf(timer.milliseconds()));
+        Log.i("autoErrorpinpointreading?", "yes");
         telemetry.addData("xDTPos", currentPos.getX());
         telemetry.addData("yDTPos", currentPos.getY());
         telemetry.addData("dtHeading", currentPos.getRotation().getDegrees());
