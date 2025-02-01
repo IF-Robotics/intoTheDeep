@@ -24,14 +24,14 @@ import org.firstinspires.ftc.teamcode.commands.WaitForArmCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.AutoBase;
 
-@Autonomous(name="0+5+")
+@Autonomous(name="0+6 \uD83D\uDFE1˚˖\uD80C\uDF62ִִ໋\uD83C\uDF0A\uD83E\uDD88˚˖\uD80C\uDF62ִ✧˚.")
 public class sampleSubCycle extends AutoBase {
 
     @Override
     public void initialize(){
         super.initialize();
         slideLeft.resetEncoder();
-
+ 
         //turn on auto drive
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
