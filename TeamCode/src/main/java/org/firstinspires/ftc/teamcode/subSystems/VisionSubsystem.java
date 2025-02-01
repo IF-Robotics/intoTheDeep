@@ -75,7 +75,11 @@ public class VisionSubsystem extends SubsystemBase {
 //            new Scalar(255, 255, 120)
 //    );
 
-    ColorRange red = ColorRange.RED;
+    ColorRange red = new ColorRange(
+            ColorSpace.YCrCb,
+            new Scalar( 32, 176,  80),
+            new Scalar(255, 255, 132)
+    );
 
     ColorRange yellow = new ColorRange(
             ColorSpace.HSV,
