@@ -34,7 +34,7 @@ public class ArmSubsystem extends SubsystemBase {
     public static double kParm = 0.05, kIarm = 0, kDarm = 0.01, kFarm = 2, kGarm = 2;
     public static double armWeakKP = 0.01;
     public static double armAngleOffset = -178.5/*-39*/;
-    public static double climbingArmP = .05;
+    public static double climbingArmP = .03;
     private double armPowerCap = 1;
     private double ff;
     private PIDController armController;

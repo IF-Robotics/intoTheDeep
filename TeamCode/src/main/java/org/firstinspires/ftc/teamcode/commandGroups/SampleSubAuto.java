@@ -43,7 +43,7 @@ public class SampleSubAuto extends SequentialCommandGroup {
                 new WaitCommand(100),
                 new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem),
                 new ParallelCommandGroup(
-                    new DriveToPointCommand(driveSubsystem, new Pose2d(-50, -7, Rotation2d.fromDegrees(-90)),2, 10).withTimeout(300)
+                    new DriveToPointCommand(driveSubsystem, new Pose2d(-40, -7, Rotation2d.fromDegrees(-90)),2, 10).withTimeout(300)
                         .andThen(new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5)),
                     new HighBasketCommand(armSubsystem, intakeSubsystem)
                 ),

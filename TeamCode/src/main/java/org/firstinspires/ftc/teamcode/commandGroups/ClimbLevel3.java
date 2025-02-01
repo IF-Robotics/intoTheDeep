@@ -29,7 +29,7 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchFrontHighChamber, rollFrontHighChamber),
 
                 //Climb to first rung
-                new ArmManualCommand(armSubsystem, () -> 1, () -> -1).withTimeout(1500),
+                new ArmManualCommand(armSubsystem, () -> 1, () -> -1).withTimeout(2000),
                 new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
                 new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
 
@@ -37,7 +37,7 @@ public class ClimbLevel3 extends SequentialCommandGroup {
                 new InstantCommand(() -> armSubsystem.setArmP(climbingArmP)),
                 //rotate arm up to second rung
                 new InstantCommand(() -> armSubsystem.setSlide(8)),
-                new WaitForArmCommand(armSubsystem, 70, 2, .5),
+                new WaitForArmCommand(armSubsystem, 70, 2, .4),
 //                new ArmManualCommand(armSubsystem, () -> -0.6, () -> 0).interruptOn(() -> gyro.getRobotYawPitchRollAngles().getPitch() > 90).withTimeout(2000),
 //                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
 //                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),

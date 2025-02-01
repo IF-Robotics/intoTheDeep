@@ -28,7 +28,7 @@ public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
     public CycleLeftSpikeMarksFast(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem) {
         Command customHighBasketCommand = new SequentialCommandGroup(
                 //move arm back
-                new WaitForArmCommand(armSubsystem, 100, 60),
+                new WaitForArmCommand(armSubsystem, 100, 55),
 
                 //move to high basket
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
@@ -59,13 +59,13 @@ public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
                 //arm basket
                 customHighBasketCommand,
 
-                new WaitCommand(100),
+                new WaitCommand(200),
 
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
 
                 //wait
-                new WaitCommand(100),
+                new WaitCommand(200),
 
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem),

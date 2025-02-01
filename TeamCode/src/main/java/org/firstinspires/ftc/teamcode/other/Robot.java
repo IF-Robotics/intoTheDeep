@@ -240,7 +240,7 @@ public abstract class Robot extends CommandOpMode {
         register(intakeSubsystem);
 
         //vision
-        visionSubsystem = new VisionSubsystem(hardwareMap.get(WebcamName.class, "Webcam 1"), telemetry);
+        visionSubsystem = new VisionSubsystem(hardwareMap.get(WebcamName.class, "Webcam 1"), hardwareMap.get(Servo.class, "light"), telemetry);
         register(visionSubsystem);
 
         m_driver = new GamepadEx(gamepad1);

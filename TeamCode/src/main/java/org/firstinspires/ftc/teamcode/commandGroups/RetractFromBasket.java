@@ -21,9 +21,9 @@ public class RetractFromBasket extends SequentialCommandGroup {
                 //outtake
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenBasket),
                 //wait
-                new WaitCommand(50),
+                new WaitCommand(75),
                 //move intake out of the way
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchWhenBasket, rollWhenIntake),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchWhenBasket, rollWhenIntake),
                 //move dt
                 new InstantCommand(() -> driveSubsystem.driveRobotCentric(0, 1, 0)),
                 //wait

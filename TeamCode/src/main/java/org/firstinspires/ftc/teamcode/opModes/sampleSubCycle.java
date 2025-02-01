@@ -37,6 +37,8 @@ public class sampleSubCycle extends AutoBase {
 
         manualArm = false;
 
+        schedule(new InstantCommand(()->intakeSubsystem.setDiffy(pitchWhenBasket, rollWhenBasket + 30)));
+
 
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosLeft2)),
@@ -48,13 +50,15 @@ public class sampleSubCycle extends AutoBase {
 
                 //raise intake and arm
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket),
-                new WaitForArmCommand(armSubsystem, 95, 10000),
+                new WaitForArmCommand(armSubsystem, 90, 50),
                 //extend slides
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
 
 
                 //drive to high basket
                 new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5),
+
+                new WaitCommand(100),
 
                 //score in high basket
                 new RetractFromBasketAuto(armSubsystem, intakeSubsystem),
@@ -63,9 +67,9 @@ public class sampleSubCycle extends AutoBase {
                 new CycleLeftSpikeMarksFast(driveSubsystem, intakeSubsystem, armSubsystem),
 
                 //cyling from the sub
-                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, colorSubsystem, new Pose2d(-24, -7, Rotation2d.fromDegrees(-90))),
-                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, colorSubsystem, new Pose2d(-24, -3, Rotation2d.fromDegrees(-90))),
-                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, colorSubsystem, new Pose2d(-24, -3, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, colorSubsystem, new Pose2d(-26, -7, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, colorSubsystem, new Pose2d(-26, -3, Rotation2d.fromDegrees(-90))),
+                new SampleSubAuto(driveSubsystem, intakeSubsystem, armSubsystem, visionSubsystem, colorSubsystem, new Pose2d(-26, -3, Rotation2d.fromDegrees(-90))),
 
 
 

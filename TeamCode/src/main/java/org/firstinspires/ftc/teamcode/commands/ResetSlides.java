@@ -33,30 +33,20 @@ public class ResetSlides extends CommandBase {
 
     @Override
     public void execute(){
-        if (armSubsystem.getSlideVelocity() < 0.5 && (timer.seconds()>0.5)||timerConditionSatisfied){
-            if(timerConditionSatisfied==false){
-                timer.reset();
-            }
-            timerConditionSatisfied = true;
-            if (timer.seconds()>1.0 && timerConditionSatisfied){
-                hasReset=true;
-                armSubsystem.resetSlideEncoder();
-            }
-        }
-
 //        armSubsystem.setSlidePower(-0.1);
-        armSubsystem.manualArm(0, -0.25);
+        armSubsystem.manualArm(0, -0.4);
         manualArm = true;
     }
 
     @Override
     public boolean isFinished(){
-        return hasReset;
+        return timer.seconds()>3.0 && armSubsystem.getSlideVelocity() < 0.25 && armSubsystem.getSlideExtention()<8.5;
 //        return false;
     }
 
     @Override
     public void end(boolean e){
+        armSubsystem.resetSlideEncoder();
         manualArm = false;
         manualSlides = false;
     }

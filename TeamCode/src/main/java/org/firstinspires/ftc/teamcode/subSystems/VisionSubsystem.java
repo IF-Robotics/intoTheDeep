@@ -11,6 +11,7 @@ import androidx.core.math.MathUtils;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.SortOrder;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.WhiteBalanceControl;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
@@ -54,9 +56,11 @@ public class VisionSubsystem extends SubsystemBase {
     public static double lowRatioFilterYellow = 1.5;
     public static double highRatioFilter = 2.8;
     public static Alliance alliance = Alliance.BLUE;
+
+    private final Servo light;
     Telemetry telemetry;
 
-    public static int exposureMillis = 24;//24, 35
+    public static int exposureMillis = 35;//24, 35
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -96,14 +100,15 @@ public class VisionSubsystem extends SubsystemBase {
             .setTargetColorRange(yellow)
             .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
             .setRoi(ImageRegion.asUnityCenterCoordinates(-0.8, 0.8, 0.8, -0.8))
+//            .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
             .setBlurSize(1)
             .setErodeSize(6)
-            .setDrawContours(true)
             .build();
 
     VisionPortal visionPortal;
 
-    public VisionSubsystem(CameraName camera, Telemetry telemetry){
+    public VisionSubsystem(CameraName camera, Servo light, Telemetry telemetry){
+        this.light = light;
         this.telemetry = telemetry;
 
         if (alliance == Alliance.BLUE){
@@ -142,7 +147,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .addProcessor(yellowLocatorProcess)
                 .addProcessor(allianceLocatorProcess)
                 .build();
-
+        enableLight(true);
         waitForSetCameraSettings(10000, 10000000);
     }
 
@@ -155,16 +160,27 @@ public class VisionSubsystem extends SubsystemBase {
 //            telemetry.addData("White Balance Temp", whiteBalanceControl.getWhiteBalanceTemperature());
 //            telemetry.addData("Max temp", whiteBalanceControl.getMaxWhiteBalanceTemperature());
 //            telemetry.addData("Min temp", whiteBalanceControl.getMinWhiteBalanceTemperature());
+//            GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+//            Log.i("gainCurr", String.valueOf(gainControl.getGain()));
+//            Log.i("gainMax", String.valueOf(gainControl.getMaxGain()));
+//            Log.i("gainMin", String.valueOf(gainControl.getMinGain()));
+//            ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+//            Log.i("exposureCurr", String.valueOf(exposureControl.getExposure(TimeUnit.MILLISECONDS)));
+//            Log.i("exposureMax", String.valueOf(exposureControl.getMaxExposure(TimeUnit.MILLISECONDS)));
+//            Log.i("exposureMin", String.valueOf(exposureControl.getMinExposure(TimeUnit.MILLISECONDS)));
+//            Log.i("exposureAE", String.valueOf(exposureControl.getAePriority()));
+//            Log.i("exposureMode", String.valueOf(exposureControl.getMode()));
+//
 //        }
 //        telemetry.addData("Sample Skew", getTotalSkew().orElse(-99999.0));
 //        telemetry.addData("Alliance Skew", getAllianceSkew().orElse(-99999.0));
 //        telemetry.addData("Yellow Skew", getYellowSkew().orElse(-99999.0));
 //
-//        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
-//        if(allianceOffsets.isPresent()) {
-//            telemetry.addData("offset x", allianceOffsets.get().get(0));
-//            telemetry.addData("offset y", allianceOffsets.get().get(1));
-//        }
+        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
+        if(allianceOffsets.isPresent()) {
+            telemetry.addData("offset x", allianceOffsets.get().get(0));
+            telemetry.addData("offset y", allianceOffsets.get().get(1));
+        }
 //
 //        Optional<RotatedRect> allianceRect = getAllianceBoxFit();
 //        if(allianceRect.isPresent()){
@@ -380,9 +396,9 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        exposureControl.setMode(ExposureControl.Mode.Manual);
+//        exposureControl.setMode(ExposureControl.Mode.Manual);
 //        Log.i("camera", "exposure: " + exposureControl.getExposure(TimeUnit.MILLISECONDS));
-        return exposureControl.setExposure(exposureMillis, TimeUnit.MILLISECONDS);
+        return exposureControl.setExposure(exposureMillis, TimeUnit.MILLISECONDS) && exposureControl.setMode(ExposureControl.Mode.Manual) && exposureControl.setAePriority(false);
     }
 
     public boolean setWhiteBalance() {
@@ -405,11 +421,14 @@ public class VisionSubsystem extends SubsystemBase {
         while (msAfterStart < timeoutMs && attempts++ < maxAttempts) {
             if (!haveSetExposure && setExposure()) {
                 haveSetExposure=true;
+                Log.i("camera", "Exposure (individual) setting worked");
+
             }
             if(!haveSetWhiteBalance && setWhiteBalance()) {
                 haveSetWhiteBalance=true;
             }
             if(haveSetExposure&&haveSetWhiteBalance){
+                Log.i("camera", "Exposure setting worked");
                 return true;
             }
             msAfterStart = System.currentTimeMillis() - startMs;
@@ -425,6 +444,15 @@ public class VisionSubsystem extends SubsystemBase {
         }
         else{
             visionPortal.stopStreaming();
+        }
+    }
+
+    public void enableLight(boolean enabled){
+        if(enabled){
+            light.setPosition(0.15);
+        }
+        else{
+            light.setPosition(0);
         }
     }
 }

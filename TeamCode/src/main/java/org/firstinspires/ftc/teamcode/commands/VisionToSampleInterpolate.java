@@ -161,7 +161,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         lutYOffset.add(-8,0.5);
         lutYOffset.add(0,0);
         lutYOffset.add(10,-0.5);
-        lutYOffset.add(20.5,1.0);
+        lutYOffset.add(20.5,-1.0);
         lutYOffset.add(30.5,-1.5);
         lutYOffset.add(40.5,-2.0);
         lutYOffset.add(50.5,-2.5);
@@ -182,7 +182,7 @@ public class VisionToSampleInterpolate extends CommandBase {
         armSubsystem.setArmY(armReadySubIntakeY);
         hasFoundBlock=false;
 
-        armSubsystem.setSlideP(0.15*1.2);
+        armSubsystem.setSlideP(0.15*1.5);
         visionSubsystem.turnOnStreaming(true);
         timer.reset();
     }
@@ -190,7 +190,10 @@ public class VisionToSampleInterpolate extends CommandBase {
     @Override
     public void execute(){
         turnpid = new BasicPID(new PIDCoefficients(kPTurn,0,0));
+        driveSubsystem.readPinpoint();
+
         Optional<RotatedRect> allianceBoxFit = Optional.empty();
+
         if(!hasFoundBlock) {
             if(isSample){
                 allianceBoxFit = visionSubsystem.getYellowBoxFit();
@@ -206,13 +209,14 @@ public class VisionToSampleInterpolate extends CommandBase {
             List<Double> allianceOffsets = visionSubsystem.getOffsetFromBoxFit(allianceBoxFit.get());
             double xOffsetInches = lutXOffset.get(allianceOffsets.get(0));
             double yOffsetInches = lutYOffset.get(allianceOffsets.get(1));
+            Log.i("bruhbruh", String.valueOf(yOffsetInches));
 
             double allianceSkew = -visionSubsystem.getAngleFromRotatedRect(allianceBoxFit.get());
 
             Rotation2d allianceSkewRotation2d = new Rotation2d(Math.toRadians(allianceSkew));
 
             Transform2d cameraToSampleTransform = new Transform2d(new Translation2d(xOffsetInches,yOffsetInches), allianceSkewRotation2d);
-            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-1.5), new Rotation2d());
+            Transform2d robotToCameraTransform = new Transform2d(new Translation2d(0,armSubsystem.getCurrentX()-0.5), new Rotation2d());
 
 
 
@@ -228,11 +232,15 @@ public class VisionToSampleInterpolate extends CommandBase {
 
         if (hasFoundBlock){
             Translation2d botToSample = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getTranslation();
+            Log.i("bruhbruhx", String.valueOf(botToSample.getX()));
+            Log.i("bruhbruhy", String.valueOf(botToSample.getY()));
+
 
 
             //CCW is positive
             double headingErrorRadians  = Math.atan2(-botToSample.getX(), botToSample.getY());
             double slideExtension = botToSample.getNorm();
+            Log.i("bruhbruhnorm", String.valueOf(slideExtension));
             double headingCalculation = turnpid.calculate(0, headingErrorRadians);
             double turnVelocity = Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
 //            Log.i("stupidOmega", String.valueOf(turnVelocity));
@@ -240,10 +248,9 @@ public class VisionToSampleInterpolate extends CommandBase {
                 driveSubsystem.teleDrive(slowMode, true, 10, strafe.getAsDouble(), forward.getAsDouble(), turnVelocity);
             }
             else{
-                driveSubsystem.readPinpoint();
                 driveSubsystem.pidToRotation2d(new Rotation2d(autoDesiredHeading));
             }
-            slideExtension = MathUtils.clamp(slideExtension, 7.75, 41);
+//            slideExtension = MathUtils.clamp(slideExtension, 7.75, 41);
             armSubsystem.setArmX(slideExtension);
 
             double wristAngle = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getRotation().getDegrees();
@@ -286,11 +293,13 @@ public class VisionToSampleInterpolate extends CommandBase {
             if(hasFoundBlock && Math.abs(driveSubsystem.getPos().getRotation().getRadians()-autoDesiredHeading)<Math.toRadians(5)){
                 driveOnTarget=true;
                 Log.i("errorAutoHeading", String.valueOf(Math.abs(Math.toDegrees(driveSubsystem.getPos().getRotation().getRadians()-autoDesiredHeading))));
-                Log.i("errorAutoSlides", String.valueOf(Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())));
+//                Log.i("errorAutoSlides", String.valueOf(Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())));
             }
         }
 
+        Log.i("errorAutoSlides", String.valueOf(Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())));
         Log.i("errorAutoHeadingOk", String.valueOf(driveOnTarget));
+        Log.i("errorAutoTarget", String.valueOf(armSubsystem.getTargetX()));
         boolean slidesOnTarget = hasFoundBlock && Math.abs(armSubsystem.getTargetX()-armSubsystem.getSlideX())<0.5 && Math.abs(armSubsystem.getSlideVelocity())<0.5;
         Log.i("errorAutoSlidesOk", String.valueOf(slidesOnTarget));
 

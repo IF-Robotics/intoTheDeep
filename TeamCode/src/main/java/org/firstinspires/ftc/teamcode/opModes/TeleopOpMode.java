@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -113,7 +114,7 @@ public class TeleopOpMode extends Robot {
                 new ConditionalCommand(
                         new IntakeSub(armSubsystem, intakeSubsystem),
                         new SequentialCommandGroup(
-                                new WaitForArmCommand(armSubsystem, 0, 5),
+                                new WaitForArmCommand(armSubsystem, 0, 5, true),
                                 new IntakeSub(armSubsystem, intakeSubsystem)
                         ),
                         () -> (armSubsystem.getArmAngle() < 5 && armSubsystem.getCurrentY() < 20)

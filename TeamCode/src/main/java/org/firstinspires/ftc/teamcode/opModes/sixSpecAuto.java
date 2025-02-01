@@ -97,7 +97,7 @@ public class sixSpecAuto extends AutoBase {
                 ),
                 new WaitCommand(800).interruptOn(()->armSubsystem.getCurrentX()>armReadySubIntakeX-0.75),
                 //vision
-                new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(20000),
+                new VisionToSampleInterpolate(driveSubsystem, visionSubsystem, armSubsystem, intakeSubsystem, true).withTimeout(3000),
                 //wait
                 new WaitCommand(100),
                 //pickup sample and retract

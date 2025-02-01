@@ -15,10 +15,22 @@ public class WaitForArmCommand extends CommandBase {
     private ElapsedTime timer = new ElapsedTime();
     private int loopCount = 0;
 
+    private boolean returnSlides;
+
     public WaitForArmCommand(ArmSubsystem armSubsystem, double targetAngle, double tolerance) {
         this.armSubsystem = armSubsystem;
         this.targetAngle = targetAngle;
         this.tolerance = tolerance;
+
+
+        addRequirements(armSubsystem);
+    }
+
+    public WaitForArmCommand(ArmSubsystem armSubsystem, double targetAngle, double tolerance, boolean returnSlides) {
+        this.armSubsystem = armSubsystem;
+        this.targetAngle = targetAngle;
+        this.tolerance = tolerance;
+        this.returnSlides=returnSlides;
 
 
         addRequirements(armSubsystem);
@@ -36,6 +48,9 @@ public class WaitForArmCommand extends CommandBase {
     @Override
     public void initialize(){
         armSubsystem.setArm(targetAngle);
+        if(returnSlides){
+            armSubsystem.setSlide(7.75);
+        }
         timer.reset();
         loopCount = 0;
         if(powerCap != 0){
