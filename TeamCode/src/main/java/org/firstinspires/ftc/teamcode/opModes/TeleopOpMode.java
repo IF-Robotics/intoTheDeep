@@ -136,9 +136,9 @@ public class TeleopOpMode extends Robot {
         dRight2.whenPressed(new IntakeCloseCommand(armSubsystem, intakeSubsystem));
         //retract after intaking
         dDown1.whenPressed(new ConditionalCommand(
-                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem),
+                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem, true),
                         new SequentialCommandGroup(
-                                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem),
+                                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem, true),
                                 new HighBasketCommand(armSubsystem, intakeSubsystem)
                         ),
                         () -> teleopSpec == true

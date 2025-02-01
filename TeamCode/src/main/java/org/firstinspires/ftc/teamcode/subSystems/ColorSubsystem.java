@@ -79,14 +79,14 @@ public class ColorSubsystem extends SubsystemBase {
         COLOR bruh = getColor();
         if(VisionSubsystem.alliance == VisionSubsystem.Alliance.BLUE){
 //            if(getColor()==COLOR.RED){
-            if(bruh== COLOR.BLUE){ //TEST
+            if(bruh== COLOR.RED){
                 oppositeColor=true;
                 Log.i("ColorSensorOpposite", "Yes");
             }
         }
         else{
 //            if(getColor()== COLOR.BLUE){
-            if(bruh== COLOR.RED){ //TEST
+            if(bruh== COLOR.BLUE){ //TEST
                 oppositeColor=true;
                 Log.i("ColorSensorOpposite", "Yes");
             }
@@ -108,7 +108,7 @@ public class ColorSubsystem extends SubsystemBase {
 
     public void turnOnLED(boolean enable){
         if(enable){
-            setLedBrightness(50);
+            setLedBrightness(100);
         }
         else{
             setLedBrightness(0);
