@@ -16,12 +16,13 @@ import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.VisionToSampleInterpolate;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.ColorSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.VisionSubsystem;
 
 public class SampleSubAuto extends SequentialCommandGroup {
-    public SampleSubAuto(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem, Pose2d intakePose) {
+    public SampleSubAuto(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ArmSubsystem armSubsystem, VisionSubsystem visionSubsystem, ColorSubsystem colorSubsystem, Pose2d intakePose) {
 
         addCommands(
                 new DriveToPointCommand(driveSubsystem, new Pose2d(-52, 3, Rotation2d.fromDegrees(-90)),2, 7).withTimeout(1000),
@@ -40,7 +41,7 @@ public class SampleSubAuto extends SequentialCommandGroup {
                     )
                 ).withTimeout(3500),
                 new WaitCommand(100),
-                new RetractAfterIntake(armSubsystem, intakeSubsystem),
+                new RetractAfterIntake(armSubsystem, intakeSubsystem, ColorSubsystem),
                 new ParallelCommandGroup(
                     new DriveToPointCommand(driveSubsystem, new Pose2d(-50, -7, Rotation2d.fromDegrees(-90)),2, 10).withTimeout(300)
                         .andThen(new DriveToPointCommand(driveSubsystem, leftBasketPose2, 2, 5)),

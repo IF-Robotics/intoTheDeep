@@ -226,9 +226,6 @@ public abstract class Robot extends CommandOpMode {
         //sensor
 
         sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
-        distance = hardwareMap.get(RevColorSensorV3.class, "Distance");
-        AnalogInput pin0 = hardwareMap.analogInput.get("analog0");
-        AnalogInput pin1 = hardwareMap.analogInput.get("analog1");
 
         colorSubsystem = new ColorSubsystem(hardwareMap, telemetry);
         register(colorSubsystem);
@@ -365,7 +362,7 @@ public abstract class Robot extends CommandOpMode {
         intakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake);
 
         //command groups
-        retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem);
+        retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem);
         retractFromBasket = new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem);
         highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
         scoreHighChamberCommand = new ScoreHighChamberCommand(armSubsystem, intakeSubsystem);

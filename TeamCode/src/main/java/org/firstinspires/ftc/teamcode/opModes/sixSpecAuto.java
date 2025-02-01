@@ -101,7 +101,7 @@ public class sixSpecAuto extends AutoBase {
                 //wait
                 new WaitCommand(100),
                 //pickup sample and retract
-                new RetractAfterIntake(armSubsystem, intakeSubsystem),
+                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem),
 
 
 

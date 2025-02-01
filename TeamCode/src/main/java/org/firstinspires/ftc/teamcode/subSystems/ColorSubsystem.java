@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subSystems;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -7,16 +9,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 
 public class ColorSubsystem extends SubsystemBase {
     private final RevColorSensorV3 colorSensor;
-    private final RevColorSensorV3 distanceSensor;
+    private final I2cDeviceSynchSimple i2c;
 
 //    private final AnalogInput analog0;
 //
 //    private final AnalogInput analog1;
 
     private final Telemetry telemetry;
+
+    private static final byte LED_BRIGHTNESS = 0x46;
 
     public enum COLOR{
         RED,
@@ -27,11 +32,13 @@ public class ColorSubsystem extends SubsystemBase {
 
     public ColorSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.colorSensor = hardwareMap.get(RevColorSensorV3.class, "Color");
-        this.distanceSensor = hardwareMap.get(RevColorSensorV3.class, "Distance");
+        this.i2c=colorSensor.getDeviceClient();
+        this.i2c.enableWriteCoalescing(true);
 //        this.analog0 = hardwareMap.get(AnalogInput.class, "analog0");
 //        this.analog1 = hardwareMap.get(AnalogInput.class, "analog1");
         this.telemetry = telemetry;
 
+        turnOnLED(true);
     }
 
     public COLOR getColor() {
@@ -51,7 +58,7 @@ public class ColorSubsystem extends SubsystemBase {
     }
 
     public double getColorDistance(){
-        return colorSensor.getDistance(DistanceUnit.INCH);
+        return colorSensor.getDistance(DistanceUnit.MM);
     }
 
 
@@ -65,5 +72,47 @@ public class ColorSubsystem extends SubsystemBase {
         telemetry.update();
     }
 
+
+    public boolean holdingOppositeColor(){
+        boolean sampleInBot = getColorDistance()<100;
+        boolean oppositeColor = false;
+        COLOR bruh = getColor();
+        if(VisionSubsystem.alliance == VisionSubsystem.Alliance.BLUE){
+//            if(getColor()==COLOR.RED){
+            if(bruh== COLOR.BLUE){ //TEST
+                oppositeColor=true;
+                Log.i("ColorSensorOpposite", "Yes");
+            }
+        }
+        else{
+//            if(getColor()== COLOR.BLUE){
+            if(bruh== COLOR.RED){ //TEST
+                oppositeColor=true;
+                Log.i("ColorSensorOpposite", "Yes");
+            }
+        }
+
+        Log.i("ColorSensorColor", String.valueOf(bruh));
+        Log.i("ColorSensorSampleInBot", "Yes");
+        Log.i("Red", String.valueOf(colorSensor.red()));
+        Log.i("Green", String.valueOf(colorSensor.green()));
+        Log.i("Blue", String.valueOf(colorSensor.blue()));
+
+        return sampleInBot && oppositeColor;
+    }
+
+    //https://docs.brushlandlabs.com/sensors/color-rangefinder/configuration
+    private void setLedBrightness(int value) {
+        i2c.write8(LED_BRIGHTNESS, value);
+    }
+
+    public void turnOnLED(boolean enable){
+        if(enable){
+            setLedBrightness(50);
+        }
+        else{
+            setLedBrightness(0);
+        }
+    }
 
 }
