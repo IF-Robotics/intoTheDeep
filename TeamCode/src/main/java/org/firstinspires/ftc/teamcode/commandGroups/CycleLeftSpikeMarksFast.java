@@ -52,7 +52,7 @@ public class CycleLeftSpikeMarksFast extends SequentialCommandGroup {
                         )
                         ),
 
-                new WaitCommand(200),
+                new WaitCommand(300),
 
                 //grab and retract
                 new RetractAfterIntake(armSubsystem, intakeSubsystem),

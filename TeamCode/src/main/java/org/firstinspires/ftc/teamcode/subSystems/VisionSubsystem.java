@@ -60,7 +60,10 @@ public class VisionSubsystem extends SubsystemBase {
     private final Servo light;
     Telemetry telemetry;
 
-    public static int exposureMillis = 35;//24, 35
+
+    public static int exposureMillis = 8;//24, 35
+
+    public static double lightStrength = 0.35;
 
     //    ColorRange blue = new ColorRange(
 //            ColorSpace.HSV,
@@ -87,7 +90,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     ColorRange yellow = new ColorRange(
             ColorSpace.HSV,
-            new Scalar(13, 100, 140),
+            new Scalar(13, 80, 140),
             new Scalar(50, 255, 255)
     );
 
@@ -180,11 +183,11 @@ public class VisionSubsystem extends SubsystemBase {
 //        telemetry.addData("Alliance Skew", getAllianceSkew().orElse(-99999.0));
 //        telemetry.addData("Yellow Skew", getYellowSkew().orElse(-99999.0));
 //
-        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
-        if(allianceOffsets.isPresent()) {
-            telemetry.addData("offset x", allianceOffsets.get().get(0));
-            telemetry.addData("offset y", allianceOffsets.get().get(1));
-        }
+//        Optional<List<Double>> allianceOffsets = getAllianceOffsets();
+//        if(allianceOffsets.isPresent()) {
+//            telemetry.addData("offset x", allianceOffsets.get().get(0));
+//            telemetry.addData("offset y", allianceOffsets.get().get(1));
+//        }
 //
 //        Optional<RotatedRect> allianceRect = getAllianceBoxFit();
 //        if(allianceRect.isPresent()){
@@ -201,8 +204,9 @@ public class VisionSubsystem extends SubsystemBase {
 //            process.addFilter(areaFilter);
 //            process.addFilter(ratioFilter);
 //        }
-
+//
 //        setExposure();
+//        light.setPosition(lightStrength);
     }
 
     /**
