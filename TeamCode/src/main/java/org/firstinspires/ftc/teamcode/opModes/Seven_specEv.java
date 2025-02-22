@@ -5,6 +5,9 @@ import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeWallX;
 import static org.firstinspires.ftc.teamcode.other.Globals.armIntakeWallY;
 import static org.firstinspires.ftc.teamcode.other.Globals.clawClose;
 import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
+import static org.firstinspires.ftc.teamcode.other.Globals.pitchIntakeWall;
+import static org.firstinspires.ftc.teamcode.other.Globals.rollEvwall;
+import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -20,8 +23,10 @@ import org.firstinspires.ftc.teamcode.commandGroups.SweepSpikes;
 import org.firstinspires.ftc.teamcode.commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.commands.ArmCoordinatesCommand;
 import org.firstinspires.ftc.teamcode.commands.DriveToPointCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
+import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 
 @Autonomous(name="EV")
 public class Seven_specEv extends Robot {
@@ -38,11 +43,23 @@ public class Seven_specEv extends Robot {
         claw.setPosition(clawClose);
 
 
+
         //turn on auto drive
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
         schedule(new SequentialCommandGroup(
-                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -35, Rotation2d.fromDegrees(180)), 2, 5),
+                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosRight)),
+                //wait
+                new WaitCommand(6),
+
+                //hold pos
+                new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
+                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -40, Rotation2d.fromDegrees(0)), 2, 5),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),//remove later maybe
+                new WaitCommand(500),
+                new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
+                new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),

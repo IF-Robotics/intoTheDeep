@@ -52,8 +52,8 @@ public class Globals {
     public static double rollFrontRightHighChamber = rollTeleopHighChamber;
     public static double pitchPlaceFrontHighRightChamber = 0;
     public static double rollPlaceFrontHighRightChamber = 260;
-    public static double pitchEvAutoHighChamber = 325;
-    public static double rollEvAutoHighChamber = 120;
+    public static double pitchEvAutoHighChamber = -110;
+    public static double rollEvAutoHighChamber = 110;
 
 
     //home
@@ -82,8 +82,8 @@ public class Globals {
     public static double armRightHighChamberY = 28.0;
     public static double armHighChamberX = -1;
     public static double armHighChamberY = armRightHighChamberY;
-    public static double armEvHighChamberX = 34;
-    public static double armEvHighChamberY = 15.43;
+    public static double armEvHighChamberX = 31;
+    public static double armEvHighChamberY = 22;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;

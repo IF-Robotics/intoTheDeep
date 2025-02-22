@@ -24,7 +24,7 @@ public class PosGlobals {
     public static Pose2d highChamberLeft = new Pose2d(-5, -32.4, Rotation2d.fromDegrees(0));
     public static Pose2d firstHighChamberRight = new Pose2d(1, -33.0, Rotation2d.fromDegrees(0));
     public static Pose2d highChamberRight = new Pose2d(8, -32, Rotation2d.fromDegrees(180));
-    public static Pose2d highChamberEvRight = new Pose2d(26.24, -47.7, Rotation2d.fromDegrees(39.66));
+    public static Pose2d highChamberEvRight = new Pose2d(21, -40, Rotation2d.fromDegrees(39));
 
 
     //baskets
@@ -50,7 +50,7 @@ public class PosGlobals {
 
     //wallPickUp
     public static Pose2d wallPickUp = new Pose2d(38, -60 + 1, Rotation2d.fromDegrees(180));
-    public static Pose2d wallEvPickUp = new Pose2d(38, -60 + .25, Rotation2d.fromDegrees(0));
+    public static Pose2d wallEvPickUp = new Pose2d(38, -58, Rotation2d.fromDegrees(0));
 
     //parking
     public static Pose2d leftAutoPark = new Pose2d(-24, -7.09, Rotation2d.fromDegrees(-90));
