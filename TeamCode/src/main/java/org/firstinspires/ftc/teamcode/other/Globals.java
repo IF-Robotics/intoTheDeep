@@ -13,6 +13,7 @@ public class Globals {
     public static int rollWhenIntake = -190;
     public static int pitchLastLeftAuto = 60;
     public static int rollLastLeftAuto = -190;
+    public static int rollEvwall = 120;
     //intake from the wall
     public static int pitchIntakeWall = 400;
     public static int rollIntakeWall = -20;
@@ -51,6 +52,8 @@ public class Globals {
     public static double rollFrontRightHighChamber = rollTeleopHighChamber;
     public static double pitchPlaceFrontHighRightChamber = 0;
     public static double rollPlaceFrontHighRightChamber = 260;
+    public static double pitchEvAutoHighChamber = 325;
+    public static double rollEvAutoHighChamber = 120;
 
 
     //home
@@ -79,6 +82,8 @@ public class Globals {
     public static double armRightHighChamberY = 28.0;
     public static double armHighChamberX = -1;
     public static double armHighChamberY = armRightHighChamberY;
+    public static double armEvHighChamberX = 34;
+    public static double armEvHighChamberY = 15.43;
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
@@ -92,6 +97,8 @@ public class Globals {
     //arm when intaking form the wall
     public static double armIntakeWallX = 7.7;
     public static double armIntakeWallY = 8 +0.5;
+    public static double armEvIntakeWallX = -4.9;
+    public static double armEvIntakewallY = 10.6;
     // arm when intaking for AutoRight
     public static double armAutoRightX = 16.6;
     public static double armAutoRightY = 1.3;
