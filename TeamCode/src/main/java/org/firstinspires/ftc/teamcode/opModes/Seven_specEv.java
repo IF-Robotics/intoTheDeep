@@ -55,7 +55,7 @@ public class Seven_specEv extends Robot {
                 //hold pos
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
                 new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -40, Rotation2d.fromDegrees(0)), 2, 5),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(37, -34, Rotation2d.fromDegrees(0)), 2, 5),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),//remove later maybe
                 new WaitCommand(500),
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
