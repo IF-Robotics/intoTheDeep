@@ -40,10 +40,10 @@ import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 public class AutoSpecimenCycleEV extends SequentialCommandGroup {
     public AutoSpecimenCycleEV(ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem, DriveSubsystem driveSubsystem) {
         addCommands(
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),
 
 //                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
                 new ArmCoordinatesCommand(armSubsystem, armEvIntakeWallX, armEvIntakewallY),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),
 //                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),
 
 
@@ -55,8 +55,8 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
 
                 //wait
 //                new WaitCommand(200),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(30, -54, Rotation2d.fromDegrees(40)), 3, 3).withTimeout(100),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(32, -54, Rotation2d.fromDegrees(0)), 3, 3).withTimeout(100),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(33, -54, Rotation2d.fromDegrees(40)), 3, 3).withTimeout(100),
+                new DriveToPointCommand(driveSubsystem, new Pose2d(35, -54, Rotation2d.fromDegrees(0)), 3, 3).withTimeout(100),
                 new ArmCoordinatesCommand(armSubsystem, armEvIntakeWallX, armEvIntakewallY),
                 new DriveToPointCommand(driveSubsystem, wallEvPickUp, 1, 3).withTimeout(700),
                 //wait
@@ -79,21 +79,22 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
 
                 // Drive to high chamber
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> armSubsystem.setArm(30.6)),
+                        new InstantCommand(() -> armSubsystem.setArm(27)),
                         new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX(), highChamberEvRight.getY(), Rotation2d.fromDegrees(38)),3, 5).withTimeout(800)
                 ),
 
                 //wait then extend slides
                 new ParallelCommandGroup(
-                        new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX, armEvHighChamberY),
-                        new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX(), highChamberEvRight.getY(), Rotation2d.fromDegrees(40)),3, 5).withTimeout(700)
+                        new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-5),
+                        new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX()+1, highChamberEvRight.getY(), Rotation2d.fromDegrees(40)),3, 5).withTimeout(700)
                         ),
                 new WaitForSlideCommand(armSubsystem, armEvHighChamberX, 30),
-
                 new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX() -3 , highChamberEvRight.getY()- 2, Rotation2d.fromDegrees(45)),20, 15).withTimeout(300),
                 //wait
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchEvAutoHighChamber, rollEvAutoHighChamber),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall)
+                new ParallelCommandGroup(
+                new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-5),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 0, 0)
+                )
 
 
 

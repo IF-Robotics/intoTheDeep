@@ -10,6 +10,7 @@ import static org.firstinspires.ftc.teamcode.other.Globals.rollEvwall;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.startingPosRight;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -53,8 +54,10 @@ public class Seven_specEv extends Robot {
                 new WaitCommand(6),
 
                 //hold pos
+                new ParallelCommandGroup(
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
-                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
+                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN))
+                ),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(37, -34, Rotation2d.fromDegrees(0)), 2, 5),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),//remove later maybe
                 new WaitCommand(500),
