@@ -85,14 +85,14 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
 
                 //wait then extend slides
                 new ParallelCommandGroup(
-                        new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-5),
+                        new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-4.7),
                         new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX()+1, highChamberEvRight.getY(), Rotation2d.fromDegrees(40)),3, 5).withTimeout(700)
                         ),
                 new WaitForSlideCommand(armSubsystem, armEvHighChamberX, 30),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX() -3 , highChamberEvRight.getY()- 2, Rotation2d.fromDegrees(45)),20, 15).withTimeout(300),
                 //wait
                 new ParallelCommandGroup(
-                new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-5),
+                new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-4.7),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 0, 0)
                 )
 

@@ -45,6 +45,7 @@ public class rightPreloadSpecScore extends SequentialCommandGroup {
                 // Score specimen
                 new DriveToPointCommand(driveSubsystem, firstHighChamberRight,5, 10).withTimeout(1500),
                 //open
+                
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, autoPitchFrontHighChamber, rollFrontHighChamber),
                 new WaitCommand(100),
                 //arm to home pos
