@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.other;
 
 import static org.firstinspires.ftc.teamcode.other.Globals.clawClose;
 import static org.firstinspires.ftc.teamcode.other.Globals.manualArm;
+import static org.firstinspires.ftc.teamcode.other.Globals.manualSlides;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -20,8 +21,10 @@ public abstract class AutoBase extends Robot{
         slideLeft.resetEncoder();
         slideRight.resetEncoder();
 
-        //schedule(new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber));
+        //schedule(new IntakeCommand(intakeSubsystem, IntakeC
+        //command.Claw.OPEN, pitchPlaceFrontHighRightChamber, rollPlaceFrontHighRightChamber));
         manualArm = false;
+        manualSlides = false;
 
         new InstantCommand(() -> armSubsystem.setArm(90)).schedule(true);
         claw.setPosition(clawClose);

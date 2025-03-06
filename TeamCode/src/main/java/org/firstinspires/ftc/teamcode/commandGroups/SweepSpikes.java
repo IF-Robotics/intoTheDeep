@@ -25,22 +25,22 @@ public class SweepSpikes extends SequentialCommandGroup {
     public SweepSpikes(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intakeSubsystem){
         addCommands(
                 // Drive to middle
-                new InstantCommand(() -> armSubsystem.setArm(20)),
+                new InstantCommand(() -> armSubsystem.setArm(40)),
                 //first sample
                 new ParallelDeadlineGroup(
                         new DriveToPointCommand(driveSubsystem, rightSideLeftSpike, 5, 5),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),
-                                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY+1),
+                                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
                                 intakeRightFrontHighChamberCommand
                         )
                 ),
                 // intake down
-                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
+                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY-0.25)),
                 new WaitCommand(300),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(34, -47, Rotation2d.fromDegrees(-120)), 5, 10),
                 //arm up
-                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
+                new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY+1),
 
 
 
@@ -50,7 +50,7 @@ public class SweepSpikes extends SequentialCommandGroup {
                 //wait
 //                new WaitCommand(1000),
                 // intake sample
-                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)),
+                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY-0.25)),
                 // wait?
                 new WaitCommand(200),
                 new DriveToPointCommand(driveSubsystem,  new Pose2d(38.5, -45, Rotation2d.fromDegrees(-130)), 5, 5),
@@ -59,6 +59,6 @@ public class SweepSpikes extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armAutoSpikeX, armAutoReadyPushY),
                 new DriveToPointCommand(driveSubsystem,  rightSideRightSpike, 2, 5),
                 // intake sample
-                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY)));
+                new InstantCommand(() -> armSubsystem.setArmY(armAutoPushY-0.5)));
     }
 }
