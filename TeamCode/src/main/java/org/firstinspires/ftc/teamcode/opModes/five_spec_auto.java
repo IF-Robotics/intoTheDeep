@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.other.Globals.*;
 import static org.firstinspires.ftc.teamcode.other.PosGlobals.*;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -49,16 +48,15 @@ public class five_spec_auto extends Robot {
                 new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-45)), 10, 10),
                 new SweepSpikes(driveSubsystem, armSubsystem, intakeSubsystem),
                 new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
+                new WaitCommand(300),
+                // wait?
                 new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 10, 10),
 
-                // wait?
-                new ParallelCommandGroup(
-                        new ArmCoordinatesCommand(armSubsystem, armEvIntakeWallX, armEvIntakewallY),
-
-                        new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall)//remove later maybe
-                ),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(30, -45, Rotation2d.fromDegrees(40)), 1, 3).withTimeout(100),
-                new WaitCommand(300),
+                //open claw
+                //retract slide
+                //drive close to pickup point
+                new DriveToPointCommand(driveSubsystem, new Pose2d(30, -54, Rotation2d.fromDegrees(40)), 1, 3).withTimeout(100),
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, pitchIntakeWall, rollEvwall),//remove later maybe
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
                 new AutoSpecimenCycleEV(armSubsystem, intakeSubsystem, driveSubsystem),
