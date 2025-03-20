@@ -14,6 +14,7 @@ public class IntakeCommand extends CommandBase {
     public enum Claw {
         OPEN,
         CLOSE,
+        HALFOPEN,
         EXTRAOPEN
     }
 
@@ -35,6 +36,8 @@ public class IntakeCommand extends CommandBase {
             intakeSubsystem.closeClaw();
         } else if (claw == Claw.EXTRAOPEN){
             intakeSubsystem.clawExtraOpen();
+        } else if (claw == Claw.HALFOPEN){
+            intakeSubsystem.clawHalfOpen();
         }
 
         intakeSubsystem.setDiffy(pitchAngle, rollAngle);

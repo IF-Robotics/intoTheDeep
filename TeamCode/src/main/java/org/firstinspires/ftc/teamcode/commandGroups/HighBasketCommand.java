@@ -23,7 +23,7 @@ public class HighBasketCommand extends SequentialCommandGroup{
 
                 //move to high basket
                 new ArmCoordinatesCommand(armSubsystem, armHighBasketX, armHighBasketY),
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, pitchWhenBasket, rollWhenBasket)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.HALFOPEN, pitchWhenBasket, rollWhenBasket)
 
         );
 

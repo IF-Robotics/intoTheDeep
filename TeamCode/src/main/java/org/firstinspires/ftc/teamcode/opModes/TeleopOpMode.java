@@ -65,6 +65,7 @@ public class TeleopOpMode extends Robot {
         //configureMoreCommands();
         configureButtons();
         manualArm = false;
+        manualSlides = false;
 
         new ArmCoordinatesCommand(armSubsystem, 3.5, 14).schedule(true);
 
