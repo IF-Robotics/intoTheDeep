@@ -62,7 +62,7 @@ public class VisionSubsystem extends SubsystemBase {
     Telemetry telemetry;
 
 
-    public static int exposureMillis = 8;//24, 35
+    public static int exposureMillis = 10;//8, 24, 35
 
     public static double lightStrength = 0.35;
 

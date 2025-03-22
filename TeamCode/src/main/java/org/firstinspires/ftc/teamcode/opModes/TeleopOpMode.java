@@ -65,6 +65,7 @@ public class TeleopOpMode extends Robot {
         //configureMoreCommands();
         configureButtons();
         manualArm = false;
+        manualSlides = false;
 
         new ArmCoordinatesCommand(armSubsystem, 3.5, 14).schedule(true);
 
@@ -137,9 +138,9 @@ public class TeleopOpMode extends Robot {
         dRight2.whenPressed(new IntakeCloseCommand(armSubsystem, intakeSubsystem));
         //retract after intaking
         dDown1.whenPressed(new ConditionalCommand(
-                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem, true),
+                new RetractAfterIntake(armSubsystem, intakeSubsystem),
                         new SequentialCommandGroup(
-                                new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem, true),
+                                new RetractAfterIntake(armSubsystem, intakeSubsystem),
                                 new HighBasketCommand(armSubsystem, intakeSubsystem)
                         ),
                         () -> teleopSpec == true
