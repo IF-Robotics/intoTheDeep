@@ -190,7 +190,9 @@ public class VisionToSampleInterpolate extends CommandBase {
     @Override
     public void execute(){
         turnpid = new BasicPID(new PIDCoefficients(kPTurn,0,0));
-        driveSubsystem.readPinpoint();
+        if(!isAuto){
+            driveSubsystem.readPinpoint();
+        }
 
         Optional<RotatedRect> allianceBoxFit = Optional.empty();
 

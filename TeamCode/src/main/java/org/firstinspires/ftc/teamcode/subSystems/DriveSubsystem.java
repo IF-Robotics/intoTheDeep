@@ -220,11 +220,11 @@ public class DriveSubsystem extends SubsystemBase {
         }
 
         //testing
-        telemetry.addData("errorX", errorX);
-        telemetry.addData("errorY", errorY);
-        telemetry.addData("targetHeading", targetPos.getRotation().getDegrees());
-        telemetry.addData("rawErrorHeading", rawErrorHeading);
-        telemetry.addData("correctedHeading", correctedErrorHeading);
+//        telemetry.addData("errorX", errorX);
+//        telemetry.addData("errorY", errorY);
+//        telemetry.addData("targetHeading", targetPos.getRotation().getDegrees());
+//        telemetry.addData("rawErrorHeading", rawErrorHeading);
+//        telemetry.addData("correctedHeading", correctedErrorHeading);
 
         //vector calculation
         rawVectorMagnitude = Math.hypot(errorX, errorY);
@@ -237,9 +237,9 @@ public class DriveSubsystem extends SubsystemBase {
         correctedVectorMagnitude = voltageCompensation * -Math.pow((Math.abs(translationController.calculate(rawVectorMagnitude,0))) * Math.signum(rawVectorMagnitude), translationKR);
 
         //testing
-        telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
-        telemetry.addData("correctedVectorMagnitude", correctedVectorMagnitude);
-        telemetry.addData("vectorTheta", vectorTheta);
+//        telemetry.addData("rawVectorMagnitude", rawVectorMagnitude);
+//        telemetry.addData("correctedVectorMagnitude", correctedVectorMagnitude);
+//        telemetry.addData("vectorTheta", vectorTheta);
 
         //breaking vector into speed values + pid
         strafeVelocity = lateralMutliplier * (Math.cos (Math.toRadians(vectorTheta)) * correctedVectorMagnitude);
@@ -247,9 +247,9 @@ public class DriveSubsystem extends SubsystemBase {
         turnVelocity = Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
 
         //testing
-        telemetry.addData("strafeSpeed", strafeVelocity);
-        telemetry.addData("forwardSpeed", forwardVelocity);
-        telemetry.addData("turnSpeed", turnVelocity);
+//        telemetry.addData("strafeSpeed", strafeVelocity);
+//        telemetry.addData("forwardSpeed", forwardVelocity);
+//        telemetry.addData("turnSpeed", turnVelocity);
 
         //actually driving
         mecanumDrive.driveFieldCentric(strafeVelocity, forwardVelocity, turnVelocity, getHeadingInDegrees(currentPos));

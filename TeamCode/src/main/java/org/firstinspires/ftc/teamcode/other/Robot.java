@@ -290,6 +290,7 @@ public abstract class Robot extends CommandOpMode {
         telemetry.addData("manual", manualArm);
         //loopTime
         telemetry.addData("hz ", 1/(time.seconds()));
+        telemetry.setMsTransmissionInterval(5);
         telemetry.update();
         time.reset();
         //clear cache
