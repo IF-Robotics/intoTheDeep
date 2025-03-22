@@ -28,8 +28,13 @@ public class VisionProcessTest implements VisionProcessor {
 
     ColorRange colorRange;
 
+    //preerode
     int predilateSize = 3;
-    int erodeSize = 3;
+
+    //post erode
+    int erodeSize = 4;
+
+    //dilate
     int postDilateSize = 4;
 
     Mat predilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(predilateSize, predilateSize));
@@ -75,7 +80,7 @@ public class VisionProcessTest implements VisionProcessor {
 
         Imgproc.erode(mask, mask, predilateElement);
         Imgproc.dilate(mask, mask, postdilateElement);
-        Imgproc.erode(mask, mask, predilateElement);
+        Imgproc.erode(mask, mask, erodeElement);
 
         Core.bitwise_not(mask, mask);
 
