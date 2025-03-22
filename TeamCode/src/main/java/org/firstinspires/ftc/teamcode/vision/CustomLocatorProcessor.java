@@ -62,9 +62,9 @@ public class CustomLocatorProcessor implements VisionProcessor {
 
     private volatile ArrayList<RotatedRect> userBlobs = new ArrayList<>();
 
-//    public CustomLocatorProcessor(COLOR color){
-//        setColor(color);
-//    }
+    public CustomLocatorProcessor(COLOR color){
+        setColor(color);
+    }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
