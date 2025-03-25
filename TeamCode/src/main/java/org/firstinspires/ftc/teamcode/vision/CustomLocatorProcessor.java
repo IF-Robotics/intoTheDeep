@@ -62,8 +62,7 @@ public class CustomLocatorProcessor implements VisionProcessor {
 
     private volatile ArrayList<RotatedRect> userBlobs = new ArrayList<>();
 
-    public CustomLocatorProcessor(COLOR color){
-        setColor(color);
+    public CustomLocatorProcessor(){
     }
 
     @Override
@@ -79,199 +78,268 @@ public class CustomLocatorProcessor implements VisionProcessor {
 
         ArrayList<RotatedRect> blobs = new ArrayList<>();
 
+//        if(frame.channels()!=3){
+//            return blobs;
+//        }
+        COLOR colorCached = COLOR.YELLOW;
         synchronized (lockColor) {
-            if (color == COLOR.BLUE) {
-                //Convert color for color thresholding
-                Mat hsvImage = new Mat();
-                Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2HSV);
+            colorCached = color;
+        }
+        if (colorCached == COLOR.BLUE) {
+            //Convert color for color thresholding
+            Mat hsvImage = new Mat();
+            Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2HSV);
 
-                //Color Thresholding
-                Mat mask = new Mat();
-                Core.inRange(hsvImage, blueLower, blueUpper, mask);
+            //Color Thresholding
+            Mat mask = new Mat();
+            Core.inRange(hsvImage, blueLower, blueUpper, mask);
 
-                //Morphological operations
-                Imgproc.erode(mask, mask, preErodeElement);
-                Imgproc.dilate(mask, mask, dilateElement);
-                Imgproc.erode(mask, mask, postErodeElement);
+            //Morphological operations
+            Imgproc.erode(mask, mask, preErodeElement);
+            Imgproc.dilate(mask, mask, dilateElement);
+            Imgproc.erode(mask, mask, postErodeElement);
 
-                //Invert
-                Core.bitwise_not(mask, mask);
+            //Invert
+            Core.bitwise_not(mask, mask);
 
-                //Apply mask to colored image, idek, theres a better solution but this is what ended up working
-                //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
-                Mat copy = frame.clone();
-                Mat zeros = Mat.zeros(frame.size(), frame.type());
-                Core.bitwise_and(copy, zeros, copy, mask);
+            //Apply mask to colored image, idek, theres a better solution but this is what ended up working
+            //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
+            Mat copy = frame.clone();
+            Mat zeros = Mat.zeros(frame.size(), frame.type());
+            Core.bitwise_and(copy, zeros, copy, mask);
 
-                //Edge detection
-                Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
-                Imgproc.Canny(copy, copy, 70, 170);
-                Imgproc.dilate(copy, copy, edgeDilateElement);
+            //Edge detection
+            Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
+            Imgproc.Canny(copy, copy, 70, 170);
+            Imgproc.dilate(copy, copy, edgeDilateElement);
 
-                //Make border so can detect cutoff samples
-                Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+            //Make border so can detect cutoff samples
+            Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
 
-                //Find contours
-                ArrayList<MatOfPoint> contours = new ArrayList<>();
-                Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+            //Find contours
+            ArrayList<MatOfPoint> contours = new ArrayList<>();
+            Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
-                //Find minAreaRects
-                for (MatOfPoint contour : contours) {
-                    RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
-                    boolean xinleyang = true;
+            //Find minAreaRects
+            for (MatOfPoint contour : contours) {
+                RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
+                boolean xinleyang = true;
 
-                    if (rect.size.area() < 8000) {
-                        xinleyang = false;
-                    }
-                    if (rect.size.area() > 50000) {
-                        xinleyang = false;
-                    }
-
-                    if (xinleyang) {
-                        blobs.add(rect);
-                        if(drawRects) {
-                            Point[] vertices = new Point[4];
-                            rect.points(vertices);
-                            MatOfPoint points = new MatOfPoint(vertices);
-                            Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
-                        }
-                    }
+                if (rect.size.area() < 8000) {
+                    xinleyang = false;
+                }
+                if (rect.size.area() > 50000) {
+                    xinleyang = false;
                 }
 
-                if (drawContours) {
-                    Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
-                }
-
-            } else if (color == COLOR.RED) {
-                //Convert color for color thresholding
-                Mat hsvImage = new Mat();
-                Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2YCrCb);
-
-                //Color Thresholding
-                Mat mask = new Mat();
-                Core.inRange(hsvImage, redLower, redUpper, mask);
-
-                //Morphological operations
-                Imgproc.erode(mask, mask, preErodeElement);
-                Imgproc.dilate(mask, mask, dilateElement);
-                Imgproc.erode(mask, mask, postErodeElement);
-
-                //Invert
-                Core.bitwise_not(mask, mask);
-
-                //Apply mask to colored image, idek, theres a better solution but this is what ended up working
-                //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
-                Mat copy = frame.clone();
-                Mat zeros = Mat.zeros(frame.size(), frame.type());
-                Core.bitwise_and(copy, zeros, copy, mask);
-
-                //Edge detection
-                Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
-                Imgproc.Canny(copy, copy, 70, 170);
-                Imgproc.dilate(copy, copy, edgeDilateElement);
-
-                //Make border so can detect cutoff samples
-                Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
-
-                //Find contours
-                ArrayList<MatOfPoint> contours = new ArrayList<>();
-                Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-
-                //Find minAreaRects
-                for (MatOfPoint contour : contours) {
-                    RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
-                    boolean xinleyang = true;
-
-                    if (rect.size.area() < 8000) {
-                        xinleyang = false;
-                    }
-                    if (rect.size.area() > 50000) {
-                        xinleyang = false;
-                    }
-
-                    if (xinleyang) {
-                        blobs.add(rect);
-                        if(drawRects) {
-                            Point[] vertices = new Point[4];
-                            rect.points(vertices);
-                            MatOfPoint points = new MatOfPoint(vertices);
-                            Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
-                        }
+                if (xinleyang) {
+                    blobs.add(rect);
+                    if(drawRects) {
+                        Point[] vertices = new Point[4];
+                        rect.points(vertices);
+                        MatOfPoint points = new MatOfPoint(vertices);
+                        Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
                     }
                 }
-
-                if (drawContours) {
-                    Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
-                }
-            } else if (color == COLOR.YELLOW) {
-                //Convert color for color thresholding
-                Mat hsvImage = new Mat();
-                Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2HSV);
-
-                //Color Thresholding
-                Mat mask = new Mat();
-                Core.inRange(hsvImage, yellowLower, yellowUpper, mask);
-
-                //Morphological operations
-                Imgproc.erode(mask, mask, preErodeElement);
-                Imgproc.dilate(mask, mask, dilateElement);
-                Imgproc.erode(mask, mask, postErodeElement);
-
-                //Invert
-                Core.bitwise_not(mask, mask);
-
-                //Apply mask to colored image, idek, theres a better solution but this is what ended up working
-                //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
-                Mat copy = frame.clone();
-                Mat zeros = Mat.zeros(frame.size(), frame.type());
-                Core.bitwise_and(copy, zeros, copy, mask);
-
-                //Edge detection
-                Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
-                Imgproc.Canny(copy, copy, 30, 150);
-                Imgproc.dilate(copy, copy, edgeDilateElement);
-
-                //Make border so can detect cutoff samples
-                Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
-
-                //Find contours
-                ArrayList<MatOfPoint> contours = new ArrayList<>();
-                Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-
-                //Find minAreaRects
-                for (MatOfPoint contour : contours) {
-                    RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
-                    boolean xinleyang = true;
-
-                    if (rect.size.area() < 8000) {
-                        xinleyang = false;
-                    }
-                    if (rect.size.area() > 50000) {
-                        xinleyang = false;
-                    }
-
-                    if (xinleyang) {
-                        blobs.add(rect);
-                        if(drawRects) {
-                            Point[] vertices = new Point[4];
-                            rect.points(vertices);
-                            MatOfPoint points = new MatOfPoint(vertices);
-                            Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
-                        }
-                    }
-                }
-
-                if (drawContours) {
-                    Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
-                }
-            } else {
-//            Log.i("VISION", "wtf happened here");
             }
+
+            if (drawContours) {
+                Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
+            }
+
+        } else if (colorCached == COLOR.RED) {
+            //Convert color for color thresholding
+            Mat hsvImage = new Mat();
+            Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2YCrCb);
+
+            //Color Thresholding
+            Mat mask = new Mat();
+            Core.inRange(hsvImage, redLower, redUpper, mask);
+
+            //Morphological operations
+            Imgproc.erode(mask, mask, preErodeElement);
+            Imgproc.dilate(mask, mask, dilateElement);
+            Imgproc.erode(mask, mask, postErodeElement);
+
+            //Invert
+            Core.bitwise_not(mask, mask);
+
+            //Apply mask to colored image, idek, theres a better solution but this is what ended up working
+            //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
+            Mat copy = frame.clone();
+            Mat zeros = Mat.zeros(frame.size(), frame.type());
+            Core.bitwise_and(copy, zeros, copy, mask);
+
+            //Edge detection
+            Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
+            Imgproc.Canny(copy, copy, 70, 170);
+            Imgproc.dilate(copy, copy, edgeDilateElement);
+
+            //Make border so can detect cutoff samples
+            Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+
+            //Find contours
+            ArrayList<MatOfPoint> contours = new ArrayList<>();
+            Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+
+            //Find minAreaRects
+            for (MatOfPoint contour : contours) {
+                RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
+                boolean xinleyang = true;
+
+                if (rect.size.area() < 8000) {
+                    xinleyang = false;
+                }
+                if (rect.size.area() > 50000) {
+                    xinleyang = false;
+                }
+
+                if (xinleyang) {
+                    blobs.add(rect);
+                    if(drawRects) {
+                        Point[] vertices = new Point[4];
+                        rect.points(vertices);
+                        MatOfPoint points = new MatOfPoint(vertices);
+                        Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
+                    }
+                }
+            }
+
+            if (drawContours) {
+                Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
+            }
+        } else if (colorCached == COLOR.YELLOW) {
+            //Convert color for color thresholding
+            Mat hsvImage = new Mat();
+            Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2HSV);
+
+            //Color Thresholding
+            Mat mask = new Mat();
+            Core.inRange(hsvImage, yellowLower, yellowUpper, mask);
+
+            //Morphological operations
+            Imgproc.erode(mask, mask, preErodeElement);
+            Imgproc.dilate(mask, mask, dilateElement);
+            Imgproc.erode(mask, mask, postErodeElement);
+
+            //Invert
+            Core.bitwise_not(mask, mask);
+
+            //Apply mask to colored image, idek, theres a better solution but this is what ended up working
+            //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
+            Mat copy = frame.clone();
+            Mat zeros = Mat.zeros(frame.size(), frame.type());
+            Core.bitwise_and(copy, zeros, copy, mask);
+
+            //Edge detection
+            Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
+            Imgproc.Canny(copy, copy, 30, 150);
+            Imgproc.dilate(copy, copy, edgeDilateElement);
+
+            //Make border so can detect cutoff samples
+            Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+
+            //Find contours
+            ArrayList<MatOfPoint> contours = new ArrayList<>();
+            Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+
+            //Find minAreaRects
+            for (MatOfPoint contour : contours) {
+                RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
+                boolean xinleyang = true;
+
+                if (rect.size.area() < 8000) {
+                    xinleyang = false;
+                }
+                if (rect.size.area() > 50000) {
+                    xinleyang = false;
+                }
+
+                if (xinleyang) {
+                    blobs.add(rect);
+                    if(drawRects) {
+                        Point[] vertices = new Point[4];
+                        rect.points(vertices);
+                        MatOfPoint points = new MatOfPoint(vertices);
+                        Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
+                    }
+                }
+            }
+
+            if (drawContours) {
+                Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
+            }
+        } else {
+//            Log.i("VISION", "wtf happened here");
         }
 
         userBlobs = new ArrayList<>(blobs);
         return blobs;
     }
+//
+//    public ArrayList<RotatedRect> getRects(Mat frame, Scalar low, Scalar high,){
+//        //Convert color for color thresholding
+//        Mat hsvImage = new Mat();
+//        Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_RGB2HSV);
+//
+//        //Color Thresholding
+//        Mat mask = new Mat();
+//        Core.inRange(hsvImage, blueLower, blueUpper, mask);
+//
+//        //Morphological operations
+//        Imgproc.erode(mask, mask, preErodeElement);
+//        Imgproc.dilate(mask, mask, dilateElement);
+//        Imgproc.erode(mask, mask, postErodeElement);
+//
+//        //Invert
+//        Core.bitwise_not(mask, mask);
+//
+//        //Apply mask to colored image, idek, theres a better solution but this is what ended up working
+//        //TODO: Alternatively, could convert copy to gray beforehand. Would likely save some time
+//        Mat copy = frame.clone();
+//        Mat zeros = Mat.zeros(frame.size(), frame.type());
+//        Core.bitwise_and(copy, zeros, copy, mask);
+//
+//        //Edge detection
+//        Imgproc.cvtColor(copy, copy, Imgproc.COLOR_RGB2GRAY);
+//        Imgproc.Canny(copy, copy, 70, 170);
+//        Imgproc.dilate(copy, copy, edgeDilateElement);
+//
+//        //Make border so can detect cutoff samples
+//        Core.copyMakeBorder(copy, copy, 1, 1, 1, 1, Core.BORDER_CONSTANT, new Scalar(255, 255, 255));
+//
+//        //Find contours
+//        ArrayList<MatOfPoint> contours = new ArrayList<>();
+//        Imgproc.findContours(copy, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+//
+//        //Find minAreaRects
+//        for (MatOfPoint contour : contours) {
+//            RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
+//            boolean xinleyang = true;
+//
+//            if (rect.size.area() < 8000) {
+//                xinleyang = false;
+//            }
+//            if (rect.size.area() > 50000) {
+//                xinleyang = false;
+//            }
+//
+//            if (xinleyang) {
+//                blobs.add(rect);
+//                if(drawRects) {
+//                    Point[] vertices = new Point[4];
+//                    rect.points(vertices);
+//                    MatOfPoint points = new MatOfPoint(vertices);
+//                    Imgproc.polylines(frame, java.util.Collections.singletonList(points), true, new Scalar(0, 255, 0), 3);
+//                }
+//            }
+//        }
+//
+//        if (drawContours) {
+//            Imgproc.drawContours(frame, contours, -1, new Scalar(255.0, 255.0, 255.0), 1);
+//        }
+//
+//    }
 
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {

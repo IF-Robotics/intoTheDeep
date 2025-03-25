@@ -211,7 +211,6 @@ public class VisionToSampleInterpolate extends CommandBase {
             List<Double> allianceOffsets = visionSubsystem.getOffsetFromBoxFit(allianceBoxFit.get());
             double xOffsetInches = lutXOffset.get(allianceOffsets.get(0));
             double yOffsetInches = lutYOffset.get(allianceOffsets.get(1));
-            Log.i("bruhbruh", String.valueOf(yOffsetInches));
 
             double allianceSkew = -visionSubsystem.getAngleFromRotatedRect(allianceBoxFit.get());
 
@@ -234,15 +233,12 @@ public class VisionToSampleInterpolate extends CommandBase {
 
         if (hasFoundBlock){
             Translation2d botToSample = samplePoseFieldOriented.relativeTo(driveSubsystem.getPos()).getTranslation();
-            Log.i("bruhbruhx", String.valueOf(botToSample.getX()));
-            Log.i("bruhbruhy", String.valueOf(botToSample.getY()));
 
 
 
             //CCW is positive
             double headingErrorRadians  = Math.atan2(-botToSample.getX(), botToSample.getY());
             double slideExtension = botToSample.getNorm();
-            Log.i("bruhbruhnorm", String.valueOf(slideExtension));
             double headingCalculation = turnpid.calculate(0, headingErrorRadians);
             double turnVelocity = Math.sqrt(Math.abs(headingCalculation)) * Math.signum(headingCalculation);
 //            Log.i("stupidOmega", String.valueOf(turnVelocity));

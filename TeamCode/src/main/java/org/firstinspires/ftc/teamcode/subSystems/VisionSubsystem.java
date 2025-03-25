@@ -153,14 +153,18 @@ public class VisionSubsystem extends SubsystemBase {
 //        yellowLocatorProcess.addFilter(areaFilterYellow);
 //        yellowLocatorProcess.addFilter(ratioFilterYellow);
 //        yellowLocatorProcess.setSort(largestSort);
+        allianceLocatorProcess = new CustomLocatorProcessor();
+        yellowLocatorProcess = new CustomLocatorProcessor();
+
         if(alliance == Alliance.BLUE) {
-            allianceLocatorProcess = new CustomLocatorProcessor(CustomLocatorProcessor.COLOR.BLUE);
+            allianceLocatorProcess.setColor(CustomLocatorProcessor.COLOR.BLUE);
         }
         else{
-            allianceLocatorProcess = new CustomLocatorProcessor(CustomLocatorProcessor.COLOR.RED);
+            allianceLocatorProcess.setColor(CustomLocatorProcessor.COLOR.RED);
         }
 
-        yellowLocatorProcess = new CustomLocatorProcessor(CustomLocatorProcessor.COLOR.YELLOW);
+        yellowLocatorProcess.setColor(CustomLocatorProcessor.COLOR.YELLOW);
+
 
 
         visionPortal = new VisionPortal.Builder()
@@ -168,6 +172,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .setCameraResolution(new Size(1280, 720))
                 .addProcessor(yellowLocatorProcess)
                 .addProcessor(allianceLocatorProcess)
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
         enableLight(true);
         waitForSetCameraSettings(10000, 10000000);
@@ -208,6 +213,12 @@ public class VisionSubsystem extends SubsystemBase {
         if(allianceRect.isPresent()){
             telemetry.addData("alliance x", allianceRect.get().center.x);
             telemetry.addData("alliance y", allianceRect.get().center.y);
+        }
+
+        Optional<RotatedRect> yellowRect = getYellowBoxFit();
+        if(yellowRect.isPresent()){
+            telemetry.addData("yellow x", yellowRect.get().center.x);
+            telemetry.addData("yellow y", yellowRect.get().center.y);
         }
 //
 //        ColorBlobLocatorProcessor.BlobFilter areaFilter =
