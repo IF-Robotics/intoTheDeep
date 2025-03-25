@@ -121,7 +121,7 @@ public abstract class Robot extends CommandOpMode {
     public ArmSubsystem armSubsystem;
     public IntakeSubsystem intakeSubsystem;
     public VisionSubsystem visionSubsystem;
-    public ColorSubsystem colorSubsystem;
+//    public ColorSubsystem colorSubsystem;
 
     //system
     private LynxModule controlHub;
@@ -225,10 +225,10 @@ public abstract class Robot extends CommandOpMode {
 
         //sensor
 
-        sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
+//        sensor = hardwareMap.get(RevColorSensorV3.class, "Color");
 
-        colorSubsystem = new ColorSubsystem(hardwareMap, telemetry);
-        register(colorSubsystem);
+//        colorSubsystem = new ColorSubsystem(hardwareMap, telemetry);
+//        register(colorSubsystem);
 
 
         //intake
@@ -363,7 +363,7 @@ public abstract class Robot extends CommandOpMode {
         intakeCommand = new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, rollWhenIntake);
 
         //command groups
-        retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem, colorSubsystem);
+        retractAfterIntake = new RetractAfterIntake(armSubsystem, intakeSubsystem);
         retractFromBasket = new RetractFromBasket(driveSubsystem, armSubsystem, intakeSubsystem);
         highChamberCommand = new HighChamberCommand(armSubsystem, intakeSubsystem);
         scoreHighChamberCommand = new ScoreHighChamberCommand(armSubsystem, intakeSubsystem);

@@ -115,7 +115,7 @@ public class VisionSubsystem extends SubsystemBase {
 //            .setErodeSize(6)
 //            .build();
 
-    CustomLocatorProcessor allianceLocatorProcess;
+//    CustomLocatorProcessor allianceLocatorProcess;
 
     CustomLocatorProcessor yellowLocatorProcess;
 
@@ -153,15 +153,15 @@ public class VisionSubsystem extends SubsystemBase {
 //        yellowLocatorProcess.addFilter(areaFilterYellow);
 //        yellowLocatorProcess.addFilter(ratioFilterYellow);
 //        yellowLocatorProcess.setSort(largestSort);
-        allianceLocatorProcess = new CustomLocatorProcessor();
+//        allianceLocatorProcess = new CustomLocatorProcessor();
         yellowLocatorProcess = new CustomLocatorProcessor();
 
-        if(alliance == Alliance.BLUE) {
-            allianceLocatorProcess.setColor(CustomLocatorProcessor.COLOR.BLUE);
-        }
-        else{
-            allianceLocatorProcess.setColor(CustomLocatorProcessor.COLOR.RED);
-        }
+//        if(alliance == Alliance.BLUE) {
+//            allianceLocatorProcess.setColor(CustomLocatorProcessor.COLOR.BLUE);
+//        }
+//        else{
+//            allianceLocatorProcess.setColor(CustomLocatorProcessor.COLOR.RED);
+//        }
 
         yellowLocatorProcess.setColor(CustomLocatorProcessor.COLOR.YELLOW);
 
@@ -171,7 +171,7 @@ public class VisionSubsystem extends SubsystemBase {
                 .setCamera(camera)
                 .setCameraResolution(new Size(1280, 720))
                 .addProcessor(yellowLocatorProcess)
-                .addProcessor(allianceLocatorProcess)
+//                .addProcessor(allianceLocatorProcess)
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
         enableLight(true);
@@ -260,7 +260,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public Optional<RotatedRect> getAllianceBoxFit(){
-        List<RotatedRect> blobs = allianceLocatorProcess.getBlobs();
+        List<RotatedRect> blobs = yellowLocatorProcess.getBlobs();
         if(blobs.isEmpty()){return Optional.empty();}
         return getClosestBoxFit(blobs);
     }
@@ -275,7 +275,7 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public Optional<RotatedRect> getTotalBoxFit(){
         List<RotatedRect> yellowBlobs = yellowLocatorProcess.getBlobs();
-        List<RotatedRect> allianceBlobs = allianceLocatorProcess.getBlobs();
+        List<RotatedRect> allianceBlobs = yellowLocatorProcess.getBlobs();
 
         //Warning -- DO NOT DO THIS, this will make yellow blobs also account for alliance specific since java references
 //        yellowBlobs.addAll(allianceBlobs);
