@@ -60,7 +60,7 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armEvIntakeWallX, armEvIntakewallY),
                 new DriveToPointCommand(driveSubsystem, wallEvPickUp, 1, 3).withTimeout(700),
                 //wait
-                new WaitCommand(0),
+                new WaitCommand(200),
 
 
                 // Intake specimen from wall
@@ -85,7 +85,7 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
 
                 //wait then extend slides
                 new ParallelCommandGroup(
-                        new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-4.7),
+                        new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-8, armEvHighChamberY-4.7),
                         new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX()+1, highChamberEvRight.getY(), Rotation2d.fromDegrees(40)),3, 5).withTimeout(700)
                         ),
                 new WaitForSlideCommand(armSubsystem, armEvHighChamberX, 30),

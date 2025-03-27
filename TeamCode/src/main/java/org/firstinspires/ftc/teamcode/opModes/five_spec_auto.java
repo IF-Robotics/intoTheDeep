@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleEV;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleSlow;
+import org.firstinspires.ftc.teamcode.commandGroups.FlipSample;
+import org.firstinspires.ftc.teamcode.commandGroups.FlipSpikesRight;
+import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
 import org.firstinspires.ftc.teamcode.commandGroups.StartSpecAuto;
 import org.firstinspires.ftc.teamcode.commandGroups.SweepSpikes;
 import org.firstinspires.ftc.teamcode.commandGroups.rightPreloadSpecScore;
@@ -25,6 +28,7 @@ import org.firstinspires.ftc.teamcode.commands.holdDTPosCommand;
 import org.firstinspires.ftc.teamcode.other.Robot;
 import org.firstinspires.ftc.teamcode.subSystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subSystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.subSystems.IntakeSubsystem;
 
 @Autonomous(name="5+0")
 public class five_spec_auto extends Robot {
@@ -45,11 +49,16 @@ public class five_spec_auto extends Robot {
         driveSubsystem.setDefaultCommand(new holdDTPosCommand(driveSubsystem));
 
         schedule(new SequentialCommandGroup(
-                new StartSpecAuto(driveSubsystem, armSubsystem, intakeSubsystem),
-                new DriveToPointCommand(driveSubsystem, new Pose2d(12.45, -48, new Rotation2d(-45)), 10, 10),
-                new SweepSpikes(driveSubsystem, armSubsystem, intakeSubsystem),
-                new InstantCommand(() -> armSubsystem.setEndstop(ArmSubsystem.Endstop.DOWN)),
-                new DriveToPointCommand(driveSubsystem,  new Pose2d(42, -45, Rotation2d.fromDegrees(-140)), 10, 10),
+                new InstantCommand(() -> driveSubsystem.setStartingPos(startingPosRight)),
+                //wait
+                new WaitCommand(6),
+
+                //hold pos
+                new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
+
+
+
+                new FlipSpikesRight(driveSubsystem, armSubsystem, intakeSubsystem),
 
                 // wait?
                 new ParallelCommandGroup(

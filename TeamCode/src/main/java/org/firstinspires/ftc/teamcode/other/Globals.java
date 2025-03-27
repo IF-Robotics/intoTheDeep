@@ -88,6 +88,7 @@ public class Globals {
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
+    public static double armAutoSpikeXTWO = 18;
     public static double armReadySubIntakeX = 27;
     public static double armSubIntakeY = 3;
     public static double armReadySubIntakeY = 8;

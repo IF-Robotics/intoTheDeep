@@ -36,7 +36,7 @@ public class FlipSample extends SequentialCommandGroup {
 //                new WaitForSlideCommand(armSubsystem, 8,5),
                 new FullRetractSlidesUntilCommand(armSubsystem, 15),
 //                new InstantCommand(() -> intakeSubsystem.openClaw())
-                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.OPEN, 0, 200).withTimeout(100)
+                new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 0, 200).withTimeout(100)
         );
 
         addRequirements(armSubsystem, intakeSubsystem);
