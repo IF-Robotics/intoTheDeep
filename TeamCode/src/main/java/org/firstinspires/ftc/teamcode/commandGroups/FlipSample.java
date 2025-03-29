@@ -23,11 +23,11 @@ public class FlipSample extends SequentialCommandGroup {
                 //tilts slides down a tad
                 new InstantCommand(() -> armSubsystem.setArmY(armSubIntakeY)),
                 //wait
-                new WaitCommand(150),
+                new WaitCommand(200),
                 //grab the sample
                 new InstantCommand(() -> intakeSubsystem.closeClaw()),
                 //wait
-                new WaitCommand(50),
+                new WaitCommand(150),
                 //retract slides & flip up intake
                 new ParallelCommandGroup(
                         new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.CLOSE, 0, 130).withTimeout(100),

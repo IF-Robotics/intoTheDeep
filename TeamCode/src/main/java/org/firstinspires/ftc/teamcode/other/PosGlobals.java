@@ -36,8 +36,8 @@ public class PosGlobals {
     public static Pose2d leftSideMidSpike = new Pose2d(-56, leftSideRightSpike.getY(), Rotation2d.fromDegrees(0));
     public static Pose2d leftSideLeftSpike = new Pose2d(-59.3, -36.85, Rotation2d.fromDegrees(35));
 
-    public static Pose2d rightSideLeftSpikeFlip = new Pose2d(51, -53, Rotation2d.fromDegrees(0));
-    public static Pose2d rightSideMidSpikeFlip = new Pose2d(61, -53, Rotation2d.fromDegrees(0));
+    public static Pose2d rightSideLeftSpikeFlip = new Pose2d(51, -52.75, Rotation2d.fromDegrees(0));
+    public static Pose2d rightSideMidSpikeFlip = new Pose2d(61, -52.75, Rotation2d.fromDegrees(0));
     public static Pose2d rightSideRightSpikeFlip = new Pose2d(59.3, -45, Rotation2d.fromDegrees(-35));
 
     public static Pose2d rightSideLeftSpike = new Pose2d(32, -37, Rotation2d.fromDegrees(-37));

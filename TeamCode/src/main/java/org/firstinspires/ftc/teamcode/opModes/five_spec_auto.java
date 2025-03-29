@@ -55,6 +55,7 @@ public class five_spec_auto extends Robot {
 
                 //hold pos
                 new InstantCommand(() -> driveSubsystem.driveToPoint(startingPosRight)),
+                new InstantCommand(()->armSubsystem.setArm(0)),
 
 
 
