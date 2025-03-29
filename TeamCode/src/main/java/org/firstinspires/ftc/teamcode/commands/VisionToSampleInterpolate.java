@@ -205,12 +205,12 @@ public class VisionToSampleInterpolate extends CommandBase {
             }
         }
 
-        if(allianceBoxFit.isPresent()&&!hasFoundBlock&&timer.milliseconds()>50){
+        if(allianceBoxFit.isPresent()&&!hasFoundBlock&&timer.milliseconds()>200){ //REQUIRED-please raise wrist before viewing, can then work on reducing timeouts
             hasFoundBlock=true;
 
             List<Double> allianceOffsets = visionSubsystem.getOffsetFromBoxFit(allianceBoxFit.get());
-            double xOffsetInches = lutXOffset.get(allianceOffsets.get(0));
-            double yOffsetInches = lutYOffset.get(allianceOffsets.get(1));
+            double xOffsetInches = lutXOffset.get(allianceOffsets.get(0)/4.0);
+            double yOffsetInches = lutYOffset.get(allianceOffsets.get(1)/4.0);
 
             double allianceSkew = -visionSubsystem.getAngleFromRotatedRect(allianceBoxFit.get());
 

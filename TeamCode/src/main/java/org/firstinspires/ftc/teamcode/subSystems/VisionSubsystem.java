@@ -46,10 +46,10 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     //0,0 is the upper left corner I believe
-    public final static double kCameraWidth=320;
+    public final static double kCameraWidth=1280;
     public final static double kDesiredX = kCameraWidth*0.5;
 
-    public final static double kCameraHeight=240;
+    public final static double kCameraHeight=720;
     public final static double kDesiredY = kCameraHeight*0.5;
 
     public static int lowAreaFilter = 600;

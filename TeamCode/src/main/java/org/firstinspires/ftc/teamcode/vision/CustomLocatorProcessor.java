@@ -35,11 +35,11 @@ public class CustomLocatorProcessor implements VisionProcessor {
     private Rect roi;
     private int frameWidth;
     private int frameHeight;
-    private boolean drawContours = false;
+    private boolean drawContours = true;
 
     private boolean drawRects = true;
 
-    private volatile COLOR color = COLOR.RED;
+    private volatile COLOR color = COLOR.YELLOW;
     private final Scalar blueLower = new Scalar(100, 105, 80);
     private final Scalar blueUpper = new Scalar(140, 255, 255);
     private final Scalar redLower = new Scalar(32, 176,  80);
@@ -138,7 +138,7 @@ public class CustomLocatorProcessor implements VisionProcessor {
 
         //Edge detection
         if(colorCached == COLOR.YELLOW){
-            Imgproc.Canny(copy, copy, 30, 150);
+            Imgproc.Canny(copy, copy, 20, 90);
         }
         else {
             Imgproc.Canny(copy, copy, 70, 170);
@@ -160,11 +160,31 @@ public class CustomLocatorProcessor implements VisionProcessor {
             RotatedRect rect = Imgproc.minAreaRect(new MatOfPoint2f((Point[]) contour.toArray()));
             boolean xinleyang = true;
 
-            if (rect.size.area() < 8000) {
+            if (rect.size.area() < 15000) {
                 xinleyang = false;
             }
             if (rect.size.area() > 50000) {
                 xinleyang = false;
+            }
+
+            double largerSide = 0;
+            double smallerSide = 0;
+            if(rect.size.height>rect.size.width){
+                largerSide=rect.size.height;
+                smallerSide=rect.size.width;
+            }
+            else{
+                largerSide=rect.size.width;
+                smallerSide=rect.size.height;
+            }
+
+            double ratio = largerSide/smallerSide;
+
+            if(ratio<1.5){
+                xinleyang = false;
+            }
+            if (ratio>4.5){//ratio is off
+//                xinleyang=false;
             }
 
             if (xinleyang) {
