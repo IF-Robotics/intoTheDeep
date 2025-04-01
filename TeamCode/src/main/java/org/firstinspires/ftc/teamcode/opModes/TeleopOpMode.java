@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.commandGroups.ClimbLevel3;
 import org.firstinspires.ftc.teamcode.commandGroups.DropCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.DropOffCommand;
+import org.firstinspires.ftc.teamcode.commandGroups.FlipSample;
 import org.firstinspires.ftc.teamcode.commandGroups.HighChamberCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeCloseCommand;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
@@ -65,6 +66,7 @@ public class TeleopOpMode extends Robot {
         //configureMoreCommands();
         configureButtons();
         manualArm = false;
+        manualSlides = false;
 
         new ArmCoordinatesCommand(armSubsystem, 3.5, 14).schedule(true);
 
@@ -145,6 +147,7 @@ public class TeleopOpMode extends Robot {
                         () -> teleopSpec == true
             )
         );
+//        dDown1.whenPressed(new FlipSample(armSubsystem, intakeSubsystem));
 
         dDown2.whenPressed(new RetractAfterIntake(armSubsystem, intakeSubsystem));
         //wall intake

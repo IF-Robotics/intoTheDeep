@@ -25,11 +25,12 @@ public class Globals {
     public static double clawOpen = 0.7;
     public static double clawExtraOpen = .8;
     public static double clawClose = .25;
+    public static double clawHalfOpen = 0.367;
 
 
     //scoring
     //basket
-    public static int pitchWhenBasket = pitchIntakeWall;
+    public static int pitchWhenBasket = 0;
     public static int rollWhenBasket = 130;
 
     public static double pitchWhenHighChamber = 0;
@@ -87,6 +88,7 @@ public class Globals {
 
     //arm when intaking from sub
     public static double armAutoSpikeX = 23;
+    public static double armAutoSpikeXTWO = 18;
     public static double armReadySubIntakeX = 27;
     public static double armSubIntakeY = 3;
     public static double armReadySubIntakeY = 8;

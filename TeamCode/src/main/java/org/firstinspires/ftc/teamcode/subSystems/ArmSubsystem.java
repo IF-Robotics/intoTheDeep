@@ -111,6 +111,10 @@ public class ArmSubsystem extends SubsystemBase {
         slideManualPower = slidePower;
     }
 
+    public void manualSlide(double slidePower){
+        slideManualPower = slidePower;
+    }
+
     public void setArm(double targetAngle) {
         setArmTargetAngle = targetAngle;
     }

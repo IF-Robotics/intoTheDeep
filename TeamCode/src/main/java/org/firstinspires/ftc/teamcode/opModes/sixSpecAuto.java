@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleFast;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoSpecimenCycleSlow;
+import org.firstinspires.ftc.teamcode.commandGroups.FlipSpikesRight;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeSub;
 import org.firstinspires.ftc.teamcode.commandGroups.RetractAfterIntake;
 import org.firstinspires.ftc.teamcode.commandGroups.StartSpecAuto;
@@ -118,10 +119,8 @@ public class sixSpecAuto extends AutoBase {
                 //drop sample
                 new InstantCommand(() -> intakeSubsystem.openClaw()),
 
-
-
                 //sweep spikes
-                new SweepSpikes(driveSubsystem, armSubsystem, intakeSubsystem),
+                new FlipSpikesRight(driveSubsystem, armSubsystem, intakeSubsystem),
 
 
 

@@ -60,7 +60,7 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armEvIntakeWallX, armEvIntakewallY),
                 new DriveToPointCommand(driveSubsystem, wallEvPickUp, 1, 3).withTimeout(700),
                 //wait
-                new WaitCommand(0),
+                new WaitCommand(200),
 
 
                 // Intake specimen from wall
@@ -79,8 +79,8 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
 
                 // Drive to high chamber
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> armSubsystem.setArm(27)),
-                        new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX(), highChamberEvRight.getY(), Rotation2d.fromDegrees(38)),3, 5).withTimeout(800)
+                    new InstantCommand(() -> armSubsystem.setArm(27)),
+                    new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX(), highChamberEvRight.getY(), Rotation2d.fromDegrees(38)),3, 5).withTimeout(800)
                 ),
 
                 //wait then extend slides
@@ -88,6 +88,8 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
                         new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-5),
                         new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX()+1, highChamberEvRight.getY(), Rotation2d.fromDegrees(40)),3, 5).withTimeout(700)
                         ),
+                    new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-8, armEvHighChamberY-4.7),
+                    new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX()+1, highChamberEvRight.getY(), Rotation2d.fromDegrees(40)),3, 5).withTimeout(700),
                 new WaitForSlideCommand(armSubsystem, armEvHighChamberX, 30),
                 new DriveToPointCommand(driveSubsystem, new Pose2d(highChamberEvRight.getX() -3 , highChamberEvRight.getY()- 2, Rotation2d.fromDegrees(45)),20, 15).withTimeout(300),
                 //wait
@@ -95,6 +97,8 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
                 new ArmCoordinatesCommand(armSubsystem, armEvHighChamberX-9, armEvHighChamberY-5),
                 new IntakeCommand(intakeSubsystem, IntakeCommand.Claw.EXTRAOPEN, 0, 0)
                 )
+        );
+
 
 
 
@@ -102,7 +106,7 @@ public class AutoSpecimenCycleEV extends SequentialCommandGroup {
                 // Score specimen
 
 
-        );
+
 
         addRequirements(armSubsystem, intakeSubsystem);
     }
