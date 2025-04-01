@@ -14,16 +14,14 @@ import org.firstinspires.ftc.teamcode.subSystems.LimelightSubsystem;
  @TeleOp(name = "LimelightTest")
 public class limelightTest extends LinearOpMode {
     private Limelight3A camera;
-    public static double colorChoice = 1.0;
 
-    // First Index 0.0 = Red 1.0 = Blue 2.0 = Yellow
     @Override
     public void runOpMode() throws InterruptedException {
         camera = hardwareMap.get(Limelight3A.class, "limelight");
         LimelightSubsystem vision = new LimelightSubsystem(hardwareMap, telemetry);
         vision.initializeCamera();
         waitForStart();
-        camera.start();
+        camera.start(); //call waitForStart() and then call camera.start() afterwards to start the camera
 
         while (!isStopRequested() && opModeIsActive()) {
             CommandScheduler.getInstance().run();

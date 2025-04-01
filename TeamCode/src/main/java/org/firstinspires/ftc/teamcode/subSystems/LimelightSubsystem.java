@@ -33,17 +33,16 @@ public class LimelightSubsystem extends SubsystemBase {
     private boolean isDataOld = false;
     private LLResult result;
     private double sampleColor = -1;
-    VisionPortal visionPortal;
 
 
-//    public static double CAMERA_HEIGHT = 307.0 - 16;
-//    public static double CAMERA_ANGLE = -45.0;
-//    public static double TARGET_HEIGHT = 19.05;
+//    public static double CAMERA_HEIGHT = ;
+//    public static double CAMERA_ANGLE = ;
+//    public static double TARGET_HEIGHT = ;
 //
-//    public static double strafeConversionFactor = 6.6667;
-//    public static double cameraStrafeToBot = -20;
+//    public static double strafeConversionFactor = ;  //whatever numbers that the actual height and stuff is.
+//    public static double cameraStrafeToBot = ;
 //
-//    public static double sampleToRobotDistance = 145;
+//    public static double sampleToRobotDistance = ;
 
     Telemetry telemetry;
 
@@ -54,14 +53,14 @@ public class LimelightSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
 
         if (alliance1 == Alliance.BLUE){
-            camera.pipelineSwitch(0);
+            camera.pipelineSwitch(0);  //pipeline 0 is blue
             sampleColor = 0.0;
         }
         else{
-            camera.pipelineSwitch(1);
+            camera.pipelineSwitch(1);  //pipeline 1 is red
             sampleColor = 1.0;
         }
-    }
+    } //pipeline 2 is yellow
 
     public void initializeCamera() {
         camera.setPollRateHz(50);
@@ -71,7 +70,7 @@ public class LimelightSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         camera.updatePythonInputs(new double[] {sampleColor, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
-        result = camera.getLatestResult();
+        result = camera.getLatestResult(); // call this to get the limelight results
             long staleness = result.getStaleness();
             isDataOld = staleness >= 100; //100 ms
             telemetry.addData("Tx", getTx());
@@ -83,15 +82,15 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public double getTx() {
         return result.getTx();
-    }
+    } //tx is the x distance from the crosshair (center of the screen)
 
     public double getTy() {
         return result.getTy();
-    }
+    } //ty is y distance from the crosshair (center of the screen)
 
     public Double getAngle() {
         return result.getPythonOutput()[3];
-    }
+    } //angle of the sample (.getPythonOutput()[i] gets the python snapscript outputs. 2 is center and 4 is area.
 
 }
 
